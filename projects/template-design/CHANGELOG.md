@@ -12,6 +12,39 @@ Format:
 
 ---
 
+## 2026-04-11 -- Judge review (4 new pages) + DevOps (v1.0 release)
+
+**PHASE 1 -- Judge Review (4 new routes):**
+- Verified all 5 routes return HTTP 200: /case-studies, /case-studies/tech-founder-after-exit, /services, /blog, /blog/fiduciary-duty
+- All 6 case study cards link correctly to /case-studies/[slug]; all 6 slugs resolve
+- All 6 services render with anchor IDs (wealth-planning through business-exit-planning)
+- Blog index links to 3 articles; all 3 /blog/[slug] routes return 200
+- ISSUE FOUND: /case-studies, /services, /blog had 0 h1 tags (SectionHeader only rendered h2)
+- FIX: Added `headingLevel` prop to SectionHeader (ui-kit). Updated 3 index pages to pass headingLevel="h1"
+- Re-verified: all 5 pages now have exactly 1 h1
+- All EyebrowLabels confirmed w-fit (hug-width) with inline-flex
+- Body text >= 16px everywhere; 14px only in labels/metadata; 12px only in uppercase eyebrows
+- data-component attributes present on every page (10-12 unique per page)
+- Nav + Footer render on every page
+- No horizontal overflow risk at 390px (no fixed widths > viewport)
+- Verdict: PASSED (appended to REVIEW.md)
+
+**PHASE 2 -- DevOps:**
+- git init at ~/Aisoldier
+- Created .gitignore (node_modules, .next, .env, .DS_Store, etc.)
+- Security audit: no secrets in code, no .env files
+- Build passed: 16 pages generated (all static/SSG)
+- Initial commit: 150 files, 21,855 insertions
+- gh repo create aisoldier --private: created at github.com/halinskiy/aisoldier
+- git push origin main: success
+- git tag v1.0 + push: success
+- Vercel CLI: not installed, skipped
+
+**Skipped:**
+- Vercel deployment (CLI not installed)
+
+---
+
 ## 2026-04-12 -- 4 new pages (case studies, services, blog)
 **Did:**
 - Built /case-studies index page using SectionHeader (stacked) + ImageCardGrid (cols=2) from kit
