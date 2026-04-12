@@ -1,0 +1,32 @@
+{
+  "slug": "family-estate-coordination",
+  "eyebrow": "Multi-generational",
+  "title": "Family estate coordination",
+  "image": {
+    "src": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Coastal estate at golden hour, architectural silhouette against the water"
+  },
+  "sections": {
+    "situation": {
+      "headline": "The situation",
+      "paragraphs": [
+        "A family with $120M in combined assets across three generations had no unified estate plan. Each generation used different advisors, attorneys, and CPAs. Documents were outdated, and several trusts had unfunded provisions.",
+        "The patriarch wanted a transfer roadmap that would preserve family wealth across 30 years while minimising tax exposure at each generational transition."
+      ]
+    },
+    "approach": {
+      "headline": "Our approach",
+      "paragraphs": [
+        "We conducted a full inventory of every entity, trust, insurance policy, and real property across the family. We then coordinated five external partners: two estate attorneys, a CPA firm, a life insurance consultant, and a corporate counsel.",
+        "We designed a three-tier trust structure. The first tier funds annual distributions. The second holds illiquid assets with a 15-year horizon. The third is a dynasty trust for the third generation. Each tier has its own investment mandate, risk budget, and reporting cadence."
+      ]
+    },
+    "outcome": {
+      "headline": "The outcome",
+      "paragraphs": [
+        "The 30-year transfer roadmap is now in its third year of execution. All trusts are funded and governed by written policies. The family meets twice annually to review progress and update assumptions.",
+        "By restructuring asset ownership before any transfers, the family reduced its projected estate tax exposure by a material amount. Each generation now has visibility into its own tier without requiring access to the others."
+      ]
+    }
+  }
+}

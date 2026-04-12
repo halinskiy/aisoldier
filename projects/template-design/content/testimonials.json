@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Michael Johnson",
+    "role": "CEO, Meridian Capital Group",
+    "rating": 5,
+    "quote": "Completely restructured our investment approach. Marcus understood our goals immediately and delivered a strategy that actually works. Clear communication every step. His team is equally impressive. Tax optimization alone paid for the engagement ten times over.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Michael Johnson"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Samantha Joyce",
+    "role": "Family Office Director",
+    "rating": 5,
+    "quote": "Saved us $180K in tax exposure in year one. That's not luck, that's expertise. Rebalanced the entire portfolio without disrupting our flow.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Samantha Joyce"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Oliver Ellis",
+    "role": "Managing Partner, Ellis Ventures",
+    "rating": 5,
+    "quote": "Rebuilt our portfolio from the ground up. Thorough analysis, thoughtful execution, completely flexible when market conditions demanded adjustments. Masters at translating complex financial concepts into actionable strategies. Invaluable.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Oliver Ellis"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Diana Xavier",
+    "role": "Chief Investment Officer, Pryor Foundation",
+    "rating": 5,
+    "quote": "Fiduciary standard is real here. No hidden fees, no unnecessary trades, just pure strategy execution.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Diana Xavier"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Wendy Kemp",
+    "role": "Principal, Kemp Family Trust",
+    "rating": 5,
+    "quote": "Easy to work with and incredibly responsive. Their audit identified gaps we'd completely missed. Turned confusion into a framework we actually understand and trust. Dynamically adjusted priorities when implementation required changes. Delivered on time.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Wendy Kemp"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Holly Woods",
+    "role": "Retired Partner, Whitfield & Associates",
+    "rating": 5,
+    "quote": "Portfolio rebalancing was seamless. Volatility down, returns stable, exactly the outcome we needed. Thoughtful approach to risk management.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1614289371518-722f2615943d?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Holly Woods"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Natali Caldwell",
+    "role": "VP of Finance, Caldwell Industries",
+    "rating": 5,
+    "quote": "Treats strategy like architecture. Every component serves a purpose. Every decision backed by analysis. Quick to explain reasoning, receptive to questions, flexible when adjustments made sense.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Natali Caldwell"
+    }
+  },
+  {
+    "id": 8,
+    "name": "Rachel Zimmerman",
+    "role": "Founder, Zimmerman Medical Group",
+    "rating": 5,
+    "quote": "Best financial decision we made for the firm. Professional execution across the board, responsive to every question, committed to real results.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Rachel Zimmerman"
+    }
+  },
+  {
+    "id": 9,
+    "name": "Mia Walker",
+    "role": "Trustee, Walker Family Office",
+    "rating": 5,
+    "quote": "The structural audit alone was worth the engagement. Navigated the last three market downturns without panic or knee-jerk reactions. That discipline is rare. Portfolio protected while still capturing upside.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Mia Walker"
+    }
+  },
+  {
+    "id": 10,
+    "name": "Zara Payne",
+    "role": "Director of Philanthropy, Payne Charitable Trust",
+    "rating": 5,
+    "quote": "Took us from confusion to genuine confidence about our financial future. Their framework actually works.",
+    "avatar": {
+      "src": "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=128&h=128&q=80",
+      "alt": "Portrait of Zara Payne"
+    }
+  }
+]

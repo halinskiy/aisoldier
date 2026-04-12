@@ -1,0 +1,119 @@
+/*
+ * template-design — global stylesheet
+ *
+ * Load order (critical):
+ *   1. tailwindcss base (resolved from this project's node_modules)
+ *   2. ui-kit/tokens.css — kit @theme with cold neutral palette
+ *   3. projects/template-design/tokens.css — warm palette + #FF512A accent override
+ *   4. body / html defaults specific to this project
+ *
+ * The two @theme blocks merge at compile time; project values win because they come last.
+ */
+
+@import "tailwindcss";
+@import "../../../../ui-kit/tokens.css";
+@import "../../tokens.css";
+
+/* Tailwind v4 auto-detects sources from the project root but excludes
+   node_modules by default. The kit is symlinked into this project's
+   node_modules via a file: dependency, so none of its classes would
+   otherwise be picked up. Point the source scanner at the real folder. */
+@source "../../../../ui-kit/components/**/*.{ts,tsx}";
+@source "../../../../ui-kit/patterns/**/*.{ts,tsx}";
+
+/* next/font injects --font-plex-sans / --font-plex-serif on <html>.
+   Redirect the kit's --font-sans / --font-serif to pick them up. */
+@theme {
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-plex-serif), "IBM Plex Serif", Georgia, "Times New Roman", serif;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+}
+
+/* ============================================================
+ * Motion primitives driven by `data-motion` + `data-motion-state`.
+ * `MotionProvider` sets the state; CSS handles the transition.
+ * ============================================================ */
+
+/* Base: every tagged target starts hidden.
+   `visible` = resting state. `reduced` / `visible-instant` skip the animation. */
+[data-motion="blur-reveal"][data-motion-state="initial"] {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+}
+
+[data-motion="blur-reveal"][data-motion-state="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-motion="blur-reveal"][data-motion-state="reduced"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Line draw — per-segment scaleX from left. */
+[data-motion="line-draw"][data-motion-state="initial"] {
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+[data-motion="line-draw"][data-motion-state="visible"] {
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-motion="line-draw"][data-motion-state="reduced"] {
+  transform: scaleX(1);
+}
+
+/* Prefers reduced motion OS-level — override everything */
+@media (prefers-reduced-motion: reduce) {
+  [data-motion][data-motion-state] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+/* Lenis requirement — see https://lenis.darkroom.engineering/ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

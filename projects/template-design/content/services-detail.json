@@ -1,0 +1,77 @@
+{
+  "eyebrow": "Services",
+  "headline": "What we do",
+  "body": "Six areas of practice, one integrated team. Every service connects to your full financial picture.",
+  "services": [
+    {
+      "id": "wealth-planning",
+      "title": "Wealth Planning",
+      "paragraphs": [
+        "Wealth planning starts with a complete inventory of your financial life: income sources, expenses, liabilities, insurance, tax position, and long-term goals. We build a written plan that maps every dollar to a purpose.",
+        "The plan is not a static document. We update it annually or whenever your circumstances change. Job transitions, real estate transactions, family events: each one triggers a review against the original assumptions.",
+        "Our modelling runs across multiple time horizons. We stress-test each scenario against historical market data, inflation projections, and tax law changes. The result is a plan that accounts for what might go wrong, not just what should go right."
+      ],
+      "whoItsFor": "Individuals and families with complex financial lives who want a single, written plan that ties everything together. Particularly useful during major transitions: career changes, inheritance, divorce, or business exits.",
+      "howWeWork": "We begin with two to three discovery meetings to gather documents and understand goals. From there, we deliver a written plan within 30 days. Implementation follows on your schedule. Reviews happen quarterly in the first year, then annually."
+    },
+    {
+      "id": "investment-management",
+      "title": "Investment Management",
+      "paragraphs": [
+        "We build diversified, evidence-based portfolios around each client's risk budget. Asset allocation is driven by your time horizon, liquidity needs, and tax position, not by market predictions or product sales.",
+        "Rebalancing happens quarterly or when drift exceeds predefined thresholds. Every trade is documented in plain language and reported to you within five business days. There are no hidden transactions.",
+        "Our investment committee reviews the model portfolios monthly. We adjust factor exposures, duration targets, and geographic allocations based on valuation data and economic indicators. Changes are incremental, not reactive."
+      ],
+      "whoItsFor": "Investors who want disciplined portfolio management without conflicts of interest. Suitable for taxable accounts, IRAs, trusts, and institutional pools.",
+      "howWeWork": "After the discovery phase, we propose an investment policy statement tailored to your situation. Once approved, we handle all execution, custody coordination, and reporting. You receive quarterly performance reports benchmarked against your policy targets."
+    },
+    {
+      "id": "tax-strategy",
+      "title": "Tax Strategy",
+      "paragraphs": [
+        "Tax strategy is built into every portfolio decision we make. Asset location determines which holdings sit in taxable accounts versus retirement accounts. Loss harvesting runs continuously, not just in December.",
+        "We coordinate directly with your CPA to ensure that investment decisions and tax filings stay aligned. Estimated tax payments, Roth conversion timing, and charitable giving strategies all flow from the same model.",
+        "For clients with concentrated stock positions, we build multi-year liquidation schedules that spread capital gains across tax years. Each tranche is sized to stay within target brackets while maintaining portfolio balance."
+      ],
+      "whoItsFor": "High-income earners, business owners, and anyone with a tax situation that extends beyond a single W-2. Especially valuable for clients with stock options, rental income, or multi-state filing obligations.",
+      "howWeWork": "We review your last three years of tax returns during onboarding. From that baseline, we identify opportunities and build a forward-looking tax calendar. Your CPA receives a year-end summary of all investment-related tax events."
+    },
+    {
+      "id": "estate-planning",
+      "title": "Estate Planning",
+      "paragraphs": [
+        "Estate planning is about transferring wealth on your terms. We work alongside your trust and estate counsel to design a structure that reflects your wishes, minimises tax exposure, and provides clarity for your heirs.",
+        "We handle the financial modelling: how much to fund each trust, when to make gifts, which assets belong in which entity. Your attorney handles the legal documents. We ensure the two sides stay coordinated.",
+        "For families with multiple generations, we build tiered structures that separate current income needs from long-term preservation. Each tier has its own investment mandate, distribution rules, and governance procedures."
+      ],
+      "whoItsFor": "Families with estates above the federal exemption threshold, business owners planning succession, and anyone who wants a structured transfer plan. Also relevant for blended families with complex beneficiary arrangements.",
+      "howWeWork": "We begin by reviewing existing documents: wills, trusts, beneficiary designations, and titling. We then model scenarios and present options with trade-offs. After you and your attorney agree on a structure, we fund and invest each entity according to its mandate."
+    },
+    {
+      "id": "retirement-planning",
+      "title": "Retirement Planning",
+      "paragraphs": [
+        "Retirement planning answers one question: will your money last? We build income projections that account for Social Security timing, pension elections, required minimum distributions, and healthcare costs.",
+        "Drawdown sequencing determines which accounts to tap first and when. The order matters because it affects your tax bracket, Medicare premiums, and the longevity of your portfolio. We model each sequence against 30 years of historical volatility.",
+        "We construct an income floor from stable sources: bonds, annuities if appropriate, and Social Security. Above that floor, a growth allocation provides purchasing power against inflation. The two layers work together to balance security and growth."
+      ],
+      "whoItsFor": "Individuals within 10 years of retirement or already retired. Also useful for early retirees who need to bridge the gap before age 59.5 and Medicare eligibility at 65.",
+      "howWeWork": "We start with a cash-flow analysis of your expected retirement expenses. From there, we model multiple scenarios: early retirement, delayed Social Security, part-time work, long-term care. You pick the path, and we build the portfolio to support it."
+    },
+    {
+      "id": "business-exit-planning",
+      "title": "Business Exit Planning",
+      "paragraphs": [
+        "Selling a business is often the largest financial event in an owner's life. The decisions made before, during, and after the sale determine how much of the proceeds you actually keep.",
+        "Pre-liquidity, we work with your counsel to structure the transaction for the best available tax treatment. Entity type, installment sale provisions, qualified small business stock exclusions: each one has a material impact on net proceeds.",
+        "Post-transaction, we build a diversified portfolio from the proceeds and integrate it with your broader financial plan. We also address the psychological transition: moving from concentrated, illiquid wealth to a diversified, liquid portfolio requires a different mindset."
+      ],
+      "whoItsFor": "Business owners considering a sale, merger, or transition within the next one to five years. Also relevant for partners in professional practices planning a buyout or succession.",
+      "howWeWork": "Ideally, we engage 12 to 24 months before the expected transaction. We review the business structure, model after-tax proceeds under different sale scenarios, and coordinate with your M&A advisor and tax counsel. Post-close, we manage the transition to a diversified portfolio."
+    }
+  ],
+  "bottomCta": {
+    "label": "Schedule a review",
+    "href": "/#contact"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "international-relocation",
+  "eyebrow": "Cross-border",
+  "title": "International relocation",
+  "image": {
+    "src": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
+    "alt": "View from an airplane window above a sunlit cloud layer at altitude"
+  },
+  "sections": {
+    "situation": {
+      "headline": "The situation",
+      "paragraphs": [
+        "A dual-citizen executive was relocating from the United States to the United Kingdom with a stop in Switzerland. Assets included U.S. retirement accounts, a taxable brokerage, stock options from a U.S. employer, and real property in two countries.",
+        "Each jurisdiction had different rules for capital gains, inheritance, and retirement account treatment. Timing the move incorrectly could have triggered tax obligations in all three countries simultaneously."
+      ]
+    },
+    "approach": {
+      "headline": "Our approach",
+      "paragraphs": [
+        "We mapped every asset against the tax treaties between the three jurisdictions. We identified which accounts could transfer, which needed to be liquidated before departure, and which could remain in place under treaty provisions.",
+        "We built a 24-month transition calendar. Stock options were exercised in tranches timed to the residency change date. Real property sales were sequenced to fall under the most favourable capital gains treatment. Currency exposure was hedged for the transition period."
+      ]
+    },
+    "outcome": {
+      "headline": "The outcome",
+      "paragraphs": [
+        "The client completed the relocation without triggering double taxation on any asset class. Retirement accounts remained intact under the applicable treaty. The real property sales closed within the planned tax windows.",
+        "Post-move, the client has a single consolidated view of all assets across jurisdictions. Quarterly reporting now includes currency-adjusted performance and jurisdiction-specific tax summaries. The engagement continues into its second year."
+      ]
+    }
+  }
+}

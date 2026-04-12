@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "question": "What's the minimum investment to get started?",
+    "answer": "Our minimum is $1M in investable assets for discretionary management. For project-based consulting or second opinions, there is no minimum. We set the threshold to ensure every client receives direct access to a senior advisor, not a junior associate.",
+    "status": "copywriter-draft",
+    "note": "Client to confirm exact minimum"
+  },
+  {
+    "id": 2,
+    "question": "How are you compensated?",
+    "answer": "We operate on a transparent fee-only basis: AUM-based advisory fees (0.75-1.25% annually, declining at scale) plus a one-time onboarding fee for implementation. No hidden commissions, no product kickbacks.",
+    "status": "approved",
+    "note": "Canonical answer from Figma. Retained as-is."
+  },
+  {
+    "id": 3,
+    "question": "What makes your team qualified?",
+    "answer": "Our senior advisors hold CFA and CFP designations and average 18 years of industry experience. We have managed client portfolios through three full market cycles, including 2008, 2020, and 2022. Every advisor is a fiduciary, registered with the SEC.",
+    "status": "copywriter-draft",
+    "note": "Client to confirm exact credentials"
+  },
+  {
+    "id": 4,
+    "question": "How often do we communicate?",
+    "answer": "You receive a written quarterly performance report and a formal annual plan review. Between those, your advisor is reachable by phone or email on business days. When markets move significantly, we contact you before you need to contact us.",
+    "status": "copywriter-draft",
+    "note": "Client to confirm cadence"
+  },
+  {
+    "id": 5,
+    "question": "Can you work with my existing accounts?",
+    "answer": "Yes. We manage assets held at major custodians including Schwab, Fidelity, and Pershing. In most cases, there is no need to liquidate or transfer existing positions. We evaluate your current holdings during discovery and build the plan around what you already own.",
+    "status": "copywriter-draft",
+    "note": "Client to confirm custodian list"
+  },
+  {
+    "id": 6,
+    "question": "What's your investment philosophy?",
+    "answer": "Evidence-based, long-horizon, and tax-aware. We build diversified portfolios grounded in peer-reviewed research, not market predictions. Every allocation decision ties back to your stated goals, risk tolerance, and time horizon. We do not chase trends or concentrate in single sectors.",
+    "status": "copywriter-draft",
+    "note": "SEC-safe: no promised returns"
+  },
+  {
+    "id": 7,
+    "question": "How do you handle market downturns?",
+    "answer": "We plan for them before they happen. Every portfolio has a pre-committed risk budget that defines how much drawdown is acceptable. During downturns, we rebalance into the plan, not away from it. We also use tax-loss harvesting to turn volatility into a future tax benefit. Past downturns are not predictive of future results.",
+    "status": "copywriter-draft",
+    "note": "SEC-safe: includes past-performance disclaimer"
+  }
+]

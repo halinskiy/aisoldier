@@ -1,0 +1,26 @@
+{
+  "title": "What fiduciary duty means for your money",
+  "slug": "fiduciary-duty",
+  "eyebrow": "April 2026",
+  "readTime": "4 min read",
+  "author": {
+    "name": "Template Design Editorial",
+    "role": "Wealth Advisory"
+  },
+  "image": {
+    "src": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Pen and financial documents on a wooden desk in warm light"
+  },
+  "body": [
+    "A fiduciary is someone who is legally required to act in your interest, not their own. In wealth management, this distinction matters more than most people realise. It determines whose side your advisor is actually on.",
+    "The financial industry operates under two different standards. Fiduciaries must put your interests first. Broker-dealers operate under a lower bar called the suitability standard. Under suitability, a recommendation only needs to be appropriate for your general situation. It does not need to be the best option available to you.",
+    "Here is a concrete example. Suppose two index funds track the same benchmark. One charges 0.03% per year. The other charges 0.85% and pays a commission to the advisor who recommends it. A fiduciary must recommend the cheaper fund. A broker-dealer can recommend the expensive one, because it is still \"suitable\" for your goals.",
+    "Over 20 years on a $1M portfolio, that difference in fees compounds to more than $150,000. The suitability standard allows that cost to pass to you without disclosure.",
+    "To verify whether your advisor is a fiduciary, ask one question: are you registered as an investment adviser with the SEC or your state regulator? Registered investment advisers (RIAs) are held to the fiduciary standard by law. Broker-dealers registered with FINRA are not, even if they call themselves \"financial advisors.\"",
+    "You can check registration status yourself. The SEC maintains a public database called IAPD (Investment Adviser Public Disclosure) at adviserinfo.sec.gov. Search your advisor's name or firm. The record will show registration type, disciplinary history, and the firm's Form ADV, which discloses fees, conflicts, and business practices.",
+    "Fiduciary duty also extends to how advisors get paid. Fee-only advisors charge a flat fee, an hourly rate, or a percentage of assets under management. They do not receive commissions, referral fees, or revenue-sharing payments from product providers. This removes the financial incentive to recommend one product over another.",
+    "Fee-based advisors (note the subtle difference from fee-only) may charge fees and collect commissions. The dual compensation model creates conflicts that are difficult for clients to detect.",
+    "When evaluating an advisor, look for three things. First, RIA registration with the SEC or your state. Second, fee-only compensation disclosed in writing. Third, a willingness to sign a fiduciary pledge that applies at all times, not just when providing financial planning advice.",
+    "The standard your advisor operates under shapes every recommendation they make. It is worth understanding before you hand over your capital."
+  ]
+}

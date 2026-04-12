@@ -1,0 +1,32 @@
+{
+  "slug": "tech-founder-after-exit",
+  "eyebrow": "Post-liquidity event",
+  "title": "Tech founder after exit",
+  "image": {
+    "src": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Boardroom table with notebooks and coffee cups in warm afternoon light"
+  },
+  "sections": {
+    "situation": {
+      "headline": "The situation",
+      "paragraphs": [
+        "A software founder closed a $48M acquisition. Ninety percent of the proceeds sat in a single stock position with the acquiring company. The lock-up period was 18 months.",
+        "The founder had no prior relationship with a wealth manager. Tax exposure from the sale was significant, and the concentrated holding carried meaningful downside risk. The founder needed a clear plan before the lock-up expired."
+      ]
+    },
+    "approach": {
+      "headline": "Our approach",
+      "paragraphs": [
+        "We started with a full financial picture: existing assets, tax obligations, living expenses, and long-term goals. From that, we built a staged liquidation schedule aligned to the lock-up timeline.",
+        "We used tax-loss harvesting across the broader portfolio to offset gains from each tranche sale. Asset location decisions placed tax-inefficient holdings inside retirement accounts and tax-efficient positions in taxable accounts. Every trade was documented in plain language."
+      ]
+    },
+    "outcome": {
+      "headline": "The outcome",
+      "paragraphs": [
+        "Over the 18-month liquidation window, the concentrated position dropped from 90% to under 15% of total holdings. The diversified portfolio now spans domestic equities, international developed markets, fixed income, and alternatives.",
+        "Tax-loss harvesting saved the client six figures in the first year. The client receives quarterly reports and has a written investment policy that governs every future decision. The relationship is now in its fourth year."
+      ]
+    }
+  }
+}

@@ -1,0 +1,88 @@
+/*
+ * Template-Design — Project tokens override
+ *
+ * Imported AFTER `@aisoldier/ui-kit/tokens.css` in globals.css so these win.
+ * Only overrides. Everything else inherits from the kit.
+ */
+
+@theme {
+  /* =====================================================================
+   * ACCENT — project-specific
+   * Warm orange-red, saturated. Pairs with the cream paper background.
+   * ===================================================================== */
+  --color-accent: #FF512A;
+  --color-accent-hover: #E63D17;       /* derived: 15% darker */
+  --color-accent-subtle: rgba(255, 81, 42, 0.08);
+
+  /* =====================================================================
+   * NEUTRAL — warm editorial palette
+   * Designer tokens from Figma: Dark #212121, Light #EFEDE7, Background #F8F7F1
+   * ===================================================================== */
+  --color-bg: #F8F7F1;                 /* warm paper cream — page bg */
+  --color-surface: #EFEDE7;            /* warm light — elevated surface */
+  --color-surface-2: #E8E5DC;          /* derived: slightly deeper surface */
+  --color-border: #E0DCD0;             /* derived: warm border tone */
+  --color-border-strong: #C9C4B4;      /* derived: hover border */
+  --color-text: #212121;               /* primary text */
+  --color-text-muted: #5A5A5A;         /* derived: muted on warm bg */
+  --color-text-subtle: #8A8A84;        /* derived */
+  --color-text-faint: #B8B4A8;         /* derived */
+
+  /* =====================================================================
+   * TYPOGRAPHY — from Figma Style guide variables
+   * IBM Plex Serif (headings) + IBM Plex Sans (body).
+   * Note the deliberate weight mixing: Medium on H0/H1/H6, Regular on H2-H5.
+   * ===================================================================== */
+
+  /* Fixed sizes as designed */
+  --text-h0-fixed: 96px;
+  --text-h1-fixed: 64px;
+  --text-h2-fixed: 48px;
+  --text-h3-fixed: 40px;
+  --text-h4-fixed: 32px;
+  --text-h5-fixed: 28px;
+  --text-h6-fixed: 24px;
+
+  /* Clamp-based responsive equivalents */
+  --text-h0: clamp(40px, 8vw, 96px);
+  --text-h1: clamp(36px, 5.5vw, 64px);
+  --text-h2: clamp(28px, 4vw, 48px);
+  --text-h3: clamp(24px, 3vw, 40px);
+  --text-h4: clamp(22px, 2.5vw, 32px);
+  --text-h5: clamp(20px, 2vw, 28px);
+  --text-h6: 24px;
+
+  /* Body scale */
+  --text-large: 20px;
+  --text-body: 16px;
+  --text-small: 14px;
+  --text-label-lg: 12px;
+  --text-label-sm: 10px;
+
+  /* Line heights (from Figma) */
+  --lh-h0: 1;
+  --lh-h1: 0.95;
+  --lh-h2: 1.1;
+  --lh-h3: 1.1;
+  --lh-h4: 1.1;
+  --lh-h5: 1.2;
+  --lh-h6: 1.2;
+  --lh-large: 1.4;
+  --lh-body: 1.5;
+
+  /* Letter-spacing (from Figma) */
+  --ls-h0: -0.026em;   /* -2.5/96 */
+  --ls-h1: 0;
+  --ls-h2: -0.042em;   /* -2/48 */
+  --ls-h3: -0.025em;   /* -1/40 */
+  --ls-h4: -0.031em;   /* -1/32 */
+  --ls-h5: -0.018em;   /* -0.5/28 */
+  --ls-h6: -0.021em;   /* -0.5/24 */
+  --ls-label: 0.062em; /* 0.75/12 */
+}
+
+/* Override selection color on warm bg — use the accent's warmer cousin */
+::selection {
+  background: rgba(255, 81, 42, 0.18);
+  color: inherit;
+}

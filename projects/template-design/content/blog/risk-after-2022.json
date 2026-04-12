@@ -1,0 +1,26 @@
+{
+  "title": "Risk in a post-2022 market",
+  "slug": "risk-after-2022",
+  "eyebrow": "February 2026",
+  "readTime": "4 min read",
+  "author": {
+    "name": "Template Design Editorial",
+    "role": "Wealth Advisory"
+  },
+  "image": {
+    "src": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Financial newspaper with market data and reading glasses"
+  },
+  "body": [
+    "2022 was the worst year for a traditional 60/40 portfolio since 1937. Stocks and bonds fell together. The diversification that investors relied on for decades failed to provide its usual cushion. That experience changed how we think about risk.",
+    "Before 2022, the standard assumption was simple: when stocks fall, bonds rise. This negative correlation held for most of the period from 2000 to 2021. It broke when inflation forced the Federal Reserve to raise rates aggressively. Bond prices dropped alongside equities, and balanced portfolios had nowhere to hide.",
+    "The lesson is not that diversification is broken. The lesson is that correlation regimes shift. When inflation is high and rising, stocks and bonds can move in the same direction. When inflation is low and stable, the traditional offset tends to hold. The question for portfolio construction is which regime we are in now, and how to prepare for the next shift.",
+    "Our approach to risk starts with drawdown analysis, not standard deviation. Standard deviation treats upside and downside volatility equally. For a retiree drawing income from a portfolio, a 25% gain and a 25% loss are not symmetric. The loss triggers forced selling at depressed prices. The gain does not require any action. Drawdown measures the peak-to-trough decline, which is the number that actually affects your financial plan.",
+    "We stress-test every portfolio against historical drawdown scenarios: 2008 (credit crisis), 2020 (pandemic shock), 2022 (rate shock), and a synthetic stagflation scenario modelled on the 1970s. Each test shows how the portfolio would have performed, how long recovery would have taken, and whether income needs would have been met throughout.",
+    "Rebalancing is our primary tool for managing risk over time. When an asset class rises above its target weight, we trim it. When it falls below, we add to it. This forces a disciplined pattern of selling high and buying low at the portfolio level.",
+    "We do not rebalance on a fixed calendar. We rebalance when drift exceeds predefined thresholds. In calm markets, that might mean one or two trades per quarter. In volatile markets, it might mean several trades in a single month. The trigger is data, not dates.",
+    "Position sizing also matters. No single holding exceeds 5% of a diversified portfolio at the time of purchase. Sector concentrations are capped at levels that reflect the client's risk budget. These rules prevent the kind of concentrated bets that amplify drawdowns.",
+    "The environment after 2022 rewards discipline over prediction. Interest rates are higher, valuations are more dispersed, and the correlation between stocks and bonds remains unstable. A portfolio built for this environment needs explicit rules for rebalancing, clear drawdown limits, and enough liquidity to avoid forced selling.",
+    "We do not predict where markets will go. We build portfolios that can absorb what markets do."
+  ]
+}

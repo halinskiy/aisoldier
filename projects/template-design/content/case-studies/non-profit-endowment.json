@@ -1,0 +1,32 @@
+{
+  "slug": "non-profit-endowment",
+  "eyebrow": "Institutional",
+  "title": "Non-profit endowment",
+  "image": {
+    "src": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Row of scholarly hardback books on a study shelf in warm interior light"
+  },
+  "sections": {
+    "situation": {
+      "headline": "The situation",
+      "paragraphs": [
+        "A regional non-profit with a $28M endowment had an investment policy statement written in 2011. The asset allocation had drifted significantly from its original targets. The board lacked a formal review process.",
+        "The organisation wanted to align its portfolio with its mission without sacrificing long-term growth. Board members had varying levels of investment knowledge, and decisions often stalled."
+      ]
+    },
+    "approach": {
+      "headline": "Our approach",
+      "paragraphs": [
+        "We rewrote the investment policy statement from scratch. The new document defines asset class targets, rebalancing triggers, spending policy rules, and governance procedures in plain language.",
+        "We introduced mission-aligned allocation by screening for ESG factors within the equity sleeve while maintaining broad diversification. We also built a board education programme: a 30-minute briefing before each quarterly meeting covering one topic in depth."
+      ]
+    },
+    "outcome": {
+      "headline": "The outcome",
+      "paragraphs": [
+        "Quarterly governance reviews now run on a fixed cadence. The board votes on rebalancing decisions with a clear framework rather than ad-hoc discussion. Meeting durations dropped from 90 minutes to 45.",
+        "The endowment's spending rate is now within its target band for the first time in four years. The mission-aligned sleeve accounts for 35% of the equity allocation, and the full portfolio remains on track relative to its benchmark."
+      ]
+    }
+  }
+}

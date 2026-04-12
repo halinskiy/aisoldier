@@ -1,0 +1,32 @@
+{
+  "slug": "founder-equity-hedge",
+  "eyebrow": "Concentrated position",
+  "title": "Founder equity hedge",
+  "image": {
+    "src": "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Abstract modern skyscraper geometry photographed against a warm sky"
+  },
+  "sections": {
+    "situation": {
+      "headline": "The situation",
+      "paragraphs": [
+        "A company founder held $22M in employer stock with a 12-month lock-up period. The position represented 85% of total net worth. A 30% decline in the stock price would have wiped out a decade of personal savings.",
+        "The founder wanted downside protection but was unwilling to forfeit all upside participation. Selling was not an option during the lock-up."
+      ]
+    },
+    "approach": {
+      "headline": "Our approach",
+      "paragraphs": [
+        "We structured a costless collar using listed options on the underlying stock. The collar established a price floor at 15% below the current market value and capped upside participation at 25% above. No premium was required because the put and call values offset each other.",
+        "We also built a parallel diversified portfolio from the founder's remaining liquid assets. This portfolio was designed to perform independently of the concentrated stock, reducing overall household correlation to a single company."
+      ]
+    },
+    "outcome": {
+      "headline": "The outcome",
+      "paragraphs": [
+        "During the lock-up, the underlying stock declined 18%. The collar's put option activated, and the founder's effective loss was limited to the 15% floor. Without the hedge, the unrealised loss would have exceeded $3.9M.",
+        "After the lock-up expired, we executed a staged diversification plan over six months. The concentrated position now represents under 20% of total holdings. The founder reviews the portfolio quarterly and has a written plan for any future equity grants."
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "physician-retirement-plan",
+  "eyebrow": "Professional practice",
+  "title": "Physician retirement plan",
+  "image": {
+    "src": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+    "alt": "Stethoscope resting on medical case notes beside a cup of tea"
+  },
+  "sections": {
+    "situation": {
+      "headline": "The situation",
+      "paragraphs": [
+        "A medical practice with 12 physicians operated a defined-contribution retirement plan with high administrative costs and limited investment options. The plan had not been reviewed in six years.",
+        "Several physicians were within 10 years of retirement. Their benefit structures did not reflect their equity stakes in the practice, and contribution limits were not optimised for their income levels."
+      ]
+    },
+    "approach": {
+      "headline": "Our approach",
+      "paragraphs": [
+        "We audited the existing plan documents, fee disclosures, and fund lineup. We then benchmarked the plan against comparable medical practice plans in the same revenue band.",
+        "We redesigned the plan with a new recordkeeper, lower-cost index fund options, and a profit-sharing formula aligned to ownership percentages. We also added a cash-balance component for the physicians closest to retirement, giving them a higher annual contribution ceiling."
+      ]
+    },
+    "outcome": {
+      "headline": "The outcome",
+      "paragraphs": [
+        "Administrative overhead dropped by 40%. The average all-in fund expense ratio fell from 0.82% to 0.11%. Senior physicians now contribute up to three times more per year through the cash-balance layer.",
+        "The practice runs quarterly governance reviews on a fixed schedule. Each physician receives an individual projection that maps their plan balance to a retirement income estimate. The plan is now in its second year under the new structure."
+      ]
+    }
+  }
+}

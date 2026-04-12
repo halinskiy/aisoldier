@@ -1,0 +1,338 @@
+{
+  "nav": {
+    "logo": "Template ~ Design",
+    "links": [
+      { "label": "About", "href": "#about" },
+      { "label": "Services", "href": "#services" },
+      { "label": "Case Studies", "href": "#case-studies" },
+      { "label": "Contact", "href": "#contact" },
+      { "label": "Blog", "href": "/blog" }
+    ],
+    "cta": {
+      "label": "Schedule call",
+      "href": "#contact"
+    }
+  },
+  "hero": {
+    "eyebrow": "Wealth Advisory",
+    "headline": ["Your capital,", "disciplined."],
+    "body": "We manage $3.2B+ across 400 families with one rule: your interests come first.",
+    "primaryCta": {
+      "label": "Book a 30-minute review",
+      "href": "#contact"
+    },
+    "secondaryCta": {
+      "label": "See how we work",
+      "href": "#process"
+    },
+    "socialProof": "Trusted by 500+ clients (4.9/5)",
+    "journeyIndicator": {
+      "from": "Your Situation",
+      "to": "Long-term Clarity"
+    },
+    "carouselCard": {
+      "label": "See how we structure capital allocation for each client",
+      "href": "#services"
+    },
+    "image": {
+      "src": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1352&q=80",
+      "alt": "Two advisors reviewing a portfolio in a warm, naturally-lit office",
+      "credit": "Christina @ wocintechchat.com on Unsplash — placeholder until client delivers real photography"
+    },
+    "avatars": [
+      { "src": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=96&h=96&q=80", "alt": "Client 1" },
+      { "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=96&h=96&q=80", "alt": "Client 2" },
+      { "src": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=96&h=96&q=80", "alt": "Client 3" },
+      { "src": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=96&h=96&q=80", "alt": "Client 4" }
+    ]
+  },
+  "about": {
+    "eyebrow": "About Us",
+    "left": "We are a fiduciary wealth manager. That means one thing: we are legally bound to act in your interest, not ours. No commissions. No product quotas. Fee-only compensation, disclosed in full before we begin.",
+    "right": "Our team manages $3.2B+ in assets for over 400 families and institutions. Eighteen years of practice across three full market cycles have taught us that discipline beats prediction. We build portfolios around your complete financial picture: tax position, estate structure, liquidity needs, and time horizon. Every position, cost, and rationale is documented in plain language. You receive quarterly reports written for clarity, not compliance padding. When markets move, we call you before you call us."
+  },
+  "approach": {
+    "eyebrow": "Our Approach",
+    "headline": "Built for decades, not quarters",
+    "body": "Five principles govern every portfolio we manage. They are not guidelines. They are rules we enforce across every client, every cycle, without exception.",
+    "cta": {
+      "label": "Book a 30-minute review",
+      "href": "#contact"
+    },
+    "cards": [
+      {
+        "number": "01",
+        "title": "Discipline",
+        "body": "Every portfolio follows a pre-committed risk budget. We enforce it across cycles, not abandon it in a drawdown."
+      },
+      {
+        "number": "02",
+        "title": "Transparency",
+        "body": "Fee-only compensation. Every position, cost, and rationale documented in plain English. No exceptions."
+      },
+      {
+        "number": "03",
+        "title": "Long horizon",
+        "body": "Strategy tuned for decades. Volatility is managed, never chased. Short-term noise is filtered out."
+      },
+      {
+        "number": "04",
+        "title": "Tax-efficient",
+        "body": "Asset location, loss harvesting, and lot-level optimisation built into every rebalance. Tax drag is a cost we treat seriously."
+      },
+      {
+        "number": "05",
+        "title": "Client-first",
+        "body": "SEC fiduciary standard. We answer to your outcome, never to a product shelf or internal revenue target."
+      }
+    ]
+  },
+  "servicesShowcase": {
+    "eyebrow": "Services",
+    "headline": "Six disciplines, one mandate",
+    "body": "We keep every decision grounded in your full financial picture. Not siloed departments. Not referral chains. One team, six areas of practice.",
+    "cta": {
+      "label": "Start a conversation",
+      "href": "#contact"
+    },
+    "cards": [
+      {
+        "title": "Wealth Planning",
+        "description": "Goal-based allocation and cash-flow modelling across a multi-decade horizon. We map every income source, expense, and liability before building a plan.",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Financial planning workspace with documents and a warm desk lamp"
+        }
+      },
+      {
+        "title": "Investment Management",
+        "description": "Diversified, evidence-based portfolios built around each client's risk budget. We rebalance quarterly and report every trade in plain language.",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Analyst workstation with market data on a warm-lit monitor"
+        }
+      },
+      {
+        "title": "Tax Strategy",
+        "description": "Asset location, loss harvesting, and multi-year optimisation built into every rebalance. We coordinate directly with your CPA to reduce drag.",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Calculator, pen and financial documents on a wooden desk"
+        }
+      },
+      {
+        "title": "Estate Planning",
+        "description": "Generational transfer structured in partnership with trust and estate counsel. We design the roadmap and coordinate the legal execution.",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Row of leather-bound legal reference books in warm library light"
+        }
+      },
+      {
+        "title": "Retirement Planning",
+        "description": "Drawdown sequencing, longevity risk modelling, and income floor construction. We stress-test each plan against 30 years of historical volatility.",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Glass-and-wood modern office building bathed in golden-hour light"
+        }
+      },
+      {
+        "title": "Business Exit Planning",
+        "description": "Pre-liquidity structuring and post-transaction wealth coordination. We work with your counsel to time the exit for the best tax outcome.",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Hands writing in a leather-bound notebook beside a laptop"
+        }
+      }
+    ],
+    "note": "Section 4 content placeholder — real services and photography TBD from client"
+  },
+  "servicesList": {
+    "eyebrow": "Services",
+    "headline": "Four ways to work with us",
+    "body": "Choose the depth of partnership that matches your situation. Every engagement starts with a free 30-minute review.",
+    "cta": {
+      "label": "Start a conversation",
+      "href": "#contact"
+    },
+    "rows": [
+      {
+        "number": "01",
+        "title": "Discretionary Management",
+        "description": "We take full authority over day-to-day portfolio decisions within a pre-agreed mandate. You set the boundaries. We execute, report, and adjust.",
+        "href": "#contact"
+      },
+      {
+        "number": "02",
+        "title": "Non-discretionary Advisory",
+        "description": "You remain the decision-maker. We provide analysis, recommendations, and implementation support on your schedule.",
+        "href": "#contact"
+      },
+      {
+        "number": "03",
+        "title": "Outsourced Family CFO",
+        "description": "Coordination across legal, tax, and operational partners for families with complex estates. One point of contact instead of six.",
+        "href": "#contact"
+      },
+      {
+        "number": "04",
+        "title": "Project-based Consulting",
+        "description": "Fixed-scope engagements: second opinions, wealth transitions, and portfolio audits. Clear deliverable, agreed fee, defined timeline.",
+        "href": "#contact"
+      }
+    ]
+  },
+  "caseStudies": {
+    "eyebrow": "Case Studies",
+    "headline": "What discipline looks like",
+    "body": "Six engagements, anonymised and compliance-reviewed. Each one shows how we approach a specific situation.",
+    "cta": {
+      "label": "Book a 30-minute review",
+      "href": "#contact"
+    },
+    "cards": [
+      {
+        "eyebrow": "Post-liquidity event",
+        "title": "Tech founder after exit",
+        "description": "Converted a concentrated stock position into a diversified portfolio through staged liquidation. Tax-loss harvesting saved the client six figures in the first year.",
+        "href": "/case-studies/tech-founder-after-exit",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Boardroom table with notebooks and coffee cups in warm afternoon light"
+        }
+      },
+      {
+        "eyebrow": "Multi-generational",
+        "title": "Family estate coordination",
+        "description": "Built a trust structure with three generational tiers and coordinated five external partners. The 30-year transfer roadmap is now in its third year of execution.",
+        "href": "/case-studies/family-estate-coordination",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Coastal estate at golden hour, architectural silhouette against the water"
+        }
+      },
+      {
+        "eyebrow": "Professional practice",
+        "title": "Physician retirement plan",
+        "description": "Redesigned the defined-contribution plan and aligned the benefit structure with ownership equity. Administrative overhead dropped by 40%.",
+        "href": "/case-studies/physician-retirement-plan",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Stethoscope resting on medical case notes beside a cup of tea"
+        }
+      },
+      {
+        "eyebrow": "Institutional",
+        "title": "Non-profit endowment",
+        "description": "Rewrote the investment policy statement and introduced mission-aligned allocation. Quarterly governance reviews now run on a fixed cadence.",
+        "href": "/case-studies/non-profit-endowment",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Row of scholarly hardback books on a study shelf in warm interior light"
+        }
+      },
+      {
+        "eyebrow": "Cross-border",
+        "title": "International relocation",
+        "description": "Restructured assets ahead of a residency change across three jurisdictions. Optimised timing for currency exposure, tax treatment, and estate law differences.",
+        "href": "/case-studies/international-relocation",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
+          "alt": "View from an airplane window above a sunlit cloud layer at altitude"
+        }
+      },
+      {
+        "eyebrow": "Concentrated position",
+        "title": "Founder equity hedge",
+        "description": "Put a collar strategy in place to protect a concentrated stock position during a lock-up period. The client kept upside participation while capping downside risk.",
+        "href": "/case-studies/founder-equity-hedge",
+        "image": {
+          "src": "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Abstract modern skyscraper geometry photographed against a warm sky"
+        }
+      }
+    ]
+  },
+  "midpageBanner": {
+    "headline": "One standard: yours.",
+    "note": "Approved by copywriter — fiduciary positioning statement"
+  },
+  "testimonials": {
+    "eyebrow": "Testimonials",
+    "headline": "What clients say",
+    "sidebar": "All reviews are published with client permission and available on the founder's LinkedIn profile.",
+    "leaveReview": {
+      "label": "Leave a review",
+      "href": "#"
+    }
+  },
+  "process": {
+    "eyebrow": "How We Work",
+    "headline": "Four steps. No shortcuts.",
+    "body": "Every engagement follows the same structure. We start with your full financial picture and build from there.",
+    "cta": {
+      "label": "Book a 30-minute review",
+      "href": "#contact"
+    },
+    "steps": [
+      { "number": "01", "label": "Discovery", "description": "We audit your current holdings, tax position, estate documents, and goals. This takes one to two meetings." },
+      { "number": "02", "label": "Strategy", "description": "Our team builds a written plan matched to your risk tolerance, time horizon, and liquidity needs." },
+      { "number": "03", "label": "Execution", "description": "We implement the plan, handle all transfers, and coordinate with your CPA and counsel." },
+      { "number": "04", "label": "Review", "description": "Quarterly performance reports. Annual plan reviews. We rebalance when the data says to, not on a calendar." }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "headline": "Common questions, direct answers",
+    "note": "Items in faq.json"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "headline": "Start with a conversation",
+    "body": "Tell us about your situation in a few sentences. We read every message and respond within one business day.",
+    "submitLabel": "Send message",
+    "submittingLabel": "Sending...",
+    "successHeadline": "Message received.",
+    "successBody": "We will respond within one business day from the address you provided.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "message": "How can we help?",
+      "consent": "I understand this form does not create a binding advisory agreement."
+    },
+    "placeholders": {
+      "name": "Your full name",
+      "email": "you@example.com",
+      "phone": "+1 (555) 123-4567",
+      "message": "A paragraph about your situation and goals."
+    },
+    "secondary": {
+      "email": {
+        "label": "Prefer email?",
+        "value": "hello@template-design.example",
+        "href": "mailto:hello@template-design.example"
+      },
+      "schedule": {
+        "label": "Or book directly",
+        "value": "30-minute discovery call",
+        "href": "#schedule"
+      }
+    },
+    "note": "Section 11 — real form fields TBD"
+  },
+  "footer": {
+    "logo": "Template ~ Design",
+    "tagline": "Fee-only fiduciary wealth management for investors who value clarity over complexity. $3.2B+ under management. 400+ families served.",
+    "sitemap": [
+      { "label": "About", "href": "#about" },
+      { "label": "Services", "href": "#services" },
+      { "label": "Case Studies", "href": "#case-studies" },
+      { "label": "Contact", "href": "#contact" },
+      { "label": "Blog", "href": "/blog" },
+      { "label": "Style Guide", "href": "/style-guide" }
+    ],
+    "legal": "Template Design operates under SEC fiduciary standards. All recommendations prioritise your interests. Past performance does not indicate future results. Securities offered through our registered partner.",
+    "copyright": "\u00a9 2026. Made by 3mpq studio."
+  }
+}
