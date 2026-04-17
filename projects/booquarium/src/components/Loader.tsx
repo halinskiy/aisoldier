@@ -1,6 +1,7 @@
 "use client";
 
 import { useLenis } from "lenis/react";
+import { useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const DATA_SOURCE = "projects/booquarium/src/components/Loader.tsx";
@@ -25,19 +26,24 @@ type Phase = "enter" | "open" | "exit" | "done";
 export function Loader() {
   const [phase, setPhase] = useState<Phase>("enter");
   const lenis = useLenis();
+  const prefersReduced = useReducedMotion();
   const startedRef = useRef(false);
 
   useEffect(() => {
-    if (!lenis || startedRef.current) return;
+    if (startedRef.current) return;
     startedRef.current = true;
 
-    lenis.stop();
+    if (prefersReduced) {
+      setPhase("done");
+      return;
+    }
 
-    // Immediately jump scroll so R3F book starts lerping toward open state
+    // Lock scroll while loader plays (lenis may be null in test envs — that's fine)
+    lenis?.stop();
+
     const heroEl = document.getElementById("book-hero");
-    if (heroEl) {
+    if (heroEl && lenis) {
       const targetY = heroEl.offsetHeight * SCROLL_FRACTION;
-      // Lenis.scrollTo with immediate bypasses the smooth engine
       lenis.scrollTo(targetY, { immediate: true, force: true });
     }
 
@@ -45,16 +51,17 @@ export function Loader() {
     const t2 = setTimeout(() => setPhase("exit"), 1600);
     const t3 = setTimeout(() => {
       setPhase("done");
-      lenis.start();
+      lenis?.start();
     }, 2200);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
-      lenis.start();
+      lenis?.start();
     };
-  }, [lenis]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (phase === "done") return null;
 
@@ -84,7 +91,7 @@ export function Loader() {
         style={{
           fontFamily: "var(--font-plex-serif), Georgia, serif",
           fontStyle: "italic",
-          fontSize: "14px",
+          fontSize: "16px",
           color: "var(--color-text-subtle)",
           letterSpacing: "0.01em",
           opacity: phase === "open" || phase === "exit" ? 0 : 1,
@@ -168,7 +175,7 @@ function CSSBook({ open }: { open: boolean }) {
             fontFamily: "Georgia, serif",
             fontSize: "22px",
             fontWeight: "bold",
-            color: "#B8322C",
+            color: "var(--color-accent)",
             lineHeight: 1,
           }}
         >

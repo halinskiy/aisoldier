@@ -26,21 +26,20 @@ export function BookScene({ coverAngle, bookRotY }: BookSceneProps) {
     <Canvas
       camera={{ position: [0, 0, 6.5], fov: 40 }}
       shadows
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       style={{ width: "100%", height: "100%" }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
     >
       {/* Transparent canvas — page bg shows through */}
-      <ambientLight intensity={0.55} />
+      <ambientLight intensity={0.6} />
       <hemisphereLight args={["#fdf8f5", "#e8e0d8", 0.5]} />
       <directionalLight
         position={[5, 8, 5]}
         intensity={1.3}
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
       />
-      <directionalLight position={[-4, 3, 3]} intensity={0.4} color="#ffe2d4" />
 
       <Suspense fallback={null}>
         <BookModel coverAngle={coverAngle} bookRotY={bookRotY} />

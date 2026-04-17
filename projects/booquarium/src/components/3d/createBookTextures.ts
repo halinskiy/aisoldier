@@ -2,6 +2,52 @@
 
 import * as THREE from "three";
 
+// ─── spread loader ────────────────────────────────────────────────────────────
+// Loads /covers/spread.png once (cached) and updates a canvas texture with the
+// correct crop. Fires after the procedural fallback has already painted the canvas,
+// so R3F shows something immediately and the real image swaps in when ready.
+
+let _spreadPromise: Promise<HTMLImageElement> | null = null;
+
+function loadSpread(): Promise<HTMLImageElement> {
+  if (!_spreadPromise) {
+    _spreadPromise = new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = "/covers/spread.png";
+    });
+  }
+  return _spreadPromise;
+}
+
+function applySpreadCrop(
+  texture: THREE.CanvasTexture,
+  canvas: HTMLCanvasElement,
+  side: "front" | "back"
+) {
+  loadSpread().then((img) => {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    if (side === "front") {
+      // Right ~48% of the spread = front cover
+      const srcX = Math.round(img.width * 0.52);
+      const srcW = img.width - srcX;
+      ctx.drawImage(img, srcX, 0, srcW, img.height, 0, 0, W, H);
+    } else {
+      // Left ~40% of the spread = back cover
+      const srcW = Math.round(img.width * 0.40);
+      ctx.drawImage(img, 0, 0, srcW, img.height, 0, 0, W, H);
+    }
+
+    texture.needsUpdate = true;
+  }).catch(() => {/* spread not found — keep procedural fallback */});
+}
+
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function grain(ctx: CanvasRenderingContext2D, w: number, h: number, alpha = 0.04) {
@@ -220,6 +266,7 @@ export function createFrontCoverTexture(): THREE.CanvasTexture {
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
+  applySpreadCrop(tex, canvas, "front");
   return tex;
 }
 
@@ -306,6 +353,7 @@ export function createBackCoverTexture(blurb: string, sourceLabel: string, synop
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
+  applySpreadCrop(tex, canvas, "back");
   return tex;
 }
 
