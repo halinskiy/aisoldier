@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "../../../../ui-kit/tokens.css";
+@import "../../tokens.css";
+
+@source "../../../../ui-kit/components/**/*.{ts,tsx}";
+@source "../../../../ui-kit/patterns/**/*.{ts,tsx}";
+
+@theme {
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-plex-serif), "IBM Plex Serif", Georgia, "Times New Roman", serif;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+}
+
+[data-motion="blur-reveal"][data-motion-state="initial"] {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+}
+
+[data-motion="blur-reveal"][data-motion-state="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-motion="blur-reveal"][data-motion-state="reduced"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}

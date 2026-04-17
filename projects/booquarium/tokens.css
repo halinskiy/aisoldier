@@ -1,0 +1,64 @@
+/*
+ * booquarium — Project token overrides
+ *
+ * Imported AFTER ui-kit/tokens.css in globals.css so these win.
+ * White background. Ink Crimson accent #B8322C.
+ */
+
+@theme {
+  /* =====================================================================
+   * ACCENT — Ink Crimson
+   * Literary, editorial, warm. Wins on Etsy thumbnails against beige.
+   * ===================================================================== */
+  --color-accent: #B8322C;
+  --color-accent-hover: #961F1A;
+  --color-accent-subtle: rgba(184, 50, 44, 0.08);
+
+  /* =====================================================================
+   * NEUTRAL — pure white editorial palette
+   * ===================================================================== */
+  --color-bg: #ffffff;
+  --color-surface: #fafafa;
+  --color-surface-2: #f5f5f5;
+  --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
+  --color-text: #212121;
+  --color-text-muted: #525252;
+  --color-text-subtle: #a3a3a3;
+  --color-text-faint: #d4d4d4;
+
+  /* =====================================================================
+   * TYPOGRAPHY — same scale as kit
+   * ===================================================================== */
+  --text-h0: clamp(40px, 8vw, 96px);
+  --text-h1: clamp(36px, 5.5vw, 64px);
+  --text-h2: clamp(28px, 4vw, 48px);
+  --text-h3: clamp(24px, 3vw, 40px);
+  --text-h4: clamp(22px, 2.5vw, 32px);
+  --text-h5: clamp(20px, 2vw, 28px);
+  --text-h6: 24px;
+
+  --text-large: 20px;
+  --text-body: 16px;
+  --text-small: 14px;
+  --text-label-lg: 12px;
+
+  --lh-h0: 1;
+  --lh-h1: 0.95;
+  --lh-h2: 1.1;
+  --lh-h3: 1.1;
+  --lh-h4: 1.1;
+  --lh-body: 1.5;
+  --lh-large: 1.4;
+
+  --ls-h0: -0.026em;
+  --ls-h1: 0;
+  --ls-h2: -0.042em;
+  --ls-h3: -0.025em;
+  --ls-label: 0.062em;
+}
+
+::selection {
+  background: rgba(184, 50, 44, 0.15);
+  color: inherit;
+}

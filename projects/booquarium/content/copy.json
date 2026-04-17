@@ -1,0 +1,278 @@
+{
+  "meta": {
+    "title": "Elena Voss — The Cartographer's Daughter | Literary Fiction",
+    "description": "Elena Voss's debut novel maps grief, inheritance, and the lines we draw between belonging and escape. Pre-order The Cartographer's Daughter now."
+  },
+  "nav": {
+    "logo": "Elena Voss",
+    "links": [
+      { "label": "01 Books", "href": "#books" },
+      { "label": "02 About", "href": "#about" },
+      { "label": "03 Praise", "href": "#praise" },
+      { "label": "04 Contact", "href": "#contact" }
+    ],
+    "cta": { "label": "Pre-order now", "href": "#books" }
+  },
+  "hero": {
+    "eyebrow": "Debut Novel",
+    "headline": "Elena Voss",
+    "subheadline": "The Cartographer's Daughter",
+    "body": "A daughter inherits her father's maps and discovers the one place he refused to chart. A novel about borders, memory, and the geography of grief.",
+    "cta_primary": { "label": "Read the first chapter", "href": "#" },
+    "cta_secondary": { "label": "Pre-order now", "href": "#books" },
+    "book_genre": "Literary Fiction",
+    "book_pub_date": "Available Now",
+    "book_location": "Edinburgh"
+  },
+  "about": {
+    "eyebrow": "The Author",
+    "headline": "Before words, there were maps.",
+    "body": "Elena Voss studied cartography at the University of Edinburgh before she understood that she was really studying how people decide what to leave out. She spent a decade making maps of places that no longer exist. The Cartographer's Daughter is her first novel.",
+    "cta": { "label": "Write to Elena", "href": "#contact" }
+  },
+  "features": {
+    "eyebrow": "Inside the Book",
+    "headline": "Four things worth reading for.",
+    "items": [
+      {
+        "number": "01",
+        "title": "A house full of secrets",
+        "body": "When Mara inherits her estranged father's Edinburgh flat, she finds 300 hand-drawn maps covering every wall except one."
+      },
+      {
+        "number": "02",
+        "title": "Two timelines, one truth",
+        "body": "The novel moves between 1970s Leningrad and present-day Scotland, tracing what a single act of erasure costs across generations."
+      },
+      {
+        "number": "03",
+        "title": "Language as landscape",
+        "body": "Voss writes sentences the way a surveyor lays out ground: precise, unhurried, and always in service of the full picture."
+      },
+      {
+        "number": "04",
+        "title": "No easy resolutions",
+        "body": "This is a novel that trusts its readers enough to leave certain borders undrawn."
+      }
+    ]
+  },
+  "praise": {
+    "eyebrow": "Early Praise",
+    "headline": "What readers are saying.",
+    "blurbs": [
+      {
+        "quote": "Voss writes with the patience and precision of a cartographer. Every sentence earns its place on the page.",
+        "source": "The Bookseller",
+        "stars": 5
+      },
+      {
+        "quote": "One of the most assured debut voices I've read this year. The Cartographer's Daughter asks hard questions and lets them breathe.",
+        "source": "Literary Review",
+        "stars": 5
+      },
+      {
+        "quote": "Grief, geography, and the terrible weight of things inherited. Quiet, devastating, essential.",
+        "source": "Kirkus Reviews — Starred Review",
+        "stars": 5
+      },
+      {
+        "quote": "A debut that reads like a fifth novel. Voss knows exactly where she is going, and she takes you with her.",
+        "source": "Publishers Weekly",
+        "stars": 5
+      },
+      {
+        "quote": "The kind of book that makes you want to call your father. Or forgive him. Possibly both.",
+        "source": "The Guardian",
+        "stars": 5
+      },
+      {
+        "quote": "Rich, intelligent, and impossible to put down once you cross the threshold of the first chapter.",
+        "source": "Scotland on Sunday",
+        "stars": 5
+      }
+    ]
+  },
+  "newsletter": {
+    "eyebrow": "Stay Close",
+    "headline": "First to know.",
+    "body": "Join the list for ARC access, early chapter previews, and updates on Elena's next book before they go anywhere else.",
+    "placeholder": "Your email address",
+    "cta": "Join the list"
+  },
+  "book_pages": [
+    {
+      "chapter": "ONE",
+      "title": "The Map Room",
+      "lines_left": [
+        "he maps covered every wall of the flat.",
+        "They had been there, Mara assumed, for",
+        "decades — some of them curling at the",
+        "corners, their colours faded to the amber",
+        "tones of old photographs. She stood in the",
+        "doorway with her coat still on and her keys",
+        "in her hand, unable to step inside, as though",
+        "the flat knew she did not belong there.",
+        "",
+        "The smell of the place — cedar and cold ash",
+        "and something metallic she could not name —",
+        "pressed itself against her face like a held-back",
+        "apology. Her father had left her the flat in his",
+        "will, along with the maps and a key to a safety-",
+        "deposit box she had not yet opened."
+      ],
+      "lines_right": [
+        "Her father had not said, in any of his letters,",
+        "that he kept maps. He had written about the",
+        "weather in Edinburgh. About the quality of",
+        "the light in November. About a particular stone",
+        "bridge he could see from the window. He had",
+        "never written about the maps.",
+        "",
+        "He had never written about her mother.",
+        "",
+        "He had never written about the eight hundred",
+        "miles of sea and time that had grown between",
+        "them like a geography no cartographer had yet",
+        "agreed to chart.",
+        "",
+        "Mara set her keys on the windowsill, because",
+        "that seemed like the thing to do, and began",
+        "to look more carefully at the walls."
+      ],
+      "drop_cap": "T",
+      "page_numbers": ["1", "2"]
+    },
+    {
+      "chapter": "TWO",
+      "title": "The Box",
+      "lines_left": [
+        "he bank was on George Street, which was",
+        "the kind of address her father would have",
+        "chosen. He had a fondness for formality.",
+        "She remembered this about him from the",
+        "letters: the way he always wrote the date",
+        "in full — the twelfth of October, not 12/10.",
+        "The way he signed off not with love, but",
+        "with your affectionate father, as though",
+        "affection were a thing that required a title.",
+        "",
+        "The clerk brought out the box on a tray,",
+        "as if it were something fragile or valuable.",
+        "It was the size of a shoebox. It was heavier",
+        "than Mara expected. She carried it to a",
+        "private room and sat with it for a long",
+        "time before she lifted the lid."
+      ],
+      "lines_right": [
+        "Inside: a map she did not recognise.",
+        "Not one of the published kind — not a",
+        "survey sheet or an atlas page, but",
+        "something hand-drawn, on paper that had",
+        "yellowed at the edges. A coastline she",
+        "could not name. Interior features marked",
+        "in her father's hand. A river. A village.",
+        "A name, written and then crossed out.",
+        "",
+        "Below the map: a photograph.",
+        "A woman she did not recognise, standing",
+        "in front of a building she did not know,",
+        "in a city she could not identify.",
+        "On the back, in her father's hand:",
+        "Before the erasure. 1971."
+      ],
+      "drop_cap": "T",
+      "page_numbers": ["42", "43"]
+    },
+    {
+      "chapter": "THREE",
+      "title": "The Line",
+      "lines_left": [
+        "he archive was in a building that looked",
+        "like a library from the outside and like",
+        "a bunker from the inside. Mara waited",
+        "forty minutes at the desk while the",
+        "archivist located the relevant folder.",
+        "When it arrived, the folder was thin.",
+        "Five pages. Official language. Official",
+        "silence in every line.",
+        "",
+        "She had come expecting documents.",
+        "What she found instead was an absence:",
+        "three years in the early 1970s where",
+        "her father's name simply ceased to appear",
+        "in any record. No employment. No address.",
+        "No correspondence. A gap in the official",
+        "geography of his life."
+      ],
+      "lines_right": [
+        "The archivist, when Mara asked, said that",
+        "such gaps were not uncommon. Sometimes",
+        "people moved. Sometimes records were",
+        "lost. Sometimes, he said carefully,",
+        "looking at his desk, people chose to",
+        "leave certain parts of themselves",
+        "off the map.",
+        "",
+        "Mara thought about the name on the",
+        "back of the photograph. She thought",
+        "about the crossed-out words on the",
+        "hand-drawn coastline. She thought about",
+        "her father writing about the weather,",
+        "year after year, while somewhere in his",
+        "past a whole country was going dark."
+      ],
+      "drop_cap": "T",
+      "page_numbers": ["118", "119"]
+    },
+    {
+      "chapter": "FOUR",
+      "title": "The Sea",
+      "lines_left": [
+        "he crossing took eleven hours. Mara sat",
+        "on the upper deck with her coat pulled",
+        "close and watched the Scottish coast",
+        "disappear, and then, much later, watched",
+        "another coast appear. The sea between",
+        "them was grey and indifferent and",
+        "completely without memory, which she",
+        "found, unexpectedly, a relief.",
+        "",
+        "She had her father's map in her bag.",
+        "She had the photograph. She had an",
+        "address, written in her own hand from",
+        "her own research, that might or might",
+        "not still exist. She had no plan beyond",
+        "arriving and seeing what was there."
+      ],
+      "lines_right": [
+        "Her father had mapped this crossing once.",
+        "She found the page among the others in",
+        "the flat: a simple sheet, the outlines",
+        "of two coastlines, and between them",
+        "only water — no shipping lanes, no",
+        "soundings, no notation at all.",
+        "Just the distance.",
+        "",
+        "She understood now why he had left",
+        "the interior blank. Some geographies",
+        "resist annotation. Some distances",
+        "can only be measured by crossing them.",
+        "And some places on the map exist only",
+        "in the act of going, not in the",
+        "certainty of arrival."
+      ],
+      "drop_cap": "T",
+      "page_numbers": ["241", "242"]
+    }
+  ],
+  "footer": {
+    "tagline": "Some stories need a map. Some maps are the story.",
+    "links": [
+      { "label": "Books", "href": "#books" },
+      { "label": "About", "href": "#about" },
+      { "label": "Praise", "href": "#praise" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "legal": "© 2026 Elena Voss. All rights reserved."
+  }
+}
