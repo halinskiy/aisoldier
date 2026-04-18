@@ -18,9 +18,6 @@ const DATA_SOURCE = "projects/booquarium/src/components/Loader.tsx";
  *   2200    Overlay gone. Lenis resumed.
  */
 
-// scrollYProgress = 0.42 → pages open. Hero height = 500vh.
-const SCROLL_FRACTION = 0.42;
-
 type Phase = "enter" | "open" | "exit" | "done";
 
 export function Loader() {
@@ -38,14 +35,7 @@ export function Loader() {
       return;
     }
 
-    // Lock scroll while loader plays (lenis may be null in test envs — that's fine)
     lenis?.stop();
-
-    const heroEl = document.getElementById("book-hero");
-    if (heroEl && lenis) {
-      const targetY = heroEl.offsetHeight * SCROLL_FRACTION;
-      lenis.scrollTo(targetY, { immediate: true, force: true });
-    }
 
     const t1 = setTimeout(() => setPhase("open"), 400);
     const t2 = setTimeout(() => setPhase("exit"), 1600);
