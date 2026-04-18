@@ -18,10 +18,6 @@ const config: NextConfig = {
   webpack: (config) => {
     if (config.resolve) {
       config.resolve.symlinks = true;
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        "@aisoldier/ui-kit": require.resolve("@aisoldier/ui-kit"),
-      };
     }
     return config;
   },
