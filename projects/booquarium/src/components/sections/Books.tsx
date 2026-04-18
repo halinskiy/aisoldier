@@ -1,15 +1,7 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
 import { SectionHeader } from "@kit/components/section/SectionHeader";
 import { Button } from "@kit/components/ui/Button";
 import copy from "@content/copy.json";
-
-const BookCover3D = dynamic(
-  () => import("@/components/3d/BookCover3D").then((m) => m.BookCover3D),
-  { ssr: false }
-);
 
 type BookItem = (typeof copy.books.items)[number];
 
@@ -54,30 +46,25 @@ function BookCard({ book }: { book: BookItem }) {
 
   return (
     <article className="flex flex-col gap-4">
-      {/* 3D spinning cover */}
+      {/* Flat cover */}
       <div
         className="relative w-full overflow-hidden rounded-[12px]"
         style={{
           aspectRatio: "2/3",
+          backgroundColor: book.cover_color,
           border: isComingSoon ? "1px dashed var(--color-border)" : "none",
+          opacity: isComingSoon ? 0.5 : 1,
         }}
-      >
-        <BookCover3D
-          color={book.cover_color}
-          speed={isComingSoon ? 0.25 : 0.45}
-        />
-      </div>
+      />
 
       {/* Meta */}
       <div className="flex flex-col gap-2">
-        <div className="flex items-baseline justify-between gap-2">
-          <h3
-            className="font-serif font-medium text-[var(--color-text)]"
-            style={{ fontSize: "16px", lineHeight: 1.2, letterSpacing: "-0.01em" }}
-          >
-            {book.title}
-          </h3>
-        </div>
+        <h3
+          className="font-serif font-medium text-[var(--color-text)]"
+          style={{ fontSize: "16px", lineHeight: 1.2, letterSpacing: "-0.01em" }}
+        >
+          {book.title}
+        </h3>
 
         <p
           className="font-sans font-medium uppercase tracking-[0.06em] text-[var(--color-text-subtle)]"
