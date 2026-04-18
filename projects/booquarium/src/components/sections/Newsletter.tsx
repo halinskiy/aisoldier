@@ -4,8 +4,6 @@ import { useState, type FormEvent } from "react";
 
 import { EyebrowLabel } from "@kit/components/section/EyebrowLabel";
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
-import { useBookSection } from "@/hooks/useBookSection";
-import { OPEN_ANGLE } from "@/contexts/BookContext";
 import copy from "@content/copy.json";
 
 const DATA_SOURCE = "projects/booquarium/src/components/sections/Newsletter.tsx";
@@ -20,9 +18,6 @@ const DATA_SOURCE = "projects/booquarium/src/components/sections/Newsletter.tsx"
 export function Newsletter() {
   const { newsletter } = copy;
   const [submitted, setSubmitted] = useState(false);
-  const ref = useBookSection({
-    x: 0, scale: 0, coverAngle: OPEN_ANGLE, bookRotY: Math.PI, pageIndex: 0,
-  });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,7 +26,6 @@ export function Newsletter() {
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
       id="contact"
       data-component="Newsletter"
       data-source={DATA_SOURCE}

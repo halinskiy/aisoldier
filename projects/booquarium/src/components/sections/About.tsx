@@ -1,24 +1,25 @@
-"use client";
-
 import { SectionHeader } from "@kit/components/section/SectionHeader";
 import { SplitText } from "@kit/components/motion/SplitText";
 import { Button } from "@kit/components/ui/Button";
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
-import { useBookSection } from "@/hooks/useBookSection";
-import { OPEN_ANGLE } from "@/contexts/BookContext";
 import copy from "@content/copy.json";
 
 const DATA_SOURCE = "projects/booquarium/src/components/sections/About.tsx";
 
+/**
+ * Section 2 — About the Author.
+ *
+ * 2-column layout:
+ *   Left: square "photo" placeholder — dot-grid surface + oversized serif
+ *         initials "E.V." centred (a literary-editorial stand-in, not stock
+ *         photography).
+ *   Right: eyebrow + headline + word-reveal bio + "Write to Elena" CTA.
+ */
 export function About() {
   const { about } = copy;
-  const ref = useBookSection({
-    x: 1.6, scale: 0.76, coverAngle: OPEN_ANGLE, bookRotY: 0, pageIndex: 0,
-  });
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
       id="about"
       data-component="About"
       data-source={DATA_SOURCE}
@@ -29,7 +30,7 @@ export function About() {
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Content */}
-          <div className="relative z-20 flex flex-col gap-6 lg:gap-8">
+          <div className="flex flex-col gap-6 lg:gap-8">
             <SectionHeader
               eyebrow={about.eyebrow}
               headline={about.headline}
@@ -47,23 +48,22 @@ export function About() {
 
             <BlurReveal delay={0.2}>
               <div>
-                <Button href={about.cta.href} variant="secondary" size="lg" className="text-[16px]">
+                <Button
+                  href={about.cta.href}
+                  variant="secondary"
+                  size="lg"
+                  className="text-[16px]"
+                >
                   {about.cta.label}
                 </Button>
               </div>
             </BlurReveal>
           </div>
 
-          {/*
-            Desktop: right column is intentionally empty — the floating book
-            from BookCanvas occupies this space.
-            Mobile: show the author photo placeholder.
-          */}
-          <div className="lg:hidden">
-            <BlurReveal delay={0.05}>
-              <PhotoPlaceholder initials="E.V." caption="Elena Voss · Edinburgh · 2026" />
-            </BlurReveal>
-          </div>
+          {/* Photo placeholder */}
+          <BlurReveal delay={0.05}>
+            <PhotoPlaceholder initials="E.V." caption="Elena Voss · Edinburgh · 2026" />
+          </BlurReveal>
         </div>
       </div>
     </section>
@@ -86,12 +86,14 @@ function PhotoPlaceholder({ initials, caption }: { initials: string; caption: st
         backgroundSize: "24px 24px",
       }}
     >
+      {/* Accent corner mark */}
       <span
         aria-hidden
         className="absolute left-6 top-6 inline-block h-[10px] w-[10px] rounded-full"
         style={{ backgroundColor: "var(--color-accent)" }}
       />
 
+      {/* Initials */}
       <div className="absolute inset-0 flex items-center justify-center">
         <span
           className="font-serif font-medium text-[var(--color-text)]"
@@ -105,7 +107,10 @@ function PhotoPlaceholder({ initials, caption }: { initials: string; caption: st
         </span>
       </div>
 
-      <figcaption className="absolute bottom-4 left-6 right-6 flex items-center justify-between gap-3 font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
+      {/* Caption */}
+      <figcaption
+        className="absolute bottom-4 left-6 right-6 flex items-center justify-between gap-3 font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
+      >
         <span>{caption}</span>
       </figcaption>
     </figure>

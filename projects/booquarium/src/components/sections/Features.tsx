@@ -1,22 +1,22 @@
-"use client";
-
 import { SectionHeader } from "@kit/components/section/SectionHeader";
 import { StickyFeatureList } from "@kit/components/section/StickyFeatureList";
-import { useBookSection } from "@/hooks/useBookSection";
-import { OPEN_ANGLE } from "@/contexts/BookContext";
 import copy from "@content/copy.json";
 
 const DATA_SOURCE = "projects/booquarium/src/components/sections/Features.tsx";
 
+/**
+ * Section 3 — Inside the Book.
+ *
+ * Sticky-left-visual + scrolling-right-list pattern (Apple product pages).
+ * 4 chapters from `copy.features.items`.
+ *
+ * Section id "books" — the nav link `01 Books` scrolls here.
+ */
 export function Features() {
   const { features } = copy;
-  const ref = useBookSection({
-    x: 1.6, scale: 0.55, coverAngle: OPEN_ANGLE, bookRotY: 0, pageIndex: 0,
-  });
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
       id="books"
       data-component="FeaturesStickyList"
       data-source={DATA_SOURCE}

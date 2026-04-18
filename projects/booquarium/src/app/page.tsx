@@ -1,5 +1,3 @@
-import { BookProvider } from "@/contexts/BookContext";
-import { BookCanvas } from "@/components/BookCanvas";
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
@@ -12,21 +10,16 @@ import { Footer } from "@/components/sections/Footer";
 
 export default function Home() {
   return (
-    <BookProvider>
-      {/* Fixed 3D book canvas — desktop only, z-10, pointer-events:none */}
-      <BookCanvas />
-
+    <main>
       <Nav />
-      <main>
-        <Hero />
-        <About />
-        <Books />
-        <Features />
-        <Praise />
-        <Newsletter />
-        <FAQ />
-        <Footer />
-      </main>
-    </BookProvider>
+      <Hero />
+      <About />
+      <Books />
+      <Features />
+      <Praise />
+      <Newsletter />
+      <FAQ />
+      <Footer />
+    </main>
   );
 }
