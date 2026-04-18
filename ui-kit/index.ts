@@ -35,6 +35,24 @@ export type { ImageCardProps, ImageCardImage } from "./components/section/ImageC
 export { ImageCardGrid } from "./components/section/ImageCardGrid";
 export type { ImageCardGridProps, ImageCardGridCard } from "./components/section/ImageCardGrid";
 
+export { BrowserFrame } from "./components/section/BrowserFrame";
+export type { BrowserFrameProps } from "./components/section/BrowserFrame";
+
+export { StickyFeatureList } from "./components/section/StickyFeatureList";
+export type {
+  StickyFeatureListProps,
+  StickyFeatureItemData,
+} from "./components/section/StickyFeatureList";
+
+export { BlurbWall, BlurbCard } from "./components/section/BlurbWall";
+export type { BlurbWallProps, BlurbData } from "./components/section/BlurbWall";
+
+export { FooterEditorial } from "./components/section/FooterEditorial";
+export type {
+  FooterEditorialProps,
+  FooterLink,
+} from "./components/section/FooterEditorial";
+
 export { BlurReveal } from "./components/motion/BlurReveal";
 export type { BlurRevealProps } from "./components/motion/BlurReveal";
 

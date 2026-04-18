@@ -6,10 +6,10 @@
   "nav": {
     "logo": "Elena Voss",
     "links": [
-      { "label": "01 Books", "href": "#books" },
-      { "label": "02 About", "href": "#about" },
-      { "label": "03 Praise", "href": "#praise" },
-      { "label": "04 Contact", "href": "#contact" }
+      { "label": "Home", "href": "#book-hero" },
+      { "label": "About", "href": "#about" },
+      { "label": "Reviews", "href": "#praise" },
+      { "label": "Contact", "href": "#contact" }
     ],
     "cta": { "label": "Pre-order now", "href": "#books" }
   },
@@ -24,11 +24,56 @@
     "book_pub_date": "Available Now",
     "book_location": "Edinburgh"
   },
+  "marquee": {
+    "items": ["The Cartographer's Daughter", "Elena Voss", "Literary Fiction", "Edinburgh 2026", "Debut Novel", "Available Now"]
+  },
   "about": {
     "eyebrow": "The Author",
     "headline": "Before words, there were maps.",
     "body": "Elena Voss studied cartography at the University of Edinburgh before she understood that she was really studying how people decide what to leave out. She spent a decade making maps of places that no longer exist. The Cartographer's Daughter is her first novel.",
     "cta": { "label": "Write to Elena", "href": "#contact" }
+  },
+  "books": {
+    "eyebrow": "All Books",
+    "headline": "Elena Voss",
+    "items": [
+      {
+        "title": "The Cartographer's Daughter",
+        "year": "2026",
+        "genre": "Literary Fiction",
+        "tagline": "A daughter inherits her father's maps and discovers the one place he refused to chart.",
+        "cover_color": "#8A1813",
+        "status": "available",
+        "cta": { "label": "Pre-order", "href": "#" }
+      },
+      {
+        "title": "Meridian",
+        "year": "2024",
+        "genre": "Novel",
+        "tagline": "Two surveyors. One disputed border. The summer that divided them both.",
+        "cover_color": "#1E3A5F",
+        "status": "available",
+        "cta": { "label": "Buy now", "href": "#" }
+      },
+      {
+        "title": "The Last Sounding",
+        "year": "2023",
+        "genre": "Novel",
+        "tagline": "She mapped the seafloor for thirty years. Her daughter found the charts.",
+        "cover_color": "#1B3A2D",
+        "status": "available",
+        "cta": { "label": "Buy now", "href": "#" }
+      },
+      {
+        "title": "Minor Territories",
+        "year": "2027",
+        "genre": "Novel",
+        "tagline": "A novel about the places that appear on no map.",
+        "cover_color": "#212121",
+        "status": "coming_soon",
+        "cta": null
+      }
+    ]
   },
   "features": {
     "eyebrow": "Inside the Book",
@@ -91,6 +136,12 @@
         "stars": 5
       }
     ]
+  },
+  "author_strip": {
+    "headline": "The story behind the story.",
+    "subheadline": "Elena spent a decade making maps of places that no longer exist.",
+    "paragraph_1": "The Cartographer's Daughter grew from a single image: a woman standing in front of a building, in a city whose name has been erased from official records. That image became Mara's inheritance, and Mara's search became the novel. Elena draws on her background in cartography—the study of how societies decide what to include and, more importantly, what to leave out.",
+    "paragraph_2": "This is a novel about borders, both literal and inherited. About the maps we inherit from our parents, and the blank spaces we must learn to read. About what happens when geography becomes autobiography, and when the act of mapping becomes an act of resistance."
   },
   "newsletter": {
     "eyebrow": "Stay Close",
@@ -265,12 +316,38 @@
       "page_numbers": ["241", "242"]
     }
   ],
+  "faq": {
+    "eyebrow": "Questions",
+    "headline": "Before you ask.",
+    "items": [
+      {
+        "q": "When is the book available?",
+        "a": "The Cartographer's Daughter publishes in autumn 2026. Join the list to get the exact date and access to early chapters before the general announcement."
+      },
+      {
+        "q": "Is there an audiobook version?",
+        "a": "Yes. The audiobook will be released simultaneously with the print edition and is available for pre-order through all major platforms."
+      },
+      {
+        "q": "Can I request an advance reading copy?",
+        "a": "ARC requests are open to booksellers, librarians, and journalists. Send a short note via the contact form and Elena's team will respond within five working days."
+      },
+      {
+        "q": "Will there be a signed edition?",
+        "a": "A limited signed and numbered first edition will be available exclusively through independent bookshops. Details go to the list first."
+      },
+      {
+        "q": "Is this part of a series?",
+        "a": "The Cartographer's Daughter is a standalone novel. Elena is currently working on a second book, though the two are not sequels."
+      }
+    ]
+  },
   "footer": {
     "tagline": "Some stories need a map. Some maps are the story.",
     "links": [
       { "label": "Books", "href": "#books" },
       { "label": "About", "href": "#about" },
-      { "label": "Praise", "href": "#praise" },
+      { "label": "Reviews", "href": "#praise" },
       { "label": "Contact", "href": "#contact" }
     ],
     "legal": "© 2026 Elena Voss. All rights reserved."

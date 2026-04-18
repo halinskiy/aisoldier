@@ -24,7 +24,7 @@ function loadSpread(): Promise<HTMLImageElement> {
 function applySpreadCrop(
   texture: THREE.CanvasTexture,
   canvas: HTMLCanvasElement,
-  side: "front" | "back"
+  side: "front" | "back" | "spine"
 ) {
   loadSpread().then((img) => {
     const ctx = canvas.getContext("2d");
@@ -34,18 +34,21 @@ function applySpreadCrop(
     ctx.clearRect(0, 0, W, H);
 
     if (side === "front") {
-      // Right ~48% of the spread = front cover
       const srcX = Math.round(img.width * 0.52);
       const srcW = img.width - srcX;
       ctx.drawImage(img, srcX, 0, srcW, img.height, 0, 0, W, H);
-    } else {
-      // Left ~40% of the spread = back cover
+    } else if (side === "back") {
       const srcW = Math.round(img.width * 0.40);
       ctx.drawImage(img, 0, 0, srcW, img.height, 0, 0, W, H);
+    } else {
+      // Spine: middle strip ~40-52%
+      const srcX = Math.round(img.width * 0.40);
+      const srcW = Math.round(img.width * 0.12);
+      ctx.drawImage(img, srcX, 0, srcW, img.height, 0, 0, W, H);
     }
 
     texture.needsUpdate = true;
-  }).catch(() => {/* spread not found — keep procedural fallback */});
+  }).catch(() => {});
 }
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
@@ -198,10 +201,26 @@ function barcode(ctx: CanvasRenderingContext2D, x: number, y: number, w: number,
   ctx.fillText("978-0-00-000000-0", x + w / 2, y + h + 14);
 }
 
+// ─── SPINE COVER ─────────────────────────────────────────────────────────────
+
+export function createSpineTexture(): THREE.CanvasTexture {
+  const W = 128, H = 720;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "#0a0a0a";
+  ctx.fillRect(0, 0, W, H);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.anisotropy = 8;
+  applySpreadCrop(tex, canvas, "spine");
+  return tex;
+}
+
 // ─── FRONT COVER ─────────────────────────────────────────────────────────────
 
 export function createFrontCoverTexture(): THREE.CanvasTexture {
-  const W = 512, H = 720;
+  const W = 1024, H = 1440;
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -273,7 +292,7 @@ export function createFrontCoverTexture(): THREE.CanvasTexture {
 // ─── BACK COVER ──────────────────────────────────────────────────────────────
 
 export function createBackCoverTexture(blurb: string, sourceLabel: string, synopsis: string): THREE.CanvasTexture {
-  const W = 512, H = 720;
+  const W = 1024, H = 1440;
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;

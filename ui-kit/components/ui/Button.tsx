@@ -39,6 +39,7 @@ const DATA_SOURCE_DEFAULT = "ui-kit/components/ui/Button.tsx";
 const base =
   "inline-flex items-center justify-center gap-2 font-sans font-medium " +
   "transition-[background-color,border-color,color,transform] duration-150 " +
+  "[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] " +
   "active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 " +
   "focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 " +
   "focus-visible:ring-offset-[var(--color-bg)]";
@@ -49,7 +50,7 @@ const variants: Record<Variant, string> = {
   // `bg-[#212121] text-white` before session 13 — fixed during the
   // Section 11 dark-theme audit.
   primary:
-    "bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90 rounded-full",
+    "bg-[var(--color-text)] text-[var(--color-bg)] border border-[rgba(255,255,255,0.12)] hover:opacity-90 rounded-full",
   secondary:
     "border border-[var(--color-border-strong)] text-[var(--color-text)] " +
     "bg-transparent hover:bg-[var(--color-surface)] hover:border-[var(--color-text)] rounded-full",
@@ -65,8 +66,8 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  md: "h-11 px-5 text-[14px]", // 44px tall matches Figma
-  lg: "h-12 px-6 text-[15px]",
+  md: "h-11 px-5 text-[16px]",
+  lg: "h-12 px-6 text-[16px]",
 };
 
 /**

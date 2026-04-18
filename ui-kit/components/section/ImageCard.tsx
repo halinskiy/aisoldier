@@ -97,7 +97,7 @@ export function ImageCard({
       {/* Bottom-anchored content */}
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2 p-6 text-white lg:p-8">
         {eyebrow && (
-          <span className="inline-flex items-center gap-2 font-sans text-[12px] font-semibold uppercase tracking-[0.062em] text-white/80">
+          <span className="inline-flex items-center gap-2 font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-white/80">
             <span
               aria-hidden
               className="inline-block h-[6px] w-[6px] rounded-full bg-[var(--color-accent)]"

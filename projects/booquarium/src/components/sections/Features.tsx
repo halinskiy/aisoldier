@@ -30,12 +30,14 @@ export function Features() {
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
         <StickyFeatureList
           items={features.items}
+          cardStyle={{ height: "calc(100dvh - 300px)", aspectRatio: "unset" }}
           header={
             <SectionHeader
               eyebrow={features.eyebrow}
               headline={features.headline}
               align="stacked"
               dataSource={DATA_SOURCE}
+              className="pb-6 lg:pb-8"
             />
           }
           dataSource={DATA_SOURCE}

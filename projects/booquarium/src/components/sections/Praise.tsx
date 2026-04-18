@@ -4,12 +4,6 @@ import copy from "@content/copy.json";
 
 const DATA_SOURCE = "projects/booquarium/src/components/sections/Praise.tsx";
 
-/**
- * Section 4 — Early Praise.
- *
- * Dense 3-column BlurbWall of 6 editorial quotes. Not a carousel: all
- * blurbs are visible at once, like the back cover of a paperback.
- */
 export function Praise() {
   const { praise } = copy;
 
@@ -26,17 +20,21 @@ export function Praise() {
       }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
+        {/* Header in right column — aligns with all other section headers */}
+        <div className="mb-14 grid grid-cols-1 lg:mb-20 lg:grid-cols-2 lg:gap-16">
+          <div aria-hidden />
+          <SectionHeader
+            eyebrow={praise.eyebrow}
+            headline={praise.headline}
+            align="stacked"
+            dataSource={DATA_SOURCE}
+          />
+        </div>
+
+        {/* Blurbs full width */}
         <BlurbWall
           blurbs={praise.blurbs}
           cols={3}
-          header={
-            <SectionHeader
-              eyebrow={praise.eyebrow}
-              headline={praise.headline}
-              align="stacked"
-              dataSource={DATA_SOURCE}
-            />
-          }
           footnote="Sample copy for template demonstration"
           dataSource={DATA_SOURCE}
         />

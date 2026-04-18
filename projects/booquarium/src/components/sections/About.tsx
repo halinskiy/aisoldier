@@ -24,16 +24,11 @@ export function About() {
       data-component="About"
       data-source={DATA_SOURCE}
       data-tokens="color-bg,color-border,color-text,color-text-muted,font-serif,radius-window"
-      className="relative w-full"
+      className="relative w-full bg-[var(--color-surface)]"
       style={{ paddingTop: "clamp(96px,14vh,200px)", paddingBottom: "clamp(96px,14vh,200px)" }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[520fr_600fr] lg:gap-20">
-          {/* Photo placeholder */}
-          <BlurReveal delay={0.05}>
-            <PhotoPlaceholder initials="E.V." caption="Elena Voss · Edinburgh · 2026" />
-          </BlurReveal>
-
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Content */}
           <div className="flex flex-col gap-6 lg:gap-8">
             <SectionHeader
@@ -42,6 +37,7 @@ export function About() {
               align="stacked"
               headingLevel="h2"
               dataSource={DATA_SOURCE}
+              className="pb-6 lg:pb-8"
             />
 
             <SplitText
@@ -63,6 +59,11 @@ export function About() {
               </div>
             </BlurReveal>
           </div>
+
+          {/* Photo placeholder */}
+          <BlurReveal delay={0.05}>
+            <PhotoPlaceholder initials="E.V." caption="Elena Voss · Edinburgh · 2026" />
+          </BlurReveal>
         </div>
       </div>
     </section>
@@ -77,7 +78,7 @@ function PhotoPlaceholder({ initials, caption }: { initials: string; caption: st
       data-component="AuthorPhotoPlaceholder"
       data-source={DATA_SOURCE}
       data-tokens="color-bg,color-border,color-text,color-text-subtle,radius-window,font-serif"
-      className="relative aspect-square w-full max-w-[520px] overflow-hidden rounded-[12px] border border-[var(--color-border)]"
+      className="relative aspect-square w-full overflow-hidden rounded-[12px] border border-[var(--color-border)]"
       style={{
         backgroundColor: "var(--color-surface)",
         backgroundImage:
@@ -108,7 +109,7 @@ function PhotoPlaceholder({ initials, caption }: { initials: string; caption: st
 
       {/* Caption */}
       <figcaption
-        className="absolute bottom-4 left-6 right-6 flex items-center justify-between gap-3 font-sans text-[12px] font-semibold uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
+        className="absolute bottom-4 left-6 right-6 flex items-center justify-between gap-3 font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
       >
         <span>{caption}</span>
       </figcaption>

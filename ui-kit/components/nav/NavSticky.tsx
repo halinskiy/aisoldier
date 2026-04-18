@@ -12,6 +12,7 @@ export type NavCta = { label: string; href: string };
 
 export type NavStickyProps = {
   logo: string;
+  logoNode?: React.ReactNode;
   links: NavLink[];
   cta: NavCta;
   /**
@@ -34,13 +35,13 @@ const SCROLL_THRESHOLD = 40;
  * Token contract:
  *   accent, color-bg, color-border, color-text, radius-pill, ease-out, font-serif
  */
-export function NavSticky({ logo, links, cta, dataSource }: NavStickyProps) {
-  const [scrolled, setScrolled] = useState(false);
+export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyProps) {
+  const [bgOpacity, setBgOpacity] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => {
-    setScrolled(y > SCROLL_THRESHOLD);
+    setBgOpacity(Math.min(1, y / 100));
   });
 
   useEffect(() => {
@@ -57,16 +58,29 @@ export function NavSticky({ logo, links, cta, dataSource }: NavStickyProps) {
       data-component="NavSticky"
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
       data-tokens="accent,color-bg,color-border,color-text,radius-pill,ease-out,font-serif"
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-200",
-        scrolled
-          ? "border-[var(--color-border)] bg-[rgba(248,247,241,0.85)] shadow-[0_1px_24px_rgba(33,33,33,0.04)] backdrop-blur-xl"
-          : "border-transparent bg-transparent",
-      )}
-      style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
+      className="fixed inset-x-0 top-0 z-50"
+      style={{
+        backgroundColor: `rgba(250,249,247,${bgOpacity * 0.72})`,
+        backdropFilter: bgOpacity > 0.05 ? `blur(${bgOpacity * 16}px) saturate(${1 + bgOpacity * 0.8})` : "none",
+        WebkitBackdropFilter: bgOpacity > 0.05 ? `blur(${bgOpacity * 16}px) saturate(${1 + bgOpacity * 0.8})` : "none",
+      }}
     >
       <div className="mx-auto flex h-[89px] w-full max-w-[1600px] items-center justify-between px-6 md:px-8 lg:px-10">
-        <LogoWave logo={logo} size={18} href="#top" />
+        {logoNode ? (
+          <a href="#top" className="transition-opacity duration-150 hover:opacity-75" style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
+            {logoNode}
+          </a>
+        ) : logo.includes("~") ? (
+          <LogoWave logo={logo} size={18} href="#top" />
+        ) : (
+          <a
+            href="#top"
+            className="font-serif font-medium tracking-[-0.01em] text-[var(--color-text)] transition-opacity duration-150 hover:opacity-75"
+            style={{ fontSize: "18px", transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
+          >
+            {logo}
+          </a>
+        )}
 
         <nav
           aria-label="Primary"
@@ -118,7 +132,7 @@ function ScheduleCta({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="inline-flex items-center gap-2 rounded-full bg-[#212121] px-5 py-2.5 font-sans text-[14px] font-medium text-white transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98]"
+      className="inline-flex items-center gap-2 rounded-full bg-[#212121] px-5 py-2.5 font-sans text-[16px] font-medium text-white transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98]"
       style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       {label}
@@ -237,7 +251,7 @@ function MobileOverlay({
         <a
           href={cta.href}
           onClick={onClose}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#212121] px-6 py-4 font-sans text-[15px] font-medium text-white"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#212121] px-6 py-4 font-sans text-[16px] font-medium text-white"
         >
           {cta.label}
           <ChevronDown />
