@@ -40,6 +40,7 @@ export function Features() {
               className="pb-6 lg:pb-8"
             />
           }
+          itemMinHeight="65vh"
           dataSource={DATA_SOURCE}
         />
       </div>

@@ -34,6 +34,8 @@ export type StickyFeatureListProps = {
   defaultVisual?: ReactNode;
   /** Override styles on the sticky card container. */
   cardStyle?: React.CSSProperties;
+  /** Min height per scroll item — increase to slow down switching (e.g. "60vh") */
+  itemMinHeight?: string;
   className?: string;
   dataSource?: string;
 };
@@ -48,6 +50,7 @@ const DATA_SOURCE_DEFAULT =
 type Ctx = {
   register: (index: number) => void;
   activeIndex: number;
+  itemMinHeight?: string;
 };
 
 const StickyFeatureCtx = createContext<Ctx | null>(null);
@@ -71,6 +74,7 @@ export function StickyFeatureList({
   header,
   defaultVisual,
   cardStyle,
+  itemMinHeight,
   className,
   dataSource,
 }: StickyFeatureListProps) {
@@ -146,7 +150,7 @@ export function StickyFeatureList({
         </div>
 
         {/* Scroll list */}
-        <StickyFeatureCtx.Provider value={{ register, activeIndex }}>
+        <StickyFeatureCtx.Provider value={{ register, activeIndex, itemMinHeight }}>
           <ol className="flex w-full min-w-0 flex-col">
             {items.map((item, i) => (
               <StickyFeatureItem
@@ -216,6 +220,7 @@ function StickyFeatureItem({
       )}
       style={{
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+        ...(ctx?.itemMinHeight ? { minHeight: ctx.itemMinHeight } : {}),
       }}
     >
       {/* Accent active-bar on the left */}

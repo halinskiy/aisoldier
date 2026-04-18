@@ -1,7 +1,15 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
 import { SectionHeader } from "@kit/components/section/SectionHeader";
 import { Button } from "@kit/components/ui/Button";
 import copy from "@content/copy.json";
+
+const BookCover3D = dynamic(
+  () => import("@/components/3d/BookCover3D").then((m) => m.BookCover3D),
+  { ssr: false }
+);
 
 type BookItem = (typeof copy.books.items)[number];
 
@@ -46,57 +54,18 @@ function BookCard({ book }: { book: BookItem }) {
 
   return (
     <article className="flex flex-col gap-4">
-      {/* Cover */}
+      {/* 3D spinning cover */}
       <div
-        className="relative w-full overflow-hidden rounded-[12px] border"
+        className="relative w-full overflow-hidden rounded-[12px]"
         style={{
           aspectRatio: "2/3",
-          backgroundColor: isComingSoon ? "transparent" : book.cover_color,
-          borderColor: isComingSoon ? "var(--color-border)" : "transparent",
-          borderStyle: isComingSoon ? "dashed" : "solid",
+          border: isComingSoon ? "1px dashed var(--color-border)" : "none",
         }}
       >
-        {isComingSoon ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
-            <span
-              className="font-serif font-medium text-[var(--color-text)]"
-              style={{ fontSize: "clamp(14px, 1.4vw, 18px)", lineHeight: 1.2, letterSpacing: "-0.01em" }}
-            >
-              {book.title}
-            </span>
-            <span
-              className="font-sans font-medium uppercase tracking-[0.1em] text-[var(--color-text-subtle)]"
-              style={{ fontSize: "11px" }}
-            >
-              {book.year}
-            </span>
-          </div>
-        ) : (
-          <div className="absolute inset-0 flex flex-col p-6">
-            {/* Top: title */}
-            <div className="flex flex-1 items-center">
-              <span
-                className="font-serif font-medium text-white"
-                style={{
-                  fontSize: "clamp(15px, 1.5vw, 20px)",
-                  lineHeight: 1.15,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                {book.title}
-              </span>
-            </div>
-            {/* Thin divider */}
-            <div className="my-3 h-px w-8 bg-white/30" />
-            {/* Bottom: author */}
-            <span
-              className="font-sans font-medium uppercase tracking-[0.1em] text-white/60"
-              style={{ fontSize: "10px" }}
-            >
-              Elena Voss
-            </span>
-          </div>
-        )}
+        <BookCover3D
+          color={book.cover_color}
+          speed={isComingSoon ? 0.25 : 0.45}
+        />
       </div>
 
       {/* Meta */}
