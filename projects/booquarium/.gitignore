@@ -1,1 +1,7 @@
 .vercel
+vercel.json
+node_modules/
+.next/
+out/
+projects/
+*.tsbuildinfo
