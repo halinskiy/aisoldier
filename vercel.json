@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install --include=dev && npm run build --prefix projects/booquarium",
+  "buildCommand": "npm install --include=dev && cd projects/booquarium && npm install --include=dev && npm run build",
   "outputDirectory": "projects/booquarium/.next",
-  "installCommand": "npm install"
+  "installCommand": "npm install --include=dev"
 }
