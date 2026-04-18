@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === "production";
 
 const config: NextConfig = {
   output: "export",
-  basePath: isProd ? "/aisoldier" : "",
+  basePath: isProd ? "/booquarium" : "",
   reactStrictMode: true,
   transpilePackages: ["@aisoldier/ui-kit"],
   experimental: {

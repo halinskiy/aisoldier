@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-and-deploy:
@@ -39,9 +39,11 @@ jobs:
       - name: Add .nojekyll
         run: touch projects/booquarium/out/.nojekyll
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to halinskiy/booquarium
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.BOOQUARIUM_DEPLOY_KEY }}
+          external_repository: halinskiy/booquarium
+          publish_branch: gh-pages
           publish_dir: ./projects/booquarium/out
           force_orphan: true
