@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
+const BASE_PATH = isProd ? "/booquarium" : "";
 
 const config: NextConfig = {
   output: "export",
-  basePath: isProd ? "/booquarium" : "",
+  basePath: BASE_PATH,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: BASE_PATH,
+  },
   reactStrictMode: true,
   transpilePackages: ["@aisoldier/ui-kit"],
   experimental: {
