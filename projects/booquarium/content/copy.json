@@ -6,12 +6,12 @@
   "nav": {
     "logo": "Elena Voss",
     "links": [
-      { "label": "Home", "href": "#book-hero" },
+      { "label": "The Book", "href": "/the-cartographers-daughter" },
       { "label": "About", "href": "#about" },
       { "label": "Reviews", "href": "#praise" },
       { "label": "Contact", "href": "#contact" }
     ],
-    "cta": { "label": "Pre-order now", "href": "#books" }
+    "cta": { "label": "Pre-order now", "href": "/the-cartographers-daughter" }
   },
   "hero": {
     "eyebrow": "Debut Novel",
@@ -321,6 +321,68 @@
       "page_numbers": ["241", "242"]
     }
   ],
+  "conversations": {
+    "eyebrow": "Conversations",
+    "headline": "Elena in the press.",
+    "items": [
+      { "publication": "Paris Review", "title": "Maps, Memory, and the Spaces Between", "type": "Interview", "href": "#" },
+      { "publication": "Granta", "title": "What Cartographers Leave Out", "type": "Essay", "href": "#" },
+      { "publication": "BBC Front Row", "title": "Elena Voss on debut fiction and inherited silence", "type": "Podcast", "href": "#" },
+      { "publication": "Lit Hub", "title": "The Geography of Grief: On writing The Cartographer's Daughter", "type": "Essay", "href": "#" },
+      { "publication": "The Bookseller", "title": "Debut of the Season", "type": "Profile", "href": "#" },
+      { "publication": "Scotland on Sunday", "title": "The mapmaker's daughter who found her own territory", "type": "Profile", "href": "#" }
+    ]
+  },
+  "appearances": {
+    "eyebrow": "Appearances",
+    "headline": "Find Elena in conversation.",
+    "events": [
+      { "date_day": "14", "date_month": "May", "date_year": "2026", "venue": "Hay Festival", "city": "Hay-on-Wye", "type": "In Conversation", "href": "#" },
+      { "date_day": "04", "date_month": "Jun", "date_year": "2026", "venue": "Topping & Co", "city": "Edinburgh", "type": "Reading & Signing", "href": "#" },
+      { "date_day": "17", "date_month": "Jun", "date_year": "2026", "venue": "Edinburgh Central Library", "city": "Edinburgh", "type": "Reading", "href": "#" },
+      { "date_day": "19", "date_month": "Aug", "date_year": "2026", "venue": "Edinburgh International Book Festival", "city": "Edinburgh", "type": "Panel", "href": "#" },
+      { "date_day": "11", "date_month": "Sep", "date_year": "2026", "venue": "Blackwell's Oxford", "city": "Oxford", "type": "In Conversation", "href": "#" }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "headline": "Get in touch.",
+    "columns": [
+      { "label": "Press & Media", "description": "Interview requests, review copies, and editorial enquiries.", "email": "press@elanavoss.com" },
+      { "label": "Rights & Translation", "description": "Foreign rights, translation, and licensing.", "email": "rights@elanavoss.com" },
+      { "label": "Events & Speaking", "description": "Book clubs, festival appearances, and university visits.", "email": "hello@elanavoss.com" }
+    ]
+  },
+  "book_page": {
+    "tagline": "A daughter inherits her father's maps and discovers the one place he refused to chart.",
+    "synopsis": "Edinburgh, the present. Mara Voss has not spoken to her father in a decade when the phone call comes. He has left her everything: a flat in Leith, 300 hand-drawn maps covering every wall, and a safety-deposit box she cannot bring herself to open. Inside, she finds a map of a country she cannot name — and a photograph of a woman she does not recognise, standing in front of a building that no longer exists. The Cartographer's Daughter moves between Edinburgh today and Leningrad in 1971, charting the distances between parents and children, the places we choose not to mark, and the geography of silence that runs in families like a river through a landscape no one has thought to survey.",
+    "author_note": {
+      "headline": "A note from Elena",
+      "body": "This novel began with a single question: what do cartographers do with the places they are told not to map? I spent a year reading about the systematic erasure of towns, borders, and whole geographies from official records — places that existed, that people lived in, but that governments decided should not appear on any map. I wanted to write about what happens to the people who remember those places. Mara is not based on anyone I know. But the silence between her and her father is one I recognise from the families around me — the particular silence of people who have decided, perhaps for good reasons, that certain things are better left uncharted. This novel is about that silence, and what happens when someone finally decides to measure it."
+    },
+    "retailers": [
+      { "label": "Bookshop.org", "href": "#", "country": "UK" },
+      { "label": "Waterstones", "href": "#", "country": "UK" },
+      { "label": "Blackwell's", "href": "#", "country": "UK" },
+      { "label": "Amazon UK", "href": "#", "country": "UK" },
+      { "label": "Amazon US", "href": "#", "country": "US" },
+      { "label": "Apple Books", "href": "#", "country": "Global" },
+      { "label": "Audible", "href": "#", "country": "Global" }
+    ],
+    "reading_guide": {
+      "headline": "Reading Group Guide",
+      "intro": "These questions are offered as a starting point for reading groups. Elena is available for book club visits — in person in Edinburgh and via video elsewhere. Write to hello@elanavoss.com.",
+      "questions": [
+        "Mara describes herself as someone who \"stopped calling\" her father. At what point in the novel did you begin to understand why?",
+        "The maps function both literally and metaphorically throughout the book. Which map — physical or emotional — stayed with you most?",
+        "The novel moves between Edinburgh today and Leningrad in 1971. How does the shift in time and place change what we know about the central secret?",
+        "Elena Voss has said that the novel is about \"the geography of silence.\" Where did you see that silence operating in the story?",
+        "What do you make of the ending? Does Mara find what she is looking for — and does it matter whether she does?",
+        "The father remains an absence throughout much of the book, known only through maps, letters, and other people's accounts. Did this narrative choice work for you?",
+        "If you were to draw a map of your own family's silences, what would it show?"
+      ]
+    }
+  },
   "faq": {
     "eyebrow": "Questions",
     "headline": "Before you ask.",

@@ -1,12 +1,13 @@
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
+import { PullQuote } from "@/components/sections/PullQuote";
 import { About } from "@/components/sections/About";
 import { Features } from "@/components/sections/Features";
-import { Marquee } from "@/components/sections/Marquee";
-import { PullQuote } from "@/components/sections/PullQuote";
+import { Conversations } from "@/components/sections/Conversations";
 import { Praise } from "@/components/sections/Praise";
+import { Appearances } from "@/components/sections/Appearances";
 import { Newsletter } from "@/components/sections/Newsletter";
-import { FAQ } from "@/components/sections/FAQ";
+import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 
 export default function Home() {
@@ -14,13 +15,14 @@ export default function Home() {
     <main>
       <Nav />
       <Hero />
-      <Marquee />
       <PullQuote />
       <About />
       <Features />
+      <Conversations />
       <Praise />
+      <Appearances />
       <Newsletter />
-      <FAQ />
+      <Contact />
       <Footer />
     </main>
   );
