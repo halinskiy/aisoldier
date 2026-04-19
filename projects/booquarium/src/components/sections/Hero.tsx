@@ -121,8 +121,6 @@ export function Hero() {
             Тест Обложки
           </button>
 
-          {/* Marquee strip — bottom of book container */}
-          <EtsyMarquee />
         </div>
 
         {/* Text column — explicit lg height matches book so justify-center midpoints align */}
@@ -189,69 +187,6 @@ export function Hero() {
   );
 }
 
-const ETSY_HREF = "https://www.etsy.com/uk/shop/TheBookVeil?ref=shop_profile&listing_id=4311692197";
-const TICKER_ITEM = "30% OFF · book cover template · ";
-const TICKER_REPEAT = 6;
-
-function EtsyMarquee() {
-  return (
-    <a
-      href={ETSY_HREF}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-no-drag
-      aria-label="Book cover template — 30% off on Etsy"
-      style={{
-        position: "absolute",
-        bottom: "32px",
-        left: 0,
-        right: 0,
-        zIndex: 10,
-        display: "flex",
-        overflow: "hidden",
-        height: "28px",
-        alignItems: "center",
-        backgroundColor: "rgba(184,50,44,0.92)",
-        backdropFilter: "blur(6px)",
-        WebkitBackdropFilter: "blur(6px)",
-        textDecoration: "none",
-        cursor: "pointer",
-      }}
-    >
-      <style>{`
-        @keyframes etsy-ticker {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .etsy-ticker-inner {
-          display: flex;
-          white-space: nowrap;
-          animation: etsy-ticker 40s linear infinite;
-          will-change: transform;
-        }
-        .etsy-ticker-inner:hover { animation-play-state: paused; }
-      `}</style>
-      <div className="etsy-ticker-inner">
-        {Array.from({ length: TICKER_REPEAT * 2 }).map((_, i) => (
-          <span
-            key={i}
-            style={{
-              fontFamily: "system-ui, -apple-system, sans-serif",
-              fontSize: "13px",
-              fontWeight: 700,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: "white",
-              padding: "0 4px",
-            }}
-          >
-            {TICKER_ITEM}
-          </span>
-        ))}
-      </div>
-    </a>
-  );
-}
 
 function MetaDot() {
   return (
