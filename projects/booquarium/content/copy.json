@@ -11,7 +11,7 @@
       { "label": "Reviews", "href": "#praise" },
       { "label": "Contact", "href": "#contact" }
     ],
-    "cta": { "label": "Pre-order now", "href": "/the-cartographers-daughter" }
+    "cta": { "label": "Pre-order now", "href": "https://www.etsy.com/shop/SweetSheetShop?ref=dashboard-header" }
   },
   "hero": {
     "eyebrow": "Debut Novel",

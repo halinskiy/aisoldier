@@ -37,7 +37,7 @@ export function BookScene({ coverAngle, bookRotY, spinning }: BookSceneProps) {
       <directionalLight position={[-3, 2, 3]} intensity={0.5} color="#c8d8f0" />
       <directionalLight position={[0, 1, 7]} intensity={0.8} />
       <ContactShadows
-        position={[0, -1.2, 0]}
+        position={[0, -1.7, 0]}
         opacity={0.28}
         scale={6}
         blur={2.2}
@@ -221,7 +221,7 @@ function BookModel({ coverAngle, bookRotY, spinning }: BookSceneProps) {
   });
 
   return (
-    <group position={[0, 0.4, 0]}>
+    <group position={[0, -0.1, 0]}>
     {/* tiltGroup: handles float + mouse parallax */}
     <group ref={tiltGroupRef} rotation={[0, 0, 0]}>
       {/* bookGroup: handles the full Y-axis flip to show back cover */}

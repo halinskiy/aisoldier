@@ -128,6 +128,8 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
           <motion.a
             key="floating-cta"
             href={cta.href}
+            target={cta.href.startsWith("http") ? "_blank" : undefined}
+            rel={cta.href.startsWith("http") ? "noopener noreferrer" : undefined}
             initial={{ x: 96, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 96, opacity: 0 }}
@@ -169,9 +171,11 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
 }
 
 function ScheduleCta({ href, label }: { href: string; label: string }) {
+  const external = href.startsWith("http");
   return (
     <a
       href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="inline-flex items-center gap-2 rounded-full bg-[#212121] px-5 py-2.5 font-sans text-[16px] font-medium text-white transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98]"
       style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
