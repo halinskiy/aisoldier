@@ -7,7 +7,6 @@ import { useCallback, useRef } from "react";
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
 import { Button } from "@kit/components/ui/Button";
 import { EyebrowLabel } from "@kit/components/section/EyebrowLabel";
-import { useRoseClick, RoseLayer } from "@/components/RoseClick";
 import copy from "@content/copy.json";
 
 const DATA_SOURCE = "projects/booquarium/src/components/sections/Hero.tsx";
@@ -27,8 +26,6 @@ export function Hero() {
   const dragging = useRef(false);
   const lastX = useRef(0);
   const rotY = useRef(0);
-  const bookContainerRef = useRef<HTMLDivElement>(null);
-  const { roses, spawnRose } = useRoseClick(bookContainerRef);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     dragging.current = true;
@@ -59,8 +56,7 @@ export function Hero() {
       <div className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 items-start gap-12 px-6 md:px-8 lg:px-10 lg:grid-cols-2 lg:gap-16" style={{ paddingTop: "104px" }}>
         {/* 3D Book */}
         <div
-          ref={bookContainerRef}
-          className="relative h-[48dvh] w-full min-h-[300px] lg:h-[78dvh] lg:min-h-[480px] select-none overflow-visible rounded-[12px]"
+          className="relative h-[48dvh] w-full min-h-[300px] lg:h-[78dvh] lg:min-h-[480px] select-none overflow-hidden rounded-[12px]"
           style={{
             cursor: "grab",
             backgroundColor: "rgba(0,0,0,0.04)",
@@ -69,10 +65,8 @@ export function Hero() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
-          onClick={spawnRose}
         >
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
-          <RoseLayer roses={roses} />
         </div>
 
         {/* Text column */}
