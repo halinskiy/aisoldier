@@ -55,14 +55,14 @@ export function Hero() {
       data-tokens="accent,color-bg,color-text,color-text-muted,font-serif,ease-out"
       className="relative h-[100dvh] w-full overflow-hidden"
     >
-      <div className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 items-start gap-12 px-6 md:px-8 lg:px-10 lg:grid-cols-2 lg:gap-16" style={{ paddingTop: "104px" }}>
+      <div
+        className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 items-start gap-12 px-6 md:px-8 lg:px-10 lg:grid-cols-2 lg:gap-16"
+        style={{ paddingTop: "104px" }}
+      >
         {/* 3D Book */}
         <div
           className="relative h-[48dvh] w-full min-h-[300px] lg:h-[78dvh] lg:min-h-[480px] select-none overflow-hidden rounded-[12px]"
-          style={{
-            cursor: "grab",
-            backgroundColor: "rgba(0,0,0,0.04)",
-          }}
+          style={{ cursor: "grab", backgroundColor: "rgba(0,0,0,0.04)" }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -71,8 +71,8 @@ export function Hero() {
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
         </div>
 
-        {/* Text column — centred vertically against the book height */}
-        <div className="flex flex-col gap-5 lg:gap-6 lg:self-center">
+        {/* Text column — explicit lg height matches book so justify-center midpoints align */}
+        <div className="flex flex-col gap-5 lg:h-[78dvh] lg:min-h-[480px] lg:justify-center lg:gap-6">
           <BlurReveal delay={0.05}>
             <EyebrowLabel>{hero.eyebrow}</EyebrowLabel>
           </BlurReveal>
