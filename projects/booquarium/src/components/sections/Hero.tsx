@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue } from "framer-motion";
+import { useMotionValue } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useCallback, useRef, useState } from "react";
 
@@ -84,27 +84,22 @@ export function Hero() {
           onPointerLeave={onPointerLeave}
         >
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} customCoverUrl={customCoverUrl ?? undefined} />
-          <ComicBadge href={copy.nav.cta.href} />
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleCoverUpload}
-            style={{ display: "none" }}
-          />
+
+          {/* Upload button — top-right */}
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleCoverUpload} style={{ display: "none" }} />
           <button
             type="button"
             data-no-drag
             onClick={() => fileInputRef.current?.click()}
             style={{
               position: "absolute",
-              bottom: "clamp(14px, 4%, 28px)",
-              right: "clamp(14px, 4%, 28px)",
+              top: "clamp(10px, 3%, 18px)",
+              right: "clamp(10px, 3%, 18px)",
               zIndex: 20,
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              padding: "8px 14px",
+              padding: "7px 12px",
               borderRadius: "8px",
               backgroundColor: "rgba(255,255,255,0.88)",
               border: "1px solid rgba(0,0,0,0.14)",
@@ -118,13 +113,16 @@ export function Hero() {
               boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden>
               <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
               <circle cx="7" cy="7.5" r="2.2" stroke="currentColor" strokeWidth="1.2"/>
               <path d="M5 3L5.8 1.5H8.2L9 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
             </svg>
             Тест Обложки
           </button>
+
+          {/* Marquee strip — bottom of book container */}
+          <EtsyMarquee />
         </div>
 
         {/* Text column — explicit lg height matches book so justify-center midpoints align */}
@@ -191,62 +189,67 @@ export function Hero() {
   );
 }
 
-// 8-point star; gooey SVG filter rounds all the tips
-const BURST8 =
-  "100,12 128,52 170,38 160,78 196,100 160,122 170,162 128,148 " +
-  "100,188 72,148 30,162 40,122 4,100 40,78 30,38 72,52";
+const ETSY_HREF = "https://www.etsy.com/uk/shop/TheBookVeil?ref=shop_profile&listing_id=4311692197";
+const TICKER_ITEM = "30% OFF · book cover template · ";
+const TICKER_REPEAT = 6;
 
-function ComicBadge({ href }: { href: string }) {
+function EtsyMarquee() {
   return (
-    <motion.a
-      href="https://www.etsy.com/uk/shop/TheBookVeil?ref=shop_profile&listing_id=4311692197"
+    <a
+      href={ETSY_HREF}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Book cover template — 30% off"
-      initial={{ scale: 0, rotate: -14 }}
-      animate={{ scale: 1, rotate: -7 }}
-      transition={{ type: "spring", stiffness: 340, damping: 18, delay: 1.1 }}
-      whileHover={{ scale: 1.1, rotate: -3, transition: { type: "spring", stiffness: 400, damping: 18 } }}
-      whileTap={{ scale: 0.93 }}
+      data-no-drag
+      aria-label="Book cover template — 30% off on Etsy"
       style={{
         position: "absolute",
-        bottom: "clamp(14px, 4%, 28px)",
-        left: "clamp(14px, 4%, 28px)",
+        bottom: 0,
+        left: 0,
+        right: 0,
         zIndex: 10,
+        display: "flex",
+        overflow: "hidden",
+        height: "36px",
+        alignItems: "center",
+        backgroundColor: "rgba(184,50,44,0.92)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
         textDecoration: "none",
-        display: "block",
-        width: "clamp(130px, 14vw, 158px)",
-        height: "clamp(130px, 14vw, 158px)",
         cursor: "pointer",
-        filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.2))",
       }}
     >
-      <svg viewBox="0 0 200 200" width="100%" height="100%" overflow="visible" aria-hidden>
-        <defs>
-          <filter id="goo" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-            <feColorMatrix in="blur" type="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" />
-          </filter>
-        </defs>
-        <g filter="url(#goo)">
-          <polygon points={BURST8} fill="#FFD700" />
-          <polygon points={BURST8} fill="none" stroke="#E8B800" strokeWidth="8" />
-        </g>
-        <text x="100" y="82" textAnchor="middle" fill="#1A1A1A"
-          fontFamily="system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="50" letterSpacing="-2">
-          30%
-        </text>
-        <text x="100" y="116" textAnchor="middle" fill="#B8322C"
-          fontFamily="system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="33" letterSpacing="1">
-          OFF!
-        </text>
-        <text x="100" y="142" textAnchor="middle" fill="#1A1A1A"
-          fontFamily="system-ui, -apple-system, sans-serif" fontWeight="700" fontSize="18">
-          book cover
-        </text>
-      </svg>
-    </motion.a>
+      <style>{`
+        @keyframes etsy-ticker {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .etsy-ticker-inner {
+          display: flex;
+          white-space: nowrap;
+          animation: etsy-ticker 16s linear infinite;
+          will-change: transform;
+        }
+        .etsy-ticker-inner:hover { animation-play-state: paused; }
+      `}</style>
+      <div className="etsy-ticker-inner">
+        {Array.from({ length: TICKER_REPEAT * 2 }).map((_, i) => (
+          <span
+            key={i}
+            style={{
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontSize: "13px",
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "white",
+              padding: "0 4px",
+            }}
+          >
+            {TICKER_ITEM}
+          </span>
+        ))}
+      </div>
+    </a>
   );
 }
 
