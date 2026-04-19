@@ -109,10 +109,10 @@ export function Hero() {
 
           <BlurReveal delay={0.28}>
             <div className="mt-1 flex flex-wrap items-center gap-3">
-              <Button href={hero.cta_primary.href} variant="primary" size="lg" trailingDot={false}>
+              <Button href={hero.cta_primary.href} variant="primary" size="lg">
                 {hero.cta_primary.label}
               </Button>
-              <Button href={hero.cta_secondary.href} variant="secondary" size="lg">
+              <Button href={hero.cta_secondary.href} variant="secondary" size="lg" trailingDot={false}>
                 {hero.cta_secondary.label}
               </Button>
             </div>
