@@ -2,7 +2,7 @@
 
 import { useMotionValue } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
 import { Button } from "@kit/components/ui/Button";
@@ -18,21 +18,17 @@ const BookScene = dynamic(
 
 export function Hero() {
   const { hero } = copy;
-  // 0 = spinning, 1 = front face, 2 = back cover
-  const [rotState, setRotState] = useState<0 | 1 | 2>(0);
 
   const coverAngle = useMotionValue(0);
   const bookRotY = useMotionValue(0);
   const spinning = useMotionValue(1);
 
   const dragging = useRef(false);
-  const didDrag = useRef(false);
   const lastX = useRef(0);
   const rotY = useRef(0);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     dragging.current = true;
-    didDrag.current = false;
     lastX.current = e.clientX;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
@@ -40,7 +36,6 @@ export function Hero() {
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragging.current) return;
     const dx = e.clientX - lastX.current;
-    if (Math.abs(dx) > 4) didDrag.current = true;
     lastX.current = e.clientX;
     rotY.current += dx * 0.008;
     bookRotY.set(rotY.current);
@@ -49,28 +44,6 @@ export function Hero() {
   const onPointerUp = useCallback(() => {
     dragging.current = false;
   }, []);
-
-  const cycleRotState = useCallback(() => {
-    if (didDrag.current) return;
-    const next = ((rotState + 1) % 3) as 0 | 1 | 2;
-    setRotState(next);
-    if (next === 0) {
-      // Return to auto-spin (BookScene syncs accumulator seamlessly)
-      spinning.set(1);
-      rotY.current = 0;
-      bookRotY.set(0);
-    } else if (next === 1) {
-      // Face front
-      spinning.set(0);
-      rotY.current = 0;
-      bookRotY.set(0);
-    } else {
-      // Face back
-      spinning.set(0);
-      rotY.current = Math.PI;
-      bookRotY.set(Math.PI);
-    }
-  }, [rotState, spinning, bookRotY]);
 
   return (
     <section
@@ -92,7 +65,6 @@ export function Hero() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
-          onClick={cycleRotState}
         >
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
         </div>
