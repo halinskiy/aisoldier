@@ -35,6 +35,8 @@ export function ContactStrip({ columns, className = "", dataSource }: ContactStr
           <div
             style={{
               height: "100%",
+              display: "flex",
+              flexDirection: "column",
               padding: "clamp(28px, 4vh, 40px) clamp(24px, 3vw, 36px)",
               borderRight: "1px solid var(--color-border)",
               borderBottom: "1px solid var(--color-border)",
@@ -60,7 +62,8 @@ export function ContactStrip({ columns, className = "", dataSource }: ContactStr
                 fontSize: "15px",
                 lineHeight: 1.6,
                 color: "var(--color-text-muted)",
-                margin: "0 0 20px",
+                margin: "0",
+                flexGrow: 1,
               }}
             >
               {col.description}
@@ -75,7 +78,9 @@ export function ContactStrip({ columns, className = "", dataSource }: ContactStr
                 textDecoration: "none",
                 borderBottom: "1px solid var(--color-accent)",
                 paddingBottom: "2px",
+                marginTop: "clamp(20px, 3vh, 32px)",
                 transition: "color 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+                alignSelf: "flex-start",
               }}
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "var(--color-accent)")}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "var(--color-text)")}

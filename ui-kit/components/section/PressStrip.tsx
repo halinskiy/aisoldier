@@ -31,7 +31,11 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
       data-tokens="accent,color-text,color-text-muted,color-border,font-serif,font-sans"
       className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${className}`}
-      style={{ gap: "0" }}
+      style={{
+        gap: "0",
+        borderTop: "1px solid var(--color-border)",
+        borderLeft: "1px solid var(--color-border)",
+      }}
     >
       {items.map((item, i) => (
         <BlurReveal key={i} delay={0.04 + i * 0.04} className="h-full">
@@ -43,7 +47,8 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
               gap: "8px",
               height: "100%",
               boxSizing: "border-box",
-              padding: "clamp(28px, 4vh, 40px) clamp(20px, 3vw, 40px) clamp(28px, 4vh, 40px) 0",
+              padding: "clamp(28px, 4vh, 40px) clamp(20px, 3vw, 40px)",
+              borderRight: "1px solid var(--color-border)",
               borderBottom: "1px solid var(--color-border)",
               textDecoration: "none",
               transition: "opacity 150ms cubic-bezier(0.16,1,0.3,1)",

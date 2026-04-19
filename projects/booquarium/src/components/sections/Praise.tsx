@@ -20,16 +20,13 @@ export function Praise() {
       }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
-        {/* Header in right column — aligns with all other section headers */}
-        <div className="mb-14 grid grid-cols-1 lg:mb-20 lg:grid-cols-2 lg:gap-16">
-          <div aria-hidden />
-          <SectionHeader
-            eyebrow={praise.eyebrow}
-            headline={praise.headline}
-            align="stacked"
-            dataSource={DATA_SOURCE}
-          />
-        </div>
+        <SectionHeader
+          eyebrow={praise.eyebrow}
+          headline={praise.headline}
+          align="split"
+          dataSource={DATA_SOURCE}
+          className="mb-8 lg:mb-10"
+        />
 
         {/* Blurbs full width */}
         <BlurbWall

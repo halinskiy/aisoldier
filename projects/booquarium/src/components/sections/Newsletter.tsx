@@ -38,6 +38,7 @@ export function Newsletter() {
         backgroundImage:
           "radial-gradient(circle, rgba(33,33,33,0.12) 1px, transparent 1px)",
         backgroundSize: "24px 24px",
+        borderBottom: "1px solid var(--color-border)",
       }}
     >
       <div className="relative mx-auto flex w-full max-w-[720px] flex-col items-center gap-8 px-6 text-center md:px-8">
