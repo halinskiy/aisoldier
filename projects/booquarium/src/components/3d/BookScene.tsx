@@ -21,9 +21,10 @@ export type BookSceneProps = {
   bookRotY: MotionValue<number>;
   /** 1 = auto-spin, 0 = pinned to bookRotY target */
   spinning: MotionValue<number>;
+  customCoverUrl?: string;
 };
 
-export function BookScene({ coverAngle, bookRotY, spinning }: BookSceneProps) {
+export function BookScene({ coverAngle, bookRotY, spinning, customCoverUrl }: BookSceneProps) {
   return (
     <Canvas
       camera={{ position: [0, 0, 6.5], fov: 40 }}
@@ -46,7 +47,7 @@ export function BookScene({ coverAngle, bookRotY, spinning }: BookSceneProps) {
       />
 
       <Suspense fallback={null}>
-        <BookModel coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
+        <BookModel coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} customCoverUrl={customCoverUrl} />
       </Suspense>
     </Canvas>
   );
@@ -88,7 +89,7 @@ function buildMaterials(
 
 /* -------------------------------------------------------------------------- */
 
-function BookModel({ coverAngle, bookRotY, spinning }: BookSceneProps) {
+function BookModel({ coverAngle, bookRotY, spinning, customCoverUrl }: BookSceneProps) {
   const bookGroupRef = useRef<THREE.Group>(null);
   const tiltGroupRef = useRef<THREE.Group>(null);
   const coverPivotRef = useRef<THREE.Group>(null);
@@ -124,6 +125,36 @@ function BookModel({ coverAngle, bookRotY, spinning }: BookSceneProps) {
       Object.values(textures).forEach((t) => t.dispose());
     };
   }, [textures]);
+
+  // Repaint textures when a custom cover URL is provided
+  useEffect(() => {
+    if (!customCoverUrl) return;
+    const img = new Image();
+    img.onload = () => {
+      const W = img.width;
+      const H = img.height;
+      const repaint = (tex: THREE.CanvasTexture, sx: number, sw: number, edgeShadow?: "front") => {
+        const canvas = tex.image as HTMLCanvasElement;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, sx, 0, sw, H, 0, 0, canvas.width, canvas.height);
+        if (edgeShadow === "front") {
+          const ew = 150;
+          const eg = ctx.createLinearGradient(0, 0, ew, 0);
+          eg.addColorStop(0, "rgba(0,0,0,0.85)");
+          eg.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = eg;
+          ctx.fillRect(0, 0, ew, canvas.height);
+        }
+        tex.needsUpdate = true;
+      };
+      repaint(textures.front, Math.round(W * 0.52), W - Math.round(W * 0.52), "front");
+      repaint(textures.back,  0,                    Math.round(W * 0.40));
+      repaint(textures.spine, Math.round(W * 0.40), Math.round(W * 0.12));
+    };
+    img.src = customCoverUrl;
+  }, [customCoverUrl, textures]);
 
   // Global mouse tracking (not just canvas) for a cinematic parallax feel
   useEffect(() => {

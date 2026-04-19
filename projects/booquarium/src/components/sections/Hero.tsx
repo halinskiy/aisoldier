@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
 import { Button } from "@kit/components/ui/Button";
@@ -20,6 +20,16 @@ const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export function Hero() {
   const { hero } = copy;
+
+  const [customCoverUrl, setCustomCoverUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCoverUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setCustomCoverUrl(url);
+  }, []);
 
   const coverAngle = useMotionValue(0);
   const bookRotY = useMotionValue(0);
@@ -72,8 +82,47 @@ export function Hero() {
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerLeave}
         >
-          <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
+          <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} customCoverUrl={customCoverUrl ?? undefined} />
           <ComicBadge href={copy.nav.cta.href} />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleCoverUpload}
+            style={{ display: "none" }}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            style={{
+              position: "absolute",
+              bottom: "clamp(14px, 4%, 28px)",
+              right: "clamp(14px, 4%, 28px)",
+              zIndex: 20,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "8px",
+              backgroundColor: "rgba(255,255,255,0.88)",
+              border: "1px solid rgba(0,0,0,0.14)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontSize: "13px",
+              fontWeight: 500,
+              color: "#1a1a1a",
+              cursor: "pointer",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+              <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+              <circle cx="7" cy="7.5" r="2.2" stroke="currentColor" strokeWidth="1.2"/>
+              <path d="M5 3L5.8 1.5H8.2L9 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            </svg>
+            Тест Обложки
+          </button>
         </div>
 
         {/* Text column — explicit lg height matches book so justify-center midpoints align */}
