@@ -1,3 +1,5 @@
+"use client";
+
 import { BlurReveal } from "../motion/BlurReveal";
 
 export type ContactColumn = {

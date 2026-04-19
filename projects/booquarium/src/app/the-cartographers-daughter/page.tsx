@@ -9,15 +9,25 @@ export const metadata: Metadata = {
 };
 
 export default function BookPage() {
-  const { book_page, hero, praise } = copy;
+  const { book_page, praise } = copy;
 
   return (
     <main className="bg-[#fafaf8] font-sans" style={{ minHeight: "100vh" }}>
+
+      <style>{`
+        .retailer-btn:hover { border-color: var(--color-text) !important; background-color: rgba(0,0,0,0.04) !important; }
+        .reading-row:hover { background-color: rgba(0,0,0,0.02); }
+        .back-link:hover { color: var(--color-text) !important; }
+        .cta-primary:hover { opacity: 0.82; }
+        .cta-secondary:hover { border-color: var(--color-text) !important; }
+        .email-link:hover { color: var(--color-accent) !important; }
+      `}</style>
 
       {/* Back nav */}
       <div style={{ padding: "32px clamp(24px, 6vw, 80px) 0" }}>
         <a
           href={`${BASE}/`}
+          className="back-link"
           style={{
             fontFamily: "var(--font-sans), system-ui, sans-serif",
             fontSize: "13px",
@@ -37,23 +47,10 @@ export default function BookPage() {
       </div>
 
       {/* Hero */}
-      <div
-        style={{
-          padding: "clamp(48px, 8vh, 96px) clamp(24px, 6vw, 80px)",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "clamp(40px, 6vw, 80px)",
-            alignItems: "start",
-          }}
-          className="lg:grid-cols-[320px_1fr]"
-        >
-          {/* Cover placeholder */}
+      <div style={{ padding: "clamp(48px, 8vh, 96px) clamp(24px, 6vw, 80px)", maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr]" style={{ gap: "clamp(40px, 6vw, 80px)", alignItems: "start" }}>
+
+          {/* Cover */}
           <div
             style={{
               aspectRatio: "2/3",
@@ -69,54 +66,22 @@ export default function BookPage() {
             }}
           >
             <div style={{ width: "40px", height: "1px", backgroundColor: "#C9A84C", marginBottom: "20px" }} />
-            <p style={{ fontFamily: "Georgia, serif", fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(201,168,76,0.7)", marginBottom: "24px", textAlign: "center" }}>A Novel</p>
-            <h2 style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: "22px", color: "#F8F3E9", textAlign: "center", lineHeight: 1.3, marginBottom: "8px", fontWeight: 400 }}>The Cartographer's</h2>
-            <h2 style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: "22px", color: "#F8F3E9", textAlign: "center", lineHeight: 1.3, marginBottom: "32px", fontWeight: 400 }}>Daughter</h2>
+            <p style={{ fontFamily: "Georgia, serif", fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(201,168,76,0.7)", marginBottom: "24px", textAlign: "center", margin: "0 0 24px" }}>A Novel</p>
+            <h2 style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: "22px", color: "#F8F3E9", textAlign: "center", lineHeight: 1.3, margin: "0 0 4px", fontWeight: 400 }}>The Cartographer's</h2>
+            <h2 style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: "22px", color: "#F8F3E9", textAlign: "center", lineHeight: 1.3, margin: "0 0 32px", fontWeight: 400 }}>Daughter</h2>
             <div style={{ width: "40px", height: "1px", backgroundColor: "#C9A84C", marginBottom: "20px" }} />
-            <p style={{ fontFamily: "Georgia, serif", fontSize: "12px", letterSpacing: "0.08em", color: "rgba(248,243,233,0.65)", textTransform: "uppercase", textAlign: "center" }}>Elena Voss</p>
+            <p style={{ fontFamily: "Georgia, serif", fontSize: "12px", letterSpacing: "0.08em", color: "rgba(248,243,233,0.65)", textTransform: "uppercase", textAlign: "center", margin: 0 }}>Elena Voss</p>
           </div>
 
-          {/* Info column */}
+          {/* Info */}
           <div>
-            <p
-              style={{
-                fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontSize: "12px",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--color-accent)",
-                marginBottom: "16px",
-              }}
-            >
+            <p style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-accent)", marginBottom: "16px" }}>
               Literary Fiction · 2026
             </p>
-
-            <h1
-              style={{
-                fontFamily: "var(--font-serif), Georgia, serif",
-                fontSize: "clamp(32px, 5vw, 60px)",
-                fontWeight: 500,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.05,
-                color: "var(--color-text)",
-                marginBottom: "24px",
-              }}
-            >
+            <h1 style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "clamp(32px, 5vw, 60px)", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1.05, color: "var(--color-text)", marginBottom: "24px" }}>
               The Cartographer's<br />Daughter
             </h1>
-
-            <p
-              style={{
-                fontFamily: "var(--font-serif), Georgia, serif",
-                fontStyle: "italic",
-                fontSize: "clamp(17px, 1.8vw, 21px)",
-                lineHeight: 1.6,
-                color: "var(--color-text-muted)",
-                marginBottom: "32px",
-                maxWidth: "560px",
-              }}
-            >
+            <p style={{ fontFamily: "var(--font-serif), Georgia, serif", fontStyle: "italic", fontSize: "clamp(17px, 1.8vw, 21px)", lineHeight: 1.6, color: "var(--color-text-muted)", marginBottom: "32px", maxWidth: "560px" }}>
               {book_page.tagline}
             </p>
 
@@ -126,6 +91,7 @@ export default function BookPage() {
                 <a
                   key={i}
                   href={r.href}
+                  className="retailer-btn"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -139,15 +105,6 @@ export default function BookPage() {
                     color: "var(--color-text)",
                     textDecoration: "none",
                     transition: "border-color 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms",
-                    backgroundColor: "transparent",
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "var(--color-text)";
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-surface)";
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "var(--color-border)";
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
                   }}
                 >
                   {r.label}
@@ -155,40 +112,14 @@ export default function BookPage() {
               ))}
             </div>
 
-            {/* Starred reviews row */}
-            <div
-              style={{
-                borderTop: "1px solid var(--color-border)",
-                paddingTop: "24px",
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "20px",
-              }}
-            >
+            {/* Starred reviews */}
+            <div style={{ borderTop: "1px solid var(--color-border)", paddingTop: "24px", display: "flex", flexWrap: "wrap", gap: "24px" }}>
               {praise.blurbs.slice(0, 3).map((b, i) => (
                 <div key={i} style={{ maxWidth: "340px" }}>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-serif), Georgia, serif",
-                      fontStyle: "italic",
-                      fontSize: "14px",
-                      lineHeight: 1.6,
-                      color: "var(--color-text-muted)",
-                      marginBottom: "6px",
-                    }}
-                  >
+                  <p style={{ fontFamily: "var(--font-serif), Georgia, serif", fontStyle: "italic", fontSize: "14px", lineHeight: 1.6, color: "var(--color-text-muted)", marginBottom: "6px" }}>
                     "{b.quote}"
                   </p>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-sans), system-ui, sans-serif",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "var(--color-accent)",
-                    }}
-                  >
+                  <p style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-accent)", margin: 0 }}>
                     — {b.source}
                   </p>
                 </div>
@@ -201,19 +132,11 @@ export default function BookPage() {
       {/* Synopsis */}
       <div style={{ borderTop: "1px solid var(--color-border)" }}>
         <div style={{ padding: "clamp(56px, 8vh, 96px) clamp(24px, 6vw, 80px)", maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 5vw, 80px)" }} className="lg:grid-cols-[240px_1fr]">
-            <p style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-text-subtle)", paddingTop: "4px" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr]" style={{ gap: "clamp(32px, 5vw, 80px)" }}>
+            <p style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-text-subtle)", paddingTop: "4px", margin: 0 }}>
               About the Book
             </p>
-            <p
-              style={{
-                fontFamily: "var(--font-serif), Georgia, serif",
-                fontSize: "clamp(17px, 1.8vw, 20px)",
-                lineHeight: 1.8,
-                color: "var(--color-text)",
-                maxWidth: "720px",
-              }}
-            >
+            <p style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "clamp(17px, 1.8vw, 20px)", lineHeight: 1.8, color: "var(--color-text)", maxWidth: "720px", margin: 0 }}>
               {book_page.synopsis}
             </p>
           </div>
@@ -221,21 +144,13 @@ export default function BookPage() {
       </div>
 
       {/* Author's Note */}
-      <div style={{ borderTop: "1px solid var(--color-border)", backgroundColor: "var(--color-surface, #f5f4f0)" }}>
+      <div style={{ borderTop: "1px solid var(--color-border)", backgroundColor: "rgba(0,0,0,0.02)" }}>
         <div style={{ padding: "clamp(56px, 8vh, 96px) clamp(24px, 6vw, 80px)", maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 5vw, 80px)" }} className="lg:grid-cols-[240px_1fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr]" style={{ gap: "clamp(32px, 5vw, 80px)" }}>
             <h2 style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 500, letterSpacing: "-0.01em", color: "var(--color-text)", margin: 0 }}>
               {book_page.author_note.headline}
             </h2>
-            <p
-              style={{
-                fontFamily: "var(--font-serif), Georgia, serif",
-                fontSize: "clamp(16px, 1.6vw, 19px)",
-                lineHeight: 1.85,
-                color: "var(--color-text-muted)",
-                maxWidth: "680px",
-              }}
-            >
+            <p style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.85, color: "var(--color-text-muted)", maxWidth: "680px", margin: 0 }}>
               {book_page.author_note.body}
             </p>
           </div>
@@ -252,7 +167,7 @@ export default function BookPage() {
             <h2 style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "clamp(24px, 2.5vw, 36px)", fontWeight: 500, letterSpacing: "-0.02em", color: "var(--color-text)", margin: "0 0 16px" }}>
               {book_page.reading_guide.headline}
             </h2>
-            <p style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontSize: "15px", lineHeight: 1.65, color: "var(--color-text-muted)", maxWidth: "600px" }}>
+            <p style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontSize: "15px", lineHeight: 1.65, color: "var(--color-text-muted)", maxWidth: "600px", margin: 0 }}>
               {book_page.reading_guide.intro}
             </p>
           </div>
@@ -261,37 +176,21 @@ export default function BookPage() {
             {book_page.reading_guide.questions.map((q, i) => (
               <li
                 key={i}
+                className="reading-row"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "40px 1fr",
                   gap: "24px",
-                  padding: "clamp(20px, 3vh, 28px) 0",
+                  padding: "clamp(20px, 3vh, 28px) 8px",
                   borderBottom: "1px solid var(--color-border)",
                   alignItems: "baseline",
+                  transition: "background-color 150ms cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: "var(--font-serif), Georgia, serif",
-                    fontSize: "clamp(20px, 2vw, 28px)",
-                    fontWeight: 500,
-                    color: "var(--color-accent)",
-                    opacity: 0.6,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
+                <span style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 500, color: "var(--color-accent)", opacity: 0.55, letterSpacing: "-0.02em" }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p
-                  style={{
-                    fontFamily: "var(--font-serif), Georgia, serif",
-                    fontStyle: "italic",
-                    fontSize: "clamp(16px, 1.6vw, 19px)",
-                    lineHeight: 1.65,
-                    color: "var(--color-text)",
-                    margin: 0,
-                  }}
-                >
+                <p style={{ fontFamily: "var(--font-serif), Georgia, serif", fontStyle: "italic", fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.65, color: "var(--color-text)", margin: 0 }}>
                   {q}
                 </p>
               </li>
@@ -308,6 +207,7 @@ export default function BookPage() {
         <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
           <a
             href={`${BASE}/chapter-one`}
+            className="cta-primary"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -327,6 +227,7 @@ export default function BookPage() {
           </a>
           <a
             href={`${BASE}/`}
+            className="cta-secondary"
             style={{
               display: "inline-flex",
               alignItems: "center",

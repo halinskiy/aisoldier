@@ -1,6 +1,6 @@
+"use client";
+
 import { BlurReveal } from "../motion/BlurReveal";
-import { EyebrowLabel } from "./EyebrowLabel";
-import { SectionHeader } from "./SectionHeader";
 
 export type EventItem = {
   date_day: string;
