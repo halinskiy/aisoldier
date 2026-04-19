@@ -30,68 +30,65 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
       data-component="PressStrip"
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
       data-tokens="accent,color-text,color-text-muted,color-border,font-serif,font-sans"
-      className={className}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-        borderTop: "1px solid var(--color-border)",
-        borderLeft: "1px solid var(--color-border)",
-      }}
+      className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${className}`}
+      style={{ gap: "0" }}
     >
       {items.map((item, i) => (
         <BlurReveal key={i} delay={0.04 + i * 0.04}>
           <a
             href={item.href}
             style={{
-              display: "block",
-              padding: "clamp(24px, 3vh, 32px) clamp(20px, 3vw, 32px)",
-              borderRight: "1px solid var(--color-border)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              padding: "clamp(28px, 4vh, 40px) 0 clamp(28px, 4vh, 40px) 0",
               borderBottom: "1px solid var(--color-border)",
+              paddingRight: "clamp(20px, 3vw, 40px)",
               textDecoration: "none",
-              transition: "background-color 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: "opacity 150ms cubic-bezier(0.16,1,0.3,1)",
             }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "rgba(0,0,0,0.03)")}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "transparent")}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = "0.72")}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = "1")}
           >
             <span
               style={{
-                display: "block",
                 fontFamily: "var(--font-sans), system-ui, sans-serif",
                 fontSize: "10px",
                 fontWeight: 600,
-                letterSpacing: "0.1em",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: TYPE_COLORS[item.type] ?? "var(--color-text-subtle)",
-                marginBottom: "10px",
               }}
             >
               {item.type}
             </span>
+
             <div
               style={{
                 fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontSize: "12px",
+                fontSize: "13px",
                 fontWeight: 700,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 color: "var(--color-text)",
-                marginBottom: "8px",
               }}
             >
               {item.publication}
             </div>
+
             <div
               style={{
                 fontFamily: "var(--font-serif), Georgia, serif",
                 fontStyle: "italic",
-                fontSize: "clamp(15px, 1.4vw, 17px)",
-                lineHeight: 1.45,
+                fontSize: "clamp(15px, 1.4vw, 18px)",
+                lineHeight: 1.5,
                 color: "var(--color-text-muted)",
-                marginBottom: "16px",
+                flexGrow: 1,
               }}
             >
               {item.title}
             </div>
+
             <span
               style={{
                 fontFamily: "var(--font-sans), system-ui, sans-serif",
@@ -100,6 +97,7 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 color: "var(--color-accent)",
+                marginTop: "8px",
               }}
             >
               Read →

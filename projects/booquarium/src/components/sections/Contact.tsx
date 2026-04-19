@@ -23,7 +23,7 @@ export function Contact() {
         <SectionHeader
           eyebrow={contact.eyebrow}
           headline={contact.headline}
-          align="stacked"
+          align="split"
           dataSource={DATA_SOURCE}
           className="mb-14 lg:mb-20"
         />

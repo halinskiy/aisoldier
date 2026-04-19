@@ -27,27 +27,28 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
       data-tokens="accent,color-text,color-text-muted,color-border,font-serif,font-sans"
       className={className}
-      style={{ borderTop: "1px solid var(--color-border)" }}
     >
       {events.map((event, i) => (
-        <BlurReveal key={i} delay={0.05 + i * 0.04}>
+        <BlurReveal key={i} delay={0.04 + i * 0.05}>
           <a
             href={event.href}
+            className="group"
             style={{
               display: "grid",
-              gridTemplateColumns: "72px 1fr 20px",
+              gridTemplateColumns: "80px 1fr auto",
               alignItems: "center",
-              gap: "clamp(20px, 4vw, 48px)",
-              padding: "clamp(20px, 3vh, 28px) 0",
+              gap: "clamp(24px, 4vw, 56px)",
+              padding: "clamp(24px, 3vh, 32px) 0",
               borderBottom: "1px solid var(--color-border)",
               textDecoration: "none",
             }}
           >
-            <div style={{ textAlign: "center", flexShrink: 0 }}>
+            {/* Date */}
+            <div>
               <div
                 style={{
                   fontFamily: "var(--font-serif), Georgia, serif",
-                  fontSize: "clamp(26px, 3vw, 38px)",
+                  fontSize: "clamp(28px, 3vw, 40px)",
                   fontWeight: 500,
                   lineHeight: 1,
                   color: "var(--color-accent)",
@@ -59,26 +60,29 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
               <div
                 style={{
                   fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  fontSize: "10px",
+                  fontSize: "11px",
                   fontWeight: 600,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   color: "var(--color-text-subtle)",
-                  marginTop: "2px",
+                  marginTop: "3px",
                 }}
               >
                 {event.date_month} {event.date_year}
               </div>
             </div>
 
+            {/* Venue + meta */}
             <div>
               <div
                 style={{
                   fontFamily: "var(--font-serif), Georgia, serif",
-                  fontSize: "clamp(16px, 1.8vw, 22px)",
+                  fontSize: "clamp(18px, 2vw, 26px)",
                   fontWeight: 500,
                   color: "var(--color-text)",
-                  marginBottom: "4px",
+                  letterSpacing: "-0.01em",
+                  marginBottom: "6px",
+                  transition: "color 150ms cubic-bezier(0.16,1,0.3,1)",
                 }}
               >
                 {event.venue}
@@ -86,21 +90,29 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
               <div
                 style={{
                   fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  fontSize: "13px",
+                  fontSize: "14px",
                   color: "var(--color-text-subtle)",
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
                 }}
               >
-                {event.city}
+                <span>{event.city}</span>
                 <span aria-hidden style={{ width: 3, height: 3, borderRadius: "50%", backgroundColor: "currentColor", display: "inline-block", flexShrink: 0 }} />
-                {event.type}
+                <span>{event.type}</span>
               </div>
             </div>
 
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden style={{ color: "var(--color-text-subtle)", flexShrink: 0 }}>
-              <path d="M3 9h12M9 3l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Arrow */}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              aria-hidden
+              style={{ color: "var(--color-text-subtle)", flexShrink: 0, transition: "transform 150ms cubic-bezier(0.16,1,0.3,1), color 150ms" }}
+            >
+              <path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
         </BlurReveal>

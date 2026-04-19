@@ -23,7 +23,7 @@ export function Appearances() {
         <SectionHeader
           eyebrow={appearances.eyebrow}
           headline={appearances.headline}
-          align="stacked"
+          align="split"
           dataSource={DATA_SOURCE}
           className="mb-14 lg:mb-20"
         />
