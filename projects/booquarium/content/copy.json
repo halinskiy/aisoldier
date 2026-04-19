@@ -327,10 +327,7 @@
     "items": [
       { "publication": "Paris Review", "title": "Maps, Memory, and the Spaces Between", "type": "Interview", "href": "#" },
       { "publication": "Granta", "title": "What Cartographers Leave Out", "type": "Essay", "href": "#" },
-      { "publication": "BBC Front Row", "title": "Elena Voss on debut fiction and inherited silence", "type": "Podcast", "href": "#" },
-      { "publication": "Lit Hub", "title": "The Geography of Grief: On writing The Cartographer's Daughter", "type": "Essay", "href": "#" },
-      { "publication": "The Bookseller", "title": "Debut of the Season", "type": "Profile", "href": "#" },
-      { "publication": "Scotland on Sunday", "title": "The mapmaker's daughter who found her own territory", "type": "Profile", "href": "#" }
+      { "publication": "BBC Front Row", "title": "Elena Voss on debut fiction and inherited silence", "type": "Podcast", "href": "#" }
     ]
   },
   "appearances": {

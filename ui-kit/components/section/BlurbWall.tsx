@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/cn";
@@ -86,16 +89,18 @@ export function BlurbCard({
   index = 0,
 }: BlurbData & { index?: number }) {
   return (
-    <article
+    <motion.article
       data-component="BlurbCard"
       data-source={DATA_SOURCE_DEFAULT}
       data-tokens="color-border,color-text,color-text-muted,color-accent,font-serif,radius-window,ease-out"
       data-motion="blur-reveal"
       data-motion-index={index}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         "group flex h-full flex-col justify-between gap-6 rounded-[12px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 lg:p-7",
-        "transition-[border-color,box-shadow,transform,background-color] duration-300",
-        "hover:-translate-y-[3px] hover:border-[var(--color-accent)] hover:shadow-[0_2px_0_rgba(184,50,44,0.06),_0_12px_40px_-8px_rgba(184,50,44,0.12)]",
+        "transition-[border-color,box-shadow] duration-300",
+        "hover:border-[var(--color-accent)] hover:shadow-[0_2px_0_rgba(184,50,44,0.06),_0_12px_40px_-8px_rgba(184,50,44,0.12)]",
       )}
       style={{
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -124,7 +129,7 @@ export function BlurbCard({
       >
         — {source}
       </figcaption>
-    </article>
+    </motion.article>
   );
 }
 

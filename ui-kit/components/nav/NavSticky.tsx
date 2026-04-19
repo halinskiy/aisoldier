@@ -26,8 +26,21 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
   const [bgOpacity, setBgOpacity] = useState(0);
   const [hidden, setHidden]       = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
+  const [nearFooter, setNearFooter] = useState(false);
   const lastY                     = useRef(0);
   const { scrollY }               = useScroll();
+
+  // Hide floating CTA when footer is visible
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setNearFooter(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(footer);
+    return () => obs.disconnect();
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     setBgOpacity(Math.min(1, y / 100));
@@ -124,7 +137,7 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
 
       {/* Floating CTA — slides in from the right when header hides */}
       <AnimatePresence>
-        {hidden && (
+        {hidden && !nearFooter && (
           <motion.a
             key="floating-cta"
             href={cta.href}
@@ -143,13 +156,13 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
               gap: "8px",
               padding: "12px 22px",
               borderRadius: "999px",
-              backgroundColor: "#212121",
+              backgroundColor: "var(--color-accent)",
               fontSize: "16px",
               textDecoration: "none",
-              boxShadow: "0 4px 24px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1)",
+              boxShadow: "0 4px 24px rgba(184,50,44,0.28), 0 1px 4px rgba(0,0,0,0.1)",
             }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "#0f0f0f")}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "#212121")}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent-hover)")}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent)")}
           >
             {cta.label}
             <span
@@ -159,7 +172,7 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
                 width: 6,
                 height: 6,
                 borderRadius: "50%",
-                backgroundColor: "var(--color-accent)",
+                backgroundColor: "white",
                 flexShrink: 0,
               }}
             />
@@ -176,10 +189,11 @@ function ScheduleCta({ href, label }: { href: string; label: string }) {
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="inline-flex items-center gap-2 rounded-full bg-[#212121] px-5 py-2.5 font-sans text-[16px] font-medium text-white transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98]"
+      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 py-2.5 font-sans text-[16px] font-medium text-white transition-[background-color,transform] duration-150 hover:bg-[var(--color-accent-hover)] active:scale-[0.98]"
       style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       {label}
+      <span aria-hidden className="inline-block h-[6px] w-[6px] flex-shrink-0 rounded-full bg-white" />
     </a>
   );
 }

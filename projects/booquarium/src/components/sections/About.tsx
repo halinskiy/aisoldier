@@ -25,7 +25,7 @@ export function About() {
       data-source={DATA_SOURCE}
       data-tokens="color-bg,color-border,color-text,color-text-muted,font-serif,radius-window"
       className="relative w-full bg-[var(--color-surface)]"
-      style={{ paddingTop: "clamp(96px,14vh,200px)", paddingBottom: "clamp(96px,14vh,200px)" }}
+      style={{ paddingTop: "clamp(96px,14vh,200px)", paddingBottom: "clamp(96px,14vh,200px)", borderBottom: "1px solid var(--color-border)" }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
