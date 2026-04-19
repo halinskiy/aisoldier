@@ -69,8 +69,8 @@ export function Hero() {
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
         </div>
 
-        {/* Text column */}
-        <div className="flex flex-col gap-5 lg:gap-6" style={{ paddingTop: "24px" }}>
+        {/* Text column — centred vertically against the book height */}
+        <div className="flex flex-col gap-5 lg:gap-6 lg:self-center">
           <BlurReveal delay={0.05}>
             <EyebrowLabel>{hero.eyebrow}</EyebrowLabel>
           </BlurReveal>
