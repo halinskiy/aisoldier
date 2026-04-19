@@ -159,7 +159,7 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
               backgroundColor: "var(--color-accent)",
               fontSize: "16px",
               textDecoration: "none",
-              boxShadow: "0 4px 24px rgba(184,50,44,0.28), 0 1px 4px rgba(0,0,0,0.1)",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1)",
             }}
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent-hover)")}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent)")}
