@@ -32,8 +32,7 @@ export function Praise() {
         <BlurbWall
           blurbs={praise.blurbs}
           cols={3}
-          footnote="Sample copy for template demonstration"
-          dataSource={DATA_SOURCE}
+dataSource={DATA_SOURCE}
         />
       </div>
     </section>

@@ -46,7 +46,7 @@ export function EyebrowLabel({
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
       data-tokens="text-label-lg,color-border,color-text,color-accent,radius-pill"
       className={cn(
-        "inline-flex w-fit self-start items-center font-sans text-[12px] font-medium uppercase leading-[1.5]",
+        "inline-flex w-fit self-start items-center font-sans text-[14px] font-medium uppercase leading-[1.5]",
         "tracking-[0.062em]",
         accent ? "text-[var(--color-accent)]" : "text-[var(--color-text)]",
         pill &&

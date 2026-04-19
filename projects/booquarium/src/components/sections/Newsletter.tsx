@@ -112,7 +112,7 @@ export function Newsletter() {
             )}
 
             <p
-              className="mt-3 text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
+              className="mt-3 text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
             >
               No spam. One email per release.
             </p>

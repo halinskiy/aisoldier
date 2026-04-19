@@ -66,7 +66,7 @@ export function BlurbWall({
 
       {footnote && (
         <p
-          className="mt-8 text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
+          className="mt-8 text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
         >
           {footnote}
         </p>
@@ -94,8 +94,8 @@ export function BlurbCard({
       data-motion-index={index}
       className={cn(
         "group flex h-full flex-col justify-between gap-6 rounded-[12px] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 lg:p-7",
-        "transition-[border-color,box-shadow,transform] duration-300",
-        "hover:-translate-y-[2px] hover:border-[var(--color-border-strong)] hover:shadow-[0_1px_0_rgba(33,33,33,0.04),_0_8px_32px_-12px_rgba(33,33,33,0.08)]",
+        "transition-[border-color,box-shadow,transform,background-color] duration-300",
+        "hover:-translate-y-[3px] hover:border-[var(--color-accent)] hover:shadow-[0_2px_0_rgba(184,50,44,0.06),_0_12px_40px_-8px_rgba(184,50,44,0.12)]",
       )}
       style={{
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -120,7 +120,7 @@ export function BlurbCard({
 
       {/* Source */}
       <figcaption
-        className="font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
+        className="font-sans text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]"
       >
         — {source}
       </figcaption>

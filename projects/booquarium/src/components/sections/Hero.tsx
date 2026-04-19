@@ -121,7 +121,7 @@ export function Hero() {
           </BlurReveal>
 
           <BlurReveal delay={0.36}>
-            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
+            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
               <span>{hero.book_genre}</span>
               <MetaDot />
               <span>{hero.book_pub_date}</span>

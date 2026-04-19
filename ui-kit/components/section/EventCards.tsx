@@ -21,6 +21,21 @@ export type EventCardsProps = {
 const DATA_SOURCE_DEFAULT = "ui-kit/components/section/EventCards.tsx";
 
 export function EventCards({ events, className = "", dataSource }: EventCardsProps) {
+  const handleEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const row = e.currentTarget;
+    const venue = row.querySelector<HTMLElement>("[data-venue]");
+    const arrow = row.querySelector<HTMLElement>("[data-arrow]");
+    if (venue) venue.style.color = "var(--color-accent)";
+    if (arrow) { arrow.style.color = "var(--color-accent)"; arrow.style.transform = "translateX(5px)"; }
+  };
+  const handleLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const row = e.currentTarget;
+    const venue = row.querySelector<HTMLElement>("[data-venue]");
+    const arrow = row.querySelector<HTMLElement>("[data-arrow]");
+    if (venue) venue.style.color = "var(--color-text)";
+    if (arrow) { arrow.style.color = "var(--color-text-subtle)"; arrow.style.transform = "translateX(0)"; }
+  };
+
   return (
     <div
       data-component="EventCards"
@@ -32,7 +47,8 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
         <BlurReveal key={i} delay={0.04 + i * 0.05}>
           <a
             href={event.href}
-            className="group"
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
             style={{
               display: "grid",
               gridTemplateColumns: "80px 1fr auto",
@@ -60,7 +76,7 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
               <div
                 style={{
                   fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  fontSize: "11px",
+                  fontSize: "14px",
                   fontWeight: 600,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
@@ -75,6 +91,7 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
             {/* Venue + meta */}
             <div>
               <div
+                data-venue
                 style={{
                   fontFamily: "var(--font-serif), Georgia, serif",
                   fontSize: "clamp(18px, 2vw, 26px)",
@@ -105,12 +122,17 @@ export function EventCards({ events, className = "", dataSource }: EventCardsPro
 
             {/* Arrow */}
             <svg
+              data-arrow
               width="20"
               height="20"
               viewBox="0 0 20 20"
               fill="none"
               aria-hidden
-              style={{ color: "var(--color-text-subtle)", flexShrink: 0, transition: "transform 150ms cubic-bezier(0.16,1,0.3,1), color 150ms" }}
+              style={{
+                color: "var(--color-text-subtle)",
+                flexShrink: 0,
+                transition: "transform 200ms cubic-bezier(0.16,1,0.3,1), color 150ms cubic-bezier(0.16,1,0.3,1)",
+              }}
             >
               <path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

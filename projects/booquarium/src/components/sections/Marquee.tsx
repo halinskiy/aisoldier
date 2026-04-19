@@ -15,6 +15,9 @@ export function Marquee() {
         padding: "clamp(20px, 3vh, 32px) 0",
         borderTop: "1px solid var(--color-border)",
         borderBottom: "1px solid var(--color-border)",
+        backgroundColor: "var(--color-bg)",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       <MarqueeInfinite

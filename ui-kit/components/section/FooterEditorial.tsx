@@ -98,7 +98,7 @@ export function FooterEditorial({
                 <a
                   key={link.href}
                   href={link.href}
-                  className="inline-block font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text)] transition-colors duration-150 hover:text-[var(--color-accent)]"
+                  className="inline-block font-sans text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text)] transition-colors duration-150 hover:text-[var(--color-accent)]"
                   style={{
                     transitionTimingFunction:
                       "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -131,7 +131,7 @@ export function FooterEditorial({
               <TextLink
                 href={topHref}
                 tone="subtle"
-                className="font-sans text-[12px] uppercase tracking-[0.062em]"
+                className="font-sans text-[14px] uppercase tracking-[0.062em]"
                 aria-label={topLabel}
               >
                 <span>{topLabel}</span>

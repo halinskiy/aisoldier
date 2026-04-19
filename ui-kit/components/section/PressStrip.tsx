@@ -33,7 +33,7 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
       className={className}
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
         gap: "0",
         borderTop: "1px solid var(--color-border)",
         borderLeft: "1px solid var(--color-border)",
@@ -58,23 +58,10 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = "0.72")}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = "1")}
           >
-            <span
-              style={{
-                fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontSize: "10px",
-                fontWeight: 600,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: TYPE_COLORS[item.type] ?? "var(--color-text-subtle)",
-              }}
-            >
-              {item.type}
-            </span>
-
             <div
               style={{
                 fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontSize: "13px",
+                fontSize: "14px",
                 fontWeight: 700,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
@@ -100,7 +87,7 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
             <span
               style={{
                 fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontSize: "12px",
+                fontSize: "14px",
                 fontWeight: 600,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",

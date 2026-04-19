@@ -4,9 +4,9 @@ const DATA_SOURCE = "projects/booquarium/src/components/sections/ChaptersStacked
 
 const THEMES = [
   { bg: "#FDFAF7", text: "#1C1C1C", muted: "rgba(28,28,28,0.45)", accent: "#B8322C" },
-  { bg: "#1C1C1C", text: "#F5F0E8", muted: "rgba(245,240,232,0.5)", accent: "#D45A54" },
-  { bg: "#FDFAF7", text: "#1C1C1C", muted: "rgba(28,28,28,0.45)", accent: "#B8322C" },
-  { bg: "#1C1C1C", text: "#F5F0E8", muted: "rgba(245,240,232,0.5)", accent: "#D45A54" },
+  { bg: "#F0EDE8", text: "#1C1C1C", muted: "rgba(28,28,28,0.4)",  accent: "#B8322C" },
+  { bg: "#EDF0EC", text: "#1C1C1C", muted: "rgba(28,28,28,0.4)",  accent: "#B8322C" },
+  { bg: "#EDE8F0", text: "#1C1C1C", muted: "rgba(28,28,28,0.4)",  accent: "#B8322C" },
 ];
 
 export function ChaptersStacked() {
@@ -56,43 +56,6 @@ export function ChaptersStacked() {
               }}
             >
               {item.number}
-            </div>
-
-            {/* Top bar */}
-            <div
-              style={{
-                padding: "clamp(24px, 4vh, 40px) clamp(24px, 5vw, 80px)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                position: "relative",
-                zIndex: 1,
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: t.muted,
-                }}
-              >
-                {features.eyebrow}
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: t.muted,
-                }}
-              >
-                {item.number} / 0{features.items.length}
-              </span>
             </div>
 
             {/* Main content */}

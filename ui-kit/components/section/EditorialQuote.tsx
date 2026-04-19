@@ -1,3 +1,5 @@
+"use client";
+
 import { BlurReveal } from "../motion/BlurReveal";
 
 export type EditorialQuoteProps = {
@@ -18,91 +20,88 @@ export function EditorialQuote({
   dataSource,
 }: EditorialQuoteProps) {
   return (
-    <section
+    <div
       data-component="EditorialQuote"
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
-      data-tokens="accent,color-text,color-text-muted,font-serif"
+      data-tokens="accent,color-text,color-text-muted,color-border,font-serif,font-sans"
       className={className}
-      style={{ padding: "clamp(64px, 10vh, 120px) clamp(24px, 6vw, 80px)" }}
     >
-      <div className="mx-auto" style={{ maxWidth: "840px" }}>
-        <BlurReveal delay={0.05}>
-          {/* Decorative open-quote */}
-          <span
-            aria-hidden
+      <BlurReveal delay={0.06}>
+        {/* Decorative quote mark */}
+        <span
+          aria-hidden
+          style={{
+            display: "block",
+            fontFamily: "var(--font-serif), Georgia, serif",
+            fontSize: "clamp(56px, 8vw, 100px)",
+            lineHeight: 0.7,
+            color: "var(--color-accent)",
+            marginBottom: "clamp(20px, 3vh, 32px)",
+            fontWeight: 400,
+            letterSpacing: "-0.04em",
+            userSelect: "none",
+          }}
+        >
+          "
+        </span>
+      </BlurReveal>
+
+      <BlurReveal delay={0.12}>
+        <blockquote
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-serif), Georgia, serif",
+            fontStyle: "italic",
+            fontSize: "clamp(26px, 3.8vw, 54px)",
+            lineHeight: 1.35,
+            letterSpacing: "-0.015em",
+            color: "var(--color-text)",
+            fontWeight: 400,
+          }}
+        >
+          {quote}
+        </blockquote>
+      </BlurReveal>
+
+      {attribution && (
+        <BlurReveal delay={0.2}>
+          <figcaption
             style={{
-              display: "block",
-              fontFamily: "var(--font-serif), Georgia, serif",
-              fontSize: "clamp(72px, 10vw, 120px)",
-              lineHeight: 0.7,
-              color: "var(--color-accent)",
-              marginBottom: "clamp(16px, 2vh, 28px)",
-              fontWeight: 500,
-              letterSpacing: "-0.04em",
-              userSelect: "none",
+              marginTop: "clamp(20px, 3vh, 36px)",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
             }}
           >
-            "
-          </span>
-        </BlurReveal>
-
-        <BlurReveal delay={0.12}>
-          <blockquote
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-serif), Georgia, serif",
-              fontStyle: "italic",
-              fontSize: "clamp(22px, 3vw, 36px)",
-              lineHeight: 1.45,
-              letterSpacing: "-0.01em",
-              color: "var(--color-text)",
-              fontWeight: 400,
-            }}
-          >
-            {quote}
-          </blockquote>
-        </BlurReveal>
-
-        {attribution && (
-          <BlurReveal delay={0.2}>
-            <div
+            <span
               style={{
-                marginTop: "clamp(24px, 3vh, 40px)",
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
+                display: "inline-block",
+                width: "32px",
+                height: "1px",
+                backgroundColor: "var(--color-accent)",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "var(--font-sans), system-ui, sans-serif",
+                fontSize: "14px",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--color-text-subtle)",
               }}
             >
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "32px",
-                  height: "1px",
-                  backgroundColor: "var(--color-accent)",
-                  flexShrink: 0,
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "var(--color-text-subtle)",
-                }}
-              >
-                {attribution}
-                {attributionDetail && (
-                  <span style={{ color: "var(--color-accent)", marginLeft: "8px" }}>
-                    {attributionDetail}
-                  </span>
-                )}
-              </span>
-            </div>
-          </BlurReveal>
-        )}
-      </div>
-    </section>
+              {attribution}
+              {attributionDetail && (
+                <span style={{ color: "var(--color-accent)", marginLeft: "8px" }}>
+                  {attributionDetail}
+                </span>
+              )}
+            </span>
+          </figcaption>
+        </BlurReveal>
+      )}
+    </div>
   );
 }

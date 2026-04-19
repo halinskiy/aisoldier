@@ -25,7 +25,7 @@ export function ContactStrip({ columns, className = "", dataSource }: ContactStr
       className={className}
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
         borderTop: "1px solid var(--color-border)",
         borderLeft: "1px solid var(--color-border)",
       }}
@@ -46,7 +46,7 @@ export function ContactStrip({ columns, className = "", dataSource }: ContactStr
             <p
               style={{
                 fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontSize: "11px",
+                fontSize: "14px",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",

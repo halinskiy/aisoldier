@@ -80,7 +80,7 @@ export function MarqueeInfinite({
               alignItems: "center",
               whiteSpace: "nowrap",
               fontFamily: "var(--font-sans), system-ui, sans-serif",
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: 500,
               letterSpacing: "0.08em",
               textTransform: "uppercase",

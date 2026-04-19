@@ -1,5 +1,16 @@
 "use client";
 
+/**
+ * @deprecated The accordion logic in this section has been promoted to the
+ * kit at `@ui-kit/components/section/FAQAccordion` (FAQAccordion + FAQItem).
+ * When this section is next touched, refactor to call:
+ *
+ *   <FAQAccordion items={faq.items.map(i => ({ question: i.q, answer: i.a }))} />
+ *
+ * and drop the local FAQItem below. Leaving this section intact for now —
+ * any refactor should be scoped so the kit promotion and the booquarium
+ * rewrite don't land in the same commit.
+ */
 import { useState } from "react";
 import copy from "@content/copy.json";
 
