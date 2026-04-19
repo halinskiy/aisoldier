@@ -8,9 +8,9 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     <ReactLenis
       root
       options={{
-        lerp: 0.1,
+        lerp: 0.08,
         smoothWheel: true,
-        duration: 1.1,
+        duration: 1.0,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       }}
     >
@@ -22,6 +22,11 @@ export function LenisProvider({ children }: { children: ReactNode }) {
 
 function AnchorScrollHandler() {
   const lenis = useLenis();
+
+  // Sync every Lenis tick → Framer Motion's useScroll (needs native scroll events)
+  useLenis(() => {
+    window.dispatchEvent(new Event("scroll", { bubbles: false }));
+  });
 
   useEffect(() => {
     if (!lenis) return;

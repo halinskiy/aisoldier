@@ -55,7 +55,7 @@ function applySpreadCrop(
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function grain(ctx: CanvasRenderingContext2D, w: number, h: number, alpha = 0.04) {
-  for (let i = 0; i < 7000; i++) {
+  for (let i = 0; i < 1000; i++) {
     const x = Math.random() * w;
     const y = Math.random() * h;
     const r = Math.random() * 0.9 + 0.1;
@@ -404,7 +404,7 @@ export function createPageSpreadTexture(): THREE.CanvasTexture {
   ctx.fillRect(0, 0, W, H);
 
   // Subtle grain on paper
-  for (let i = 0; i < 3000; i++) {
+  for (let i = 0; i < 600; i++) {
     const x = Math.random() * W;
     const y = Math.random() * H;
     ctx.beginPath();
@@ -595,7 +595,7 @@ export function createInsideCoverTexture(): THREE.CanvasTexture {
   ctx.fillRect(0, 0, W, H);
 
   // Subtle marbled texture
-  for (let i = 0; i < 4000; i++) {
+  for (let i = 0; i < 800; i++) {
     const x = Math.random() * W;
     const y = Math.random() * H;
     ctx.beginPath();

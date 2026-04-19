@@ -28,9 +28,9 @@ export function BookScene({ coverAngle, bookRotY, spinning, customCoverUrl }: Bo
   return (
     <Canvas
       camera={{ position: [0, 0, 6.5], fov: 40 }}
-      dpr={[1, 1.5]}
+      dpr={[1, 1]}
       style={{ width: "100%", height: "100%" }}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      gl={{ antialias: true, alpha: true, powerPreference: "high-performance", precision: "mediump" }}
     >
       <ambientLight intensity={0.9} />
       <hemisphereLight args={["#fdf8f5", "#e8e0d8", 0.65]} />
