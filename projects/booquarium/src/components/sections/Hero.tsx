@@ -119,13 +119,7 @@ export function Hero() {
               <Button href={`${BASE}${hero.cta_primary.href}`} variant="primary" size="lg" trailingDot={false}>
                 {hero.cta_primary.label}
               </Button>
-              <Button
-                href={hero.cta_secondary.href}
-                variant="accent"
-                size="lg"
-                className="!text-white"
-                trailingIcon={<span aria-hidden style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", backgroundColor: "white", flexShrink: 0 }} />}
-              >
+              <Button href={hero.cta_secondary.href} variant="secondary" size="lg" trailingDot={false}>
                 {hero.cta_secondary.label}
               </Button>
             </div>

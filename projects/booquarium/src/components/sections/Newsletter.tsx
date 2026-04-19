@@ -65,7 +65,7 @@ export function Newsletter() {
           </p>
         </BlurReveal>
 
-        <BlurReveal delay={0.22}>
+        <BlurReveal delay={0.22} className="w-full">
           <div className="w-full max-w-[480px]">
             {submitted ? (
               <Confirmation />
@@ -96,7 +96,7 @@ export function Newsletter() {
                   data-component="Button"
                   data-source={DATA_SOURCE}
                   data-tokens="color-text,color-bg,color-accent,radius-button,ease-out"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[8px] bg-[var(--color-text)] px-6 font-sans text-[16px] font-medium text-[var(--color-bg)] transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[8px] bg-[var(--color-text)] px-6 font-sans text-[16px] font-medium text-[var(--color-bg)] transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:w-auto"
                   style={{
                     transitionTimingFunction:
                       "cubic-bezier(0.16, 1, 0.3, 1)",
