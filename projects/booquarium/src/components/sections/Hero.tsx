@@ -203,13 +203,13 @@ function EtsyMarquee() {
       aria-label="Book cover template — 30% off on Etsy"
       style={{
         position: "absolute",
-        bottom: 0,
+        bottom: "48px",
         left: 0,
         right: 0,
         zIndex: 10,
         display: "flex",
         overflow: "hidden",
-        height: "36px",
+        height: "28px",
         alignItems: "center",
         backgroundColor: "rgba(184,50,44,0.92)",
         backdropFilter: "blur(6px)",
@@ -226,7 +226,7 @@ function EtsyMarquee() {
         .etsy-ticker-inner {
           display: flex;
           white-space: nowrap;
-          animation: etsy-ticker 16s linear infinite;
+          animation: etsy-ticker 40s linear infinite;
           will-change: transform;
         }
         .etsy-ticker-inner:hover { animation-play-state: paused; }
