@@ -149,9 +149,9 @@ function BookModel({ coverAngle, bookRotY, spinning, customCoverUrl }: BookScene
         }
         tex.needsUpdate = true;
       };
-      repaint(textures.front, Math.round(W * 0.52), W - Math.round(W * 0.52), "front");
-      repaint(textures.back,  0,                    Math.round(W * 0.40));
-      repaint(textures.spine, Math.round(W * 0.40), Math.round(W * 0.12));
+      repaint(textures.front, Math.round(W * 0.48), W - Math.round(W * 0.48));
+      repaint(textures.back,  0,                    Math.round(W * 0.42));
+      repaint(textures.spine, Math.round(W * 0.42), Math.round(W * 0.06));
     };
     img.src = customCoverUrl;
   }, [customCoverUrl, textures]);
