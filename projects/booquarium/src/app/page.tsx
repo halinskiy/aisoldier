@@ -3,7 +3,8 @@ import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
 import { PullQuote } from "@/components/sections/PullQuote";
 import { About } from "@/components/sections/About";
-import { Features } from "@/components/sections/Features";
+import { ChaptersStacked } from "@/components/sections/ChaptersStacked";
+import { ChaptersPoster } from "@/components/sections/ChaptersPoster";
 import { Conversations } from "@/components/sections/Conversations";
 import { Praise } from "@/components/sections/Praise";
 import { Appearances } from "@/components/sections/Appearances";
@@ -19,7 +20,8 @@ export default function Home() {
       <Marquee />
       <PullQuote />
       <About />
-      <Features />
+      <ChaptersStacked />
+      <ChaptersPoster />
       <Conversations />
       <Praise />
       <Appearances />

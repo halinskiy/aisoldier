@@ -30,8 +30,10 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
       data-component="PressStrip"
       data-source={dataSource ?? DATA_SOURCE_DEFAULT}
       data-tokens="accent,color-text,color-text-muted,color-border,font-serif,font-sans"
-      className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${className}`}
+      className={className}
       style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
         gap: "0",
         borderTop: "1px solid var(--color-border)",
         borderLeft: "1px solid var(--color-border)",

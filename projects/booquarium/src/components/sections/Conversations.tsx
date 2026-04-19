@@ -27,8 +27,8 @@ export function Conversations() {
           dataSource={DATA_SOURCE}
           className="mb-8 lg:mb-10"
         />
-        <PressStrip items={conversations.items} dataSource={DATA_SOURCE} />
       </div>
+      <PressStrip items={conversations.items} dataSource={DATA_SOURCE} />
     </section>
   );
 }

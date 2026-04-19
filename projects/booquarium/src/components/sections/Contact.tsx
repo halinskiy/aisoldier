@@ -27,8 +27,8 @@ export function Contact() {
           dataSource={DATA_SOURCE}
           className="mb-14 lg:mb-20"
         />
-        <ContactStrip columns={contact.columns} dataSource={DATA_SOURCE} />
       </div>
+      <ContactStrip columns={contact.columns} dataSource={DATA_SOURCE} />
     </section>
   );
 }
