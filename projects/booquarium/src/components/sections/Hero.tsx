@@ -203,7 +203,7 @@ function EtsyMarquee() {
       aria-label="Book cover template — 30% off on Etsy"
       style={{
         position: "absolute",
-        bottom: "48px",
+        bottom: "32px",
         left: 0,
         right: 0,
         zIndex: 10,
