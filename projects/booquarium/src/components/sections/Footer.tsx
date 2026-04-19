@@ -16,24 +16,9 @@ export function Footer() {
   return (
     <FooterEditorial
       wordmark={nav.logo}
-      tagline={footer.tagline}
+      tagline={footer.legal}
       links={footer.links}
-      legal={footer.legal}
-      builtWith={
-        <span>
-          Built with{" "}
-          <a
-            href="#top"
-            className="underline decoration-[var(--color-border-strong)] underline-offset-4 transition-colors duration-150 hover:text-[var(--color-accent)] hover:decoration-[var(--color-accent)]"
-            style={{
-              transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-            }}
-          >
-            Booquarium
-          </a>
-        </span>
-      }
-      topHref="#top"
+      hideBottomBar
       dataSource={DATA_SOURCE}
     />
   );

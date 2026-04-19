@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/cn";
+import { TextLink } from "../ui/TextLink";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                      */
@@ -21,6 +22,10 @@ export type FooterEditorialProps = {
   builtWith?: ReactNode;
   /** Optional top-anchor href for the scroll-to-top link. Defaults to `#top`. */
   topHref?: string;
+  /** Optional translated label for the scroll-to-top link. Defaults to "Back to top". */
+  topLabel?: string;
+  /** When true, hides the bottom bar (legal + builtWith + back-to-top). */
+  hideBottomBar?: boolean;
   className?: string;
   dataSource?: string;
 };
@@ -45,6 +50,8 @@ export function FooterEditorial({
   legal,
   builtWith,
   topHref = "#top",
+  topLabel = "Back to top",
+  hideBottomBar = false,
   className,
   dataSource,
 }: FooterEditorialProps) {
@@ -60,14 +67,18 @@ export function FooterEditorial({
       }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
-        {/* Row 1 — oversized wordmark */}
-        <div className="overflow-hidden">
+        {/* Row 1 — oversized wordmark. overflow-x protects long wordmarks
+            from horizontal page-scroll, but we MUST keep overflow-y visible
+            so descenders (y, p, q) on the last line aren't clipped. The
+            h2 gets explicit padding-bottom to reserve descender space. */}
+        <div style={{ overflowX: "hidden", overflowY: "visible" }}>
           <h2
             data-component="FooterWordmark"
             data-source={dataSource ?? DATA_SOURCE_DEFAULT}
-            className="font-serif font-medium leading-[0.9] tracking-[-0.03em] text-[var(--color-text)]"
+            className="font-serif font-medium leading-[1.0] tracking-[-0.03em] text-[var(--color-text)]"
             style={{
               fontSize: "clamp(72px, 16vw, 240px)",
+              paddingBottom: "0.22em",
             }}
           >
             {wordmark}
@@ -108,41 +119,41 @@ export function FooterEditorial({
           )}
         </div>
 
-        {/* Row 3 — legal + built-with */}
-        <div
-          className="mt-10 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 font-sans text-[16px] text-[var(--color-text-subtle)] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
-        >
-          {legal && <p>{legal}</p>}
+        {/* Row 3 — legal + built-with (hidden when hideBottomBar=true) */}
+        {!hideBottomBar && (
+          <div
+            className="mt-10 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 font-sans text-[16px] text-[var(--color-text-subtle)] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+          >
+            {legal && <p>{legal}</p>}
 
-          <div className="flex items-center gap-5">
-            {builtWith && <span>{builtWith}</span>}
-            <a
-              href={topHref}
-              className="inline-flex items-center gap-1 font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-muted)] transition-colors duration-150 hover:text-[var(--color-accent)]"
-              style={{
-                transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-              }}
-              aria-label="Back to top"
-            >
-              <span>Back to top</span>
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-                fill="none"
-                aria-hidden
+            <div className="flex items-center gap-5">
+              {builtWith && <span>{builtWith}</span>}
+              <TextLink
+                href={topHref}
+                tone="subtle"
+                className="font-sans text-[12px] uppercase tracking-[0.062em]"
+                aria-label={topLabel}
               >
-                <path
-                  d="M6 10V2M6 2L2.5 5.5M6 2L9.5 5.5"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
+                <span>{topLabel}</span>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M6 10V2M6 2L2.5 5.5M6 2L9.5 5.5"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </TextLink>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </footer>
   );

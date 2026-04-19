@@ -37,11 +37,11 @@ export function BookScene({ coverAngle, bookRotY, spinning }: BookSceneProps) {
       <directionalLight position={[-3, 2, 3]} intensity={0.5} color="#c8d8f0" />
       <directionalLight position={[0, 1, 7]} intensity={0.8} />
       <ContactShadows
-        position={[0, -1.7, 0]}
-        opacity={0.3}
-        scale={8}
-        blur={2.5}
-        far={4}
+        position={[0, -1.2, 0]}
+        opacity={0.28}
+        scale={6}
+        blur={2.2}
+        far={3}
         color="#000000"
       />
 
