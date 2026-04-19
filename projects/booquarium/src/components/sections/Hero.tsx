@@ -1,6 +1,6 @@
 "use client";
 
-import { useMotionValue } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useCallback, useRef } from "react";
 
@@ -47,6 +47,10 @@ export function Hero() {
     dragging.current = false;
   }, []);
 
+  const onPointerLeave = useCallback(() => {
+    dragging.current = false;
+  }, []);
+
   return (
     <section
       id="book-hero"
@@ -66,9 +70,10 @@ export function Hero() {
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
-          onPointerLeave={onPointerUp}
+          onPointerLeave={onPointerLeave}
         >
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} />
+          <ComicBadge href={copy.nav.cta.href} />
         </div>
 
         {/* Text column — explicit lg height matches book so justify-center midpoints align */}
@@ -132,6 +137,94 @@ export function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+// 16-point starburst — outer r=95, inner r=62, viewBox 200×200
+const BURST =
+  "100,5 123.7,42.7 167.2,32.8 157.3,76.3 195,100 157.3,123.7 " +
+  "167.2,167.2 123.7,157.3 100,195 76.3,157.3 32.8,167.2 42.7,123.7 " +
+  "5,100 42.7,76.3 32.8,32.8 76.3,42.7";
+
+function ComicBadge({ href }: { href: string }) {
+  return (
+    <motion.a
+      href="https://www.etsy.com/uk/shop/TheBookVeil?ref=shop_profile&listing_id=4311692197"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Buy book cover template — 30% off"
+      initial={{ scale: 0, rotate: -18 }}
+      animate={{ scale: 1, rotate: -8 }}
+      transition={{ type: "spring", stiffness: 360, damping: 16, delay: 1.1 }}
+      whileHover={{ scale: 1.13, rotate: -4, transition: { type: "spring", stiffness: 400, damping: 18 } }}
+      whileTap={{ scale: 0.93 }}
+      style={{
+        position: "absolute",
+        bottom: "clamp(14px, 4%, 28px)",
+        right: "clamp(14px, 4%, 28px)",
+        zIndex: 10,
+        textDecoration: "none",
+        display: "block",
+        width: "clamp(140px, 15vw, 176px)",
+        height: "clamp(140px, 15vw, 176px)",
+        cursor: "pointer",
+        filter: "drop-shadow(0 4px 14px rgba(0,0,0,0.22))",
+      }}
+    >
+      <svg viewBox="0 0 200 200" width="100%" height="100%" overflow="visible" aria-hidden>
+        {/* Burst fill */}
+        <polygon points={BURST} fill="#FFD700" />
+        {/* Inner burst border for comic depth */}
+        <polygon points={BURST} fill="none" stroke="#E5A800" strokeWidth="3" />
+
+        {/* "30%" */}
+        <text
+          x="100" y="82"
+          textAnchor="middle"
+          fill="#1A1A1A"
+          fontFamily="system-ui, -apple-system, sans-serif"
+          fontWeight="900"
+          fontSize="52"
+          letterSpacing="-2"
+        >
+          30%
+        </text>
+
+        {/* "OFF!" */}
+        <text
+          x="100" y="116"
+          textAnchor="middle"
+          fill="#B8322C"
+          fontFamily="system-ui, -apple-system, sans-serif"
+          fontWeight="900"
+          fontSize="34"
+          letterSpacing="1"
+        >
+          OFF!
+        </text>
+
+        {/* "book cover" */}
+        <text
+          x="100" y="142"
+          textAnchor="middle"
+          fill="#1A1A1A"
+          fontFamily="system-ui, -apple-system, sans-serif"
+          fontWeight="700"
+          fontSize="20"
+        >
+          book cover
+        </text>
+      </svg>
+
+      {/* Continuous subtle pulse ring */}
+      <style>{`
+        @keyframes comic-pulse {
+          0%, 100% { transform: scale(1); }
+          50%       { transform: scale(1.04); }
+        }
+        .comic-badge-inner { animation: comic-pulse 2.8s ease-in-out infinite; transform-origin: center; }
+      `}</style>
+    </motion.a>
   );
 }
 
