@@ -38,6 +38,14 @@ function applySpreadCrop(
       const srcX = Math.round(img.width * 0.52);
       const srcW = img.width - srcX;
       ctx.drawImage(img, srcX, 0, srcW, img.height, 0, 0, W, H);
+      // Black shadow on spine edge (left side) so cover meets spine cleanly
+      const edgeW = 150;
+      const edgeGrad = ctx.createLinearGradient(0, 0, edgeW, 0);
+      edgeGrad.addColorStop(0, "rgba(0,0,0,1)");
+      edgeGrad.addColorStop(0.6, "rgba(0,0,0,0.55)");
+      edgeGrad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = edgeGrad;
+      ctx.fillRect(0, 0, edgeW, H);
     } else if (side === "back") {
       const srcW = Math.round(img.width * 0.40);
       ctx.drawImage(img, 0, 0, srcW, img.height, 0, 0, W, H);
@@ -283,6 +291,15 @@ export function createFrontCoverTexture(): THREE.CanvasTexture {
   ctx.arc(W / 2, H - 68, 3, 0, Math.PI * 2);
   ctx.fillStyle = "rgba(201,168,76,0.6)";
   ctx.fill();
+
+  // Black shadow on spine edge (left) — mirrors what applySpreadCrop adds
+  const edgeFallbackW = 150;
+  const edgeFallbackGrad = ctx.createLinearGradient(0, 0, edgeFallbackW, 0);
+  edgeFallbackGrad.addColorStop(0, "rgba(0,0,0,1)");
+  edgeFallbackGrad.addColorStop(0.6, "rgba(0,0,0,0.55)");
+  edgeFallbackGrad.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = edgeFallbackGrad;
+  ctx.fillRect(0, 0, edgeFallbackW, H);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
