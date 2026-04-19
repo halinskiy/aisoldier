@@ -1,5 +1,6 @@
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
+import { Marquee } from "@/components/sections/Marquee";
 import { PullQuote } from "@/components/sections/PullQuote";
 import { About } from "@/components/sections/About";
 import { Features } from "@/components/sections/Features";
@@ -15,6 +16,7 @@ export default function Home() {
     <main>
       <Nav />
       <Hero />
+      <Marquee />
       <PullQuote />
       <About />
       <Features />
