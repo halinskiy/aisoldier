@@ -217,7 +217,7 @@ function BookModel({ coverAngle, bookRotY, spinning, customCoverUrl }: BookScene
     if (!tilt || !bookGrp || !pivot) return;
 
     const t = state.clock.getElapsedTime();
-    const dt = t - lastTimeRef.current;
+    const dt = Math.min(t - lastTimeRef.current, 1 / 30);
     lastTimeRef.current = t;
 
     // Idle Y float on tilt group
