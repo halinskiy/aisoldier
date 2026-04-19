@@ -38,7 +38,7 @@ function applySpreadCrop(
       const srcX = Math.round(img.width * 0.52);
       const srcW = img.width - srcX;
       ctx.drawImage(img, srcX, 0, srcW, img.height, 0, 0, W, H);
-      // Black shadow on spine edge (left side) so cover meets spine cleanly
+      // Black shadow on left (spine) edge
       const edgeW = 150;
       const edgeGrad = ctx.createLinearGradient(0, 0, edgeW, 0);
       edgeGrad.addColorStop(0, "rgba(0,0,0,1)");
@@ -46,6 +46,14 @@ function applySpreadCrop(
       edgeGrad.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = edgeGrad;
       ctx.fillRect(0, 0, edgeW, H);
+      // Black shadow on right (outer) edge — 100px
+      const rEdgeW = 200;
+      const rEdgeGrad = ctx.createLinearGradient(W, 0, W - rEdgeW, 0);
+      rEdgeGrad.addColorStop(0, "rgba(0,0,0,1)");
+      rEdgeGrad.addColorStop(0.5, "rgba(0,0,0,0.7)");
+      rEdgeGrad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = rEdgeGrad;
+      ctx.fillRect(W - rEdgeW, 0, rEdgeW, H);
     } else if (side === "back") {
       const srcW = Math.round(img.width * 0.40);
       ctx.drawImage(img, 0, 0, srcW, img.height, 0, 0, W, H);
@@ -292,7 +300,7 @@ export function createFrontCoverTexture(): THREE.CanvasTexture {
   ctx.fillStyle = "rgba(201,168,76,0.6)";
   ctx.fill();
 
-  // Black shadow on spine edge (left) — mirrors what applySpreadCrop adds
+  // Black shadow on left (spine) edge
   const edgeFallbackW = 150;
   const edgeFallbackGrad = ctx.createLinearGradient(0, 0, edgeFallbackW, 0);
   edgeFallbackGrad.addColorStop(0, "rgba(0,0,0,1)");
@@ -300,6 +308,14 @@ export function createFrontCoverTexture(): THREE.CanvasTexture {
   edgeFallbackGrad.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = edgeFallbackGrad;
   ctx.fillRect(0, 0, edgeFallbackW, H);
+  // Black shadow on right (outer) edge
+  const rFallbackW = 200;
+  const rFallbackGrad = ctx.createLinearGradient(W, 0, W - rFallbackW, 0);
+  rFallbackGrad.addColorStop(0, "rgba(0,0,0,1)");
+  rFallbackGrad.addColorStop(0.5, "rgba(0,0,0,0.7)");
+  rFallbackGrad.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = rFallbackGrad;
+  ctx.fillRect(W - rFallbackW, 0, rFallbackW, H);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
