@@ -31,12 +31,14 @@ export function ContactStrip({ columns, className = "", dataSource }: ContactStr
       }}
     >
       {columns.map((col, i) => (
-        <BlurReveal key={i} delay={0.06 + i * 0.06}>
+        <BlurReveal key={i} delay={0.06 + i * 0.06} className="h-full">
           <div
             style={{
+              height: "100%",
               padding: "clamp(28px, 4vh, 40px) clamp(24px, 3vw, 36px)",
               borderRight: "1px solid var(--color-border)",
               borderBottom: "1px solid var(--color-border)",
+              boxSizing: "border-box",
             }}
           >
             <p
