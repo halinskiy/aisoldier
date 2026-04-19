@@ -40,6 +40,7 @@ export function Hero() {
   const rotY = useRef(0);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
+    if ((e.target as HTMLElement).closest("[data-no-drag]")) return;
     dragging.current = true;
     lastX.current = e.clientX;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -93,6 +94,7 @@ export function Hero() {
           />
           <button
             type="button"
+            data-no-drag
             onClick={() => fileInputRef.current?.click()}
             style={{
               position: "absolute",
