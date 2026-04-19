@@ -16,7 +16,7 @@ function loadSpread(): Promise<HTMLImageElement> {
       img.onload = () => resolve(img);
       img.onerror = reject;
       const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-      img.src = `${base}/covers/spread.png`;
+      img.src = `${base}/covers/spread.jpg`;
     });
   }
   return _spreadPromise;
