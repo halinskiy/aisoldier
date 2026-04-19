@@ -101,8 +101,13 @@
       }
     ]
   },
+  "pullquote": {
+    "quote": "Grief, geography, and the terrible weight of things inherited. Quiet, devastating, essential.",
+    "attribution": "Kirkus Reviews",
+    "attribution_detail": "Starred Review"
+  },
   "praise": {
-    "eyebrow": "Early Praise",
+    "eyebrow": "Reviews",
     "headline": "What readers are saying.",
     "blurbs": [
       {
