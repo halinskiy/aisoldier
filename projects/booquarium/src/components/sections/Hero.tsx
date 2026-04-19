@@ -80,7 +80,7 @@ export function Hero() {
       data-tokens="accent,color-bg,color-text,color-text-muted,font-serif,ease-out"
       className="relative h-[100dvh] w-full overflow-hidden"
     >
-      <div className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 items-center gap-12 px-6 md:px-8 lg:px-10 lg:grid-cols-2 lg:gap-16" style={{ paddingTop: "72px" }}>
+      <div className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 items-center gap-12 px-6 md:px-8 lg:px-10 lg:grid-cols-2 lg:gap-16" style={{ paddingTop: "56px" }}>
         {/* 3D Book */}
         <div
           className="relative h-[48dvh] w-full min-h-[300px] lg:h-[78dvh] lg:min-h-[480px] select-none overflow-hidden rounded-[12px]"
@@ -137,7 +137,7 @@ export function Hero() {
 
           <BlurReveal delay={0.28}>
             <div className="mt-1 flex flex-wrap items-center gap-3">
-              <Button href={hero.cta_primary.href} variant="primary" size="lg">
+              <Button href={hero.cta_primary.href} variant="primary" size="lg" trailingDot={false}>
                 {hero.cta_primary.label}
               </Button>
               <Button href={hero.cta_secondary.href} variant="secondary" size="lg">
