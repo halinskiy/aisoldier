@@ -25,7 +25,7 @@ export function Conversations() {
           headline={conversations.headline}
           align="split"
           dataSource={DATA_SOURCE}
-          className="mb-14 lg:mb-20"
+          className="mb-8 lg:mb-10"
         />
         <PressStrip items={conversations.items} dataSource={DATA_SOURCE} />
       </div>

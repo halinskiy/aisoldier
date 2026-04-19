@@ -34,16 +34,17 @@ export function PressStrip({ items, className = "", dataSource }: PressStripProp
       style={{ gap: "0" }}
     >
       {items.map((item, i) => (
-        <BlurReveal key={i} delay={0.04 + i * 0.04}>
+        <BlurReveal key={i} delay={0.04 + i * 0.04} className="h-full">
           <a
             href={item.href}
             style={{
               display: "flex",
               flexDirection: "column",
               gap: "8px",
-              padding: "clamp(28px, 4vh, 40px) 0 clamp(28px, 4vh, 40px) 0",
+              height: "100%",
+              boxSizing: "border-box",
+              padding: "clamp(28px, 4vh, 40px) clamp(20px, 3vw, 40px) clamp(28px, 4vh, 40px) 0",
               borderBottom: "1px solid var(--color-border)",
-              paddingRight: "clamp(20px, 3vw, 40px)",
               textDecoration: "none",
               transition: "opacity 150ms cubic-bezier(0.16,1,0.3,1)",
             }}
