@@ -1,7 +1,6 @@
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
-import { Books } from "@/components/sections/Books";
 import { Features } from "@/components/sections/Features";
 import { Praise } from "@/components/sections/Praise";
 import { Newsletter } from "@/components/sections/Newsletter";
@@ -14,7 +13,6 @@ export default function Home() {
       <Nav />
       <Hero />
       <About />
-      <Books />
       <Features />
       <Praise />
       <Newsletter />
