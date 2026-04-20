@@ -17,6 +17,7 @@ export function Praise() {
       style={{
         paddingTop: "clamp(96px,14vh,200px)",
         paddingBottom: "clamp(96px,14vh,200px)",
+        borderBottom: "1px solid var(--color-border)",
       }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">

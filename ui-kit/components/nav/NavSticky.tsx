@@ -165,17 +165,6 @@ export function NavSticky({ logo, logoNode, links, cta, dataSource }: NavStickyP
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent)")}
           >
             {cta.label}
-            <span
-              aria-hidden
-              style={{
-                display: "inline-block",
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                backgroundColor: "white",
-                flexShrink: 0,
-              }}
-            />
           </motion.a>
         )}
       </AnimatePresence>
@@ -193,7 +182,6 @@ function ScheduleCta({ href, label }: { href: string; label: string }) {
       style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       {label}
-      <span aria-hidden className="inline-block h-[6px] w-[6px] flex-shrink-0 rounded-full bg-white" />
     </a>
   );
 }
