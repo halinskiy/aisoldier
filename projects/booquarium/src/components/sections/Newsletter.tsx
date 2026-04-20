@@ -66,7 +66,7 @@ export function Newsletter() {
         </BlurReveal>
 
         <BlurReveal delay={0.22} className="w-full">
-          <div className="w-full max-w-[480px]">
+          <div className="mx-auto w-full max-w-[480px]">
             {submitted ? (
               <Confirmation />
             ) : (
