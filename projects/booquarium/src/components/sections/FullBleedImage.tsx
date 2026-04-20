@@ -7,11 +7,11 @@ import copy from "@content/copy.json";
 const DATA_SOURCE = "projects/booquarium/src/components/sections/FullBleedImage.tsx";
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/* ── dimensions ── */
-const W = 260;   // cover width  (px)
-const H = 380;   // cover height (px)
-const S = 38;    // spine depth  (px)
-const P = 22;    // pages depth  (px)
+/* ── book dimensions ── */
+const W = 260;   // cover width
+const H = 380;   // cover height
+const S = 42;    // spine width (visible left face)
+const P = 28;    // pages edge width (visible right face)
 
 export function FullBleedImage() {
   const { hero, nav } = copy;
@@ -112,28 +112,30 @@ export function FullBleedImage() {
       >
         {/* ── CSS 3D Book mockup ── */}
         <BlurReveal delay={0.05} className="flex items-center justify-center lg:justify-end">
-          <div style={{ perspective: "1400px" }}>
+          {/*
+            Fold approach: front face sits at z=0. Spine and pages-edge
+            are folded from the left/right edges using transform-origin.
+            The whole book is rotated so spine + front + pages-edge are visible.
+          */}
+          <div style={{ perspective: "1200px", paddingLeft: S, paddingTop: 8 }}>
             <div
               style={{
                 position: "relative",
-                width: W + S,
+                width: W,
                 height: H,
                 transformStyle: "preserve-3d",
-                transform: "rotateY(-28deg) rotateX(4deg)",
-                filter: "drop-shadow(-16px 24px 48px rgba(0,0,0,0.28))",
+                transform: "rotateX(6deg) rotateY(-28deg)",
+                filter: "drop-shadow(-20px 28px 52px rgba(80,20,10,0.22)) drop-shadow(-4px 6px 12px rgba(0,0,0,0.14))",
               }}
             >
-              {/* Front cover */}
+              {/* ── Front cover ── */}
               <div
                 style={{
                   position: "absolute",
-                  left: S,
-                  top: 0,
-                  width: W,
-                  height: H,
-                  transform: `translateZ(${P / 2}px)`,
-                  borderRadius: "0 4px 4px 0",
+                  inset: 0,
+                  borderRadius: "1px 5px 5px 1px",
                   overflow: "hidden",
+                  boxShadow: "inset -3px 0 8px rgba(0,0,0,0.12)",
                 }}
               >
                 <Image
@@ -143,71 +145,77 @@ export function FullBleedImage() {
                   sizes="320px"
                   style={{ objectFit: "cover", objectPosition: "right center" }}
                 />
+                {/* Subtle inner spine shadow */}
+                <div style={{
+                  position: "absolute", inset: 0, left: 0, width: 28,
+                  background: "linear-gradient(to right, rgba(0,0,0,0.35), transparent)",
+                  pointerEvents: "none",
+                }} />
               </div>
 
-              {/* Spine */}
+              {/* ── Spine (left face) — folded from left edge ── */}
               <div
                 style={{
                   position: "absolute",
-                  left: 0,
                   top: 0,
+                  left: -S,
                   width: S,
                   height: H,
-                  transform: `rotateY(90deg) translateZ(${S}px) translateX(${-P / 2}px)`,
                   transformOrigin: "right center",
-                  backgroundColor: "#6b1410",
-                  overflow: "hidden",
+                  transform: "rotateY(-90deg)",
+                  background: "linear-gradient(to right, #4a0d0a, #6b1410 40%, #7a1812)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  overflow: "hidden",
                 }}
               >
-                {/* Spine text */}
-                <span
-                  style={{
-                    writingMode: "vertical-rl",
-                    transform: "rotate(180deg)",
-                    fontFamily: "Georgia, serif",
-                    fontSize: "11px",
-                    fontWeight: 500,
-                    letterSpacing: "0.14em",
-                    color: "rgba(255,235,215,0.7)",
-                    textTransform: "uppercase",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  The Cartographer's Daughter
+                <span style={{
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
+                  fontFamily: "Georgia, serif",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  letterSpacing: "0.16em",
+                  color: "rgba(255,230,200,0.65)",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                  userSelect: "none",
+                }}>
+                  The Cartographer's Daughter · Elena Voss
                 </span>
               </div>
 
-              {/* Pages edge (right side) */}
+              {/* ── Pages edge (right face) — folded from right edge ── */}
               <div
                 style={{
                   position: "absolute",
-                  left: S + W,
-                  top: 2,
+                  top: 0,
+                  left: W,
                   width: P,
-                  height: H - 4,
-                  transform: `rotateY(-90deg) translateZ(0px)`,
+                  height: H,
                   transformOrigin: "left center",
-                  backgroundColor: "#f0e8da",
-                  backgroundImage: "repeating-linear-gradient(#e8ddd0 0px, #e8ddd0 1px, transparent 1px, transparent 4px)",
-                  borderRadius: "0 2px 2px 0",
+                  transform: "rotateY(90deg)",
+                  backgroundColor: "#ede5d8",
+                  backgroundImage: [
+                    "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(190,175,155,0.5) 3px, rgba(190,175,155,0.5) 4px)",
+                    "linear-gradient(to right, #d8cfc2, #ede5d8 30%)",
+                  ].join(", "),
                 }}
               />
 
-              {/* Top edge */}
+              {/* ── Top face — folded from top edge ── */}
               <div
                 style={{
                   position: "absolute",
-                  left: S,
-                  top: 0,
+                  top: -8,
+                  left: 0,
                   width: W,
-                  height: P,
-                  transform: `rotateX(90deg) translateZ(0px)`,
-                  transformOrigin: "center top",
-                  backgroundColor: "#e8ddd0",
-                  backgroundImage: "repeating-linear-gradient(90deg, #ddd3c4 0px, #ddd3c4 1px, transparent 1px, transparent 4px)",
+                  height: 8,
+                  transformOrigin: "bottom center",
+                  transform: "rotateX(90deg)",
+                  backgroundColor: "#e2d8c8",
+                  backgroundImage: "linear-gradient(to bottom, #cfc5b2, #e2d8c8)",
                 }}
               />
             </div>
