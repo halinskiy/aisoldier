@@ -62,7 +62,7 @@ const variants: Record<Variant, string> = {
   // near-black (not white) because #ffffff on #FF512A is only 3.24:1
   // contrast (AA fail). Near-black #1e1e1e on orange is ~7:1 (AAA).
   accent:
-    "bg-[var(--color-accent)] text-[#1e1e1e] hover:bg-[var(--color-accent-hover)] rounded-full",
+    "bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] rounded-full",
 };
 
 const sizes: Record<Size, string> = {

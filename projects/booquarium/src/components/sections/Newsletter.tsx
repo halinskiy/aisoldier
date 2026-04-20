@@ -85,7 +85,7 @@ export function Newsletter() {
                   type="email"
                   required
                   placeholder={newsletter.placeholder}
-                  className="h-12 flex-1 rounded-[8px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 font-sans text-[16px] text-[var(--color-text)] placeholder:text-[var(--color-text-subtle)] focus-visible:border-[var(--color-accent)] focus-visible:outline-none transition-[border-color] duration-150"
+                  className="h-12 flex-1 rounded-full border border-[var(--color-border)] bg-[var(--color-bg)] px-5 font-sans text-[16px] text-[var(--color-text)] placeholder:text-[var(--color-text-subtle)] focus-visible:border-[var(--color-accent)] focus-visible:outline-none transition-[border-color] duration-150"
                   style={{
                     transitionTimingFunction:
                       "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -95,18 +95,14 @@ export function Newsletter() {
                   type="submit"
                   data-component="Button"
                   data-source={DATA_SOURCE}
-                  data-tokens="color-text,color-bg,color-accent,radius-button,ease-out"
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[8px] bg-[var(--color-text)] px-6 font-sans text-[16px] font-medium text-[var(--color-bg)] transition-[background-color,transform] duration-150 hover:bg-[#0f0f0f] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:w-auto"
+                  data-tokens="color-accent,radius-pill,ease-out"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-6 font-sans text-[16px] font-medium text-white transition-[background-color,transform] duration-150 hover:bg-[var(--color-accent-hover)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:w-auto"
                   style={{
                     transitionTimingFunction:
                       "cubic-bezier(0.16, 1, 0.3, 1)",
                   }}
                 >
-                  <span>{newsletter.cta}</span>
-                  <span
-                    aria-hidden
-                    className="inline-block h-[6px] w-[6px] rounded-full bg-[var(--color-accent)]"
-                  />
+                  {newsletter.cta}
                 </button>
               </form>
             )}
