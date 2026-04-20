@@ -85,6 +85,62 @@ export function Hero() {
         >
           <BookScene coverAngle={coverAngle} bookRotY={bookRotY} spinning={spinning} customCoverUrl={customCoverUrl ?? undefined} />
 
+          {/* Etsy promo pill — bottom-left */}
+          <a
+            href="https://www.etsy.com/uk/shop/TheBookVeil?ref=shop_profile&listing_id=4311692197"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-no-drag
+            aria-label="Cover template — 30% off on Etsy"
+            style={{
+              position: "absolute",
+              bottom: "clamp(14px, 4%, 22px)",
+              left: "clamp(14px, 4%, 22px)",
+              zIndex: 20,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7px",
+              padding: "7px 13px",
+              borderRadius: "999px",
+              backgroundColor: "rgba(20,15,10,0.72)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "background-color 200ms cubic-bezier(0.16,1,0.3,1)",
+            }}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "rgba(20,15,10,0.9)")}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "rgba(20,15,10,0.72)")}
+          >
+            <span style={{
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontSize: "12px",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+              color: "rgba(255,255,255,0.55)",
+              textTransform: "uppercase",
+            }}>Cover template</span>
+            <span style={{
+              width: 1,
+              height: 10,
+              backgroundColor: "rgba(255,255,255,0.2)",
+              flexShrink: 0,
+            }} />
+            <span style={{
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontSize: "13px",
+              fontWeight: 700,
+              color: "#FFD166",
+              letterSpacing: "0.01em",
+            }}>−30%</span>
+            <span style={{
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontSize: "11px",
+              color: "rgba(255,255,255,0.45)",
+            }}>→</span>
+          </a>
+
           {/* Upload button — top-right */}
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleCoverUpload} style={{ display: "none" }} />
           <button
