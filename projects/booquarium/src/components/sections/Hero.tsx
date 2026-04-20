@@ -166,9 +166,6 @@ export function Hero() {
               <Button href={`${BASE}${hero.cta_primary.href}`} variant="accent" size="lg" trailingDot={false}>
                 {hero.cta_primary.label}
               </Button>
-              <Button href={hero.cta_secondary.href} variant="accent" size="lg" trailingDot={false}>
-                {hero.cta_secondary.label}
-              </Button>
             </div>
           </BlurReveal>
 
