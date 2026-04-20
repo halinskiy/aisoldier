@@ -25,7 +25,7 @@ export function FullBleedImage() {
       className="relative w-full overflow-hidden"
       style={{
         minHeight: "100dvh",
-        backgroundColor: "#0d0b0a",
+        backgroundColor: "#faf5ee",
       }}
     >
       {/* ── Background patterns (cartographic theme) ── */}
@@ -37,11 +37,11 @@ export function FullBleedImage() {
         <defs>
           {/* Radial map grid */}
           <pattern id="map-grid" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(255,245,235,0.04)" strokeWidth="0.5" />
+            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(60,35,15,0.07)" strokeWidth="0.5" />
           </pattern>
           {/* Diagonal hatch */}
           <pattern id="hatch" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M-4,4 l8,-8 M0,32 l32,-32 M28,36 l8,-8" stroke="rgba(184,50,44,0.07)" strokeWidth="0.6" />
+            <path d="M-4,4 l8,-8 M0,32 l32,-32 M28,36 l8,-8" stroke="rgba(184,50,44,0.09)" strokeWidth="0.6" />
           </pattern>
         </defs>
 
@@ -57,21 +57,21 @@ export function FullBleedImage() {
             cx="22%" cy="55%"
             r={r}
             fill="none"
-            stroke="rgba(255,245,235,0.045)"
+            stroke="rgba(60,35,15,0.1)"
             strokeWidth="0.6"
             strokeDasharray={i % 2 === 0 ? "4 8" : "none"}
           />
         ))}
 
         {/* Compass rose cross-hairs */}
-        <line x1="22%" y1="0" x2="22%" y2="100%" stroke="rgba(255,245,235,0.04)" strokeWidth="0.5" />
-        <line x1="0" y1="55%" x2="100%" y2="55%" stroke="rgba(255,245,235,0.04)" strokeWidth="0.5" />
+        <line x1="22%" y1="0" x2="22%" y2="100%" stroke="rgba(60,35,15,0.07)" strokeWidth="0.5" />
+        <line x1="0" y1="55%" x2="100%" y2="55%" stroke="rgba(60,35,15,0.07)" strokeWidth="0.5" />
 
         {/* 45° diagonal lines through compass centre */}
         <line x1="calc(22% - 600px)" y1="calc(55% - 600px)" x2="calc(22% + 600px)" y2="calc(55% + 600px)"
-          stroke="rgba(255,245,235,0.025)" strokeWidth="0.5" />
+          stroke="rgba(60,35,15,0.05)" strokeWidth="0.5" />
         <line x1="calc(22% + 600px)" y1="calc(55% - 600px)" x2="calc(22% - 600px)" y2="calc(55% + 600px)"
-          stroke="rgba(255,245,235,0.025)" strokeWidth="0.5" />
+          stroke="rgba(60,35,15,0.05)" strokeWidth="0.5" />
 
         {/* Small tick marks on largest ring */}
         {Array.from({ length: 24 }).map((_, i) => {
@@ -81,7 +81,7 @@ export function FullBleedImage() {
           const y1 = `calc(55% + ${Math.sin(angle) * r}px)`;
           const x2 = `calc(22% + ${Math.cos(angle) * (r - 14)}px)`;
           const y2 = `calc(55% + ${Math.sin(angle) * (r - 14)}px)`;
-          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,245,235,0.07)" strokeWidth="0.8" />;
+          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(60,35,15,0.13)" strokeWidth="0.8" />;
         })}
 
         {/* Warm red glow accent */}
@@ -94,7 +94,7 @@ export function FullBleedImage() {
         {/* Faint text label — cartographic coordinates */}
         <text
           x="calc(22% - 42px)" y="calc(55% - 560px)"
-          fill="rgba(255,255,255,0.12)" fontSize="10" fontFamily="monospace" letterSpacing="0.12em"
+          fill="rgba(60,35,15,0.2)" fontSize="10" fontFamily="monospace" letterSpacing="0.12em"
           textAnchor="middle"
         >
           55°57′N  3°11′W
@@ -120,7 +120,7 @@ export function FullBleedImage() {
                 height: H,
                 transformStyle: "preserve-3d",
                 transform: "rotateY(-28deg) rotateX(4deg)",
-                filter: "drop-shadow(-24px 32px 60px rgba(0,0,0,0.8))",
+                filter: "drop-shadow(-16px 24px 48px rgba(0,0,0,0.28))",
               }}
             >
               {/* Front cover */}
@@ -227,7 +227,7 @@ export function FullBleedImage() {
 
           <BlurReveal delay={0.18}>
             <h2
-              className="font-serif font-medium text-white"
+              className="font-serif font-medium text-[var(--color-text)]"
               style={{
                 fontSize: "clamp(36px, 4vw, 64px)",
                 lineHeight: 1.0,
@@ -241,7 +241,7 @@ export function FullBleedImage() {
           <BlurReveal delay={0.24}>
             <p
               className="font-serif italic"
-              style={{ fontSize: "clamp(18px, 1.8vw, 22px)", lineHeight: 1.3, color: "rgba(255,255,255,0.45)" }}
+              style={{ fontSize: "clamp(18px, 1.8vw, 22px)", lineHeight: 1.3, color: "var(--color-text-muted)" }}
             >
               {hero.headline}
             </p>
@@ -250,7 +250,7 @@ export function FullBleedImage() {
           <BlurReveal delay={0.30}>
             <p
               className="max-w-[480px] leading-[1.8]"
-              style={{ fontSize: "16px", color: "rgba(255,255,255,0.62)" }}
+              style={{ fontSize: "16px", color: "var(--color-text-muted)" }}
             >
               {hero.body}
             </p>
