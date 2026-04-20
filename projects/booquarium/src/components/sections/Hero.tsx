@@ -6,7 +6,6 @@ import { useCallback, useRef, useState } from "react";
 
 import { BlurReveal } from "@kit/components/motion/BlurReveal";
 import { Button } from "@kit/components/ui/Button";
-import { EyebrowLabel } from "@kit/components/section/EyebrowLabel";
 import copy from "@content/copy.json";
 
 const DATA_SOURCE = "projects/booquarium/src/components/sections/Hero.tsx";
@@ -126,10 +125,6 @@ export function Hero() {
         {/* Text column — explicit lg height matches book so justify-center midpoints align */}
         <div className="flex flex-col gap-5 lg:h-[78dvh] lg:min-h-[480px] lg:justify-center lg:gap-6">
           <BlurReveal delay={0.05}>
-            <EyebrowLabel>{hero.eyebrow}</EyebrowLabel>
-          </BlurReveal>
-
-          <BlurReveal delay={0.1}>
             <h1
               className="font-serif font-medium text-[var(--color-text)]"
               style={{
@@ -169,27 +164,8 @@ export function Hero() {
             </div>
           </BlurReveal>
 
-          <BlurReveal delay={0.36}>
-            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
-              <span>{hero.book_genre}</span>
-              <MetaDot />
-              <span>{hero.book_pub_date}</span>
-              <MetaDot />
-              <span>Edinburgh</span>
-            </div>
-          </BlurReveal>
         </div>
       </div>
     </section>
-  );
-}
-
-
-function MetaDot() {
-  return (
-    <span
-      aria-hidden
-      className="inline-block h-[3px] w-[3px] rounded-full bg-[var(--color-text-subtle)]"
-    />
   );
 }
