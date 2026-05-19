@@ -17,6 +17,9 @@ export type { NavStickyProps, NavLink, NavCta } from "./components/nav/NavSticky
 export { LogoWave } from "./components/brand/LogoWave";
 export type { LogoWaveProps } from "./components/brand/LogoWave";
 
+export { Logo3mpq } from "./components/brand/Logo3mpq";
+export type { Logo3mpqProps } from "./components/brand/Logo3mpq";
+
 export { EyebrowLabel } from "./components/section/EyebrowLabel";
 export type { EyebrowLabelProps } from "./components/section/EyebrowLabel";
 
@@ -61,3 +64,49 @@ export type { SplitTextProps } from "./components/motion/SplitText";
 
 export { Button } from "./components/ui/Button";
 export type { ButtonProps } from "./components/ui/Button";
+
+export { TextLink } from "./components/ui/TextLink";
+export type { TextLinkProps } from "./components/ui/TextLink";
+
+export { SegmentedToggle } from "./components/ui/SegmentedToggle";
+export type {
+  SegmentedToggleProps,
+  SegmentedToggleOption,
+} from "./components/ui/SegmentedToggle";
+
+export { Badge } from "./components/ui/Badge";
+export type { BadgeProps } from "./components/ui/Badge";
+
+export { Input } from "./components/ui/Input";
+export type { InputProps } from "./components/ui/Input";
+
+export { Textarea } from "./components/ui/Textarea";
+export type { TextareaProps } from "./components/ui/Textarea";
+
+export { Select } from "./components/ui/Select";
+export type { SelectProps, SelectOption } from "./components/ui/Select";
+
+export { LogoBelt } from "./components/section/LogoBelt";
+export type { LogoBeltProps, LogoBeltItem } from "./components/section/LogoBelt";
+
+export { FAQAccordion, FAQItem } from "./components/section/FAQAccordion";
+export type {
+  FAQAccordionProps,
+  FAQItemData,
+} from "./components/section/FAQAccordion";
+
+export { HeroPinned } from "./components/section/HeroPinned";
+export type { HeroPinnedProps } from "./components/section/HeroPinned";
+
+export { BentoGrid, BentoCell } from "./components/section/BentoGrid";
+export type {
+  BentoGridProps,
+  BentoCellProps,
+  BentoCellSpan,
+} from "./components/section/BentoGrid";
+
+export { MetricsBar } from "./components/section/MetricsBar";
+export type { MetricsBarProps, MetricItem } from "./components/section/MetricsBar";
+
+export { CookieConsent } from "./components/consent/CookieConsent";
+export type { CookieConsentProps } from "./components/consent/CookieConsent";
