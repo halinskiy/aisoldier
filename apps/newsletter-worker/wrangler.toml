@@ -1,0 +1,16 @@
+name = "corder-newsletter"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Mount the worker at api.getcorder.com/newsletter. The custom domain
+# binding must already exist in the Cloudflare dashboard (Workers
+# Routes -> api.getcorder.com/*) before the first deploy.
+routes = [
+  { pattern = "api.getcorder.com/newsletter", zone_name = "getcorder.com" }
+]
+
+# Secrets are populated via wrangler:
+#   wrangler secret put RESEND_API_KEY      -- re_xxx from Resend dashboard
+#   wrangler secret put RESEND_AUDIENCE_ID  -- UUID of the audience to add subscribers to
+#   wrangler secret put ALLOWED_ORIGIN      -- https://getcorder.com (no trailing slash)
