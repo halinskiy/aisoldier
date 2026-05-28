@@ -1,0 +1,17 @@
+name = "corder-contact"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Mount at api.getcorder.com/contact. Custom domain binding must
+# already exist in the Cloudflare dashboard (Workers Routes ->
+# api.getcorder.com/*) before the first deploy.
+routes = [
+  { pattern = "api.getcorder.com/contact", zone_name = "getcorder.com" }
+]
+
+# Secrets populated via wrangler:
+#   wrangler secret put RESEND_API_KEY    -- re_xxx
+#   wrangler secret put TO_ADDRESS        -- hello@getcorder.com
+#   wrangler secret put FROM_ADDRESS      -- a verified Resend sender (e.g. noreply@getcorder.com)
+#   wrangler secret put ALLOWED_ORIGIN    -- https://getcorder.com
