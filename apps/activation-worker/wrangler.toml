@@ -1,7 +1,8 @@
 name = "corder-activation"
 main = "src/index.ts"
 compatibility_date = "2026-06-01"
-compatibility_flags = ["nodejs_compat"]
+# No Node builtins used (verified: zero node:/process/Buffer/require) --
+# nodejs_compat removed 2026-06-09.
 
 # 2026-06-01: contact-worker observed that getcorder.com lives on
 # Porkbun, not Cloudflare, so a Workers route binding cannot resolve
@@ -14,12 +15,20 @@ compatibility_flags = ["nodejs_compat"]
 #   ]
 workers_dev = true
 
+# SUPABASE_URL is public (not a secret) so it ships as a var. The Mac
+# app + landing already commit it. Override per deploy if forking.
+[vars]
+SUPABASE_URL = "https://cfsajlsctzxgixjwslni.supabase.co"
+# PADDLE_API_BASE = "https://sandbox-api.paddle.com"   # uncomment for sandbox
+
 # Secrets are populated via `wrangler secret put`:
-#   PADDLE_WEBHOOK_SECRET  -- from Paddle Dashboard -> Developer Tools ->
+#   PADDLE_WEBHOOK_SECRET  -- Paddle Dashboard -> Developer Tools ->
 #                             Notifications -> destination -> Secret key.
-#                             Paddle generates one per destination; do
-#                             NOT reuse across destinations.
-#   ALLOWED_ORIGIN         -- optional, defaults to "*" if unset. Only
-#                             relevant if a browser POSTs here (Paddle
-#                             webhooks are server-to-server, so this
-#                             stays mostly cosmetic for now).
+#                             One per destination; do NOT reuse.
+#   SUPABASE_SERVICE_ROLE  -- Supabase -> Settings -> API -> service_role
+#                             key. REQUIRED to grant tiers. Until set, the
+#                             Worker verifies + logs events but writes
+#                             nothing (safe degradation).
+#   PADDLE_API_KEY         -- Paddle Dashboard -> Authentication -> API
+#                             keys. Used to resolve the buyer email from
+#                             the customer_id. REQUIRED for grants.

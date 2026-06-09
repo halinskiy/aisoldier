@@ -1,14 +1,21 @@
 name = "corder-contact"
 main = "src/index.ts"
 compatibility_date = "2026-05-01"
-compatibility_flags = ["nodejs_compat"]
+# No Node builtins used (verified: zero node:/process/Buffer/require) --
+# nodejs_compat removed 2026-06-09, it only pulled in the polyfill layer
+# for nothing.
 
-# Mount at api.getcorder.com/contact. Custom domain binding must
-# already exist in the Cloudflare dashboard (Workers Routes ->
-# api.getcorder.com/*) before the first deploy.
-routes = [
-  { pattern = "api.getcorder.com/contact", zone_name = "getcorder.com" }
-]
+# 2026-05-28: domain getcorder.com lives on Porkbun, not Cloudflare,
+# so we cannot bind a Worker route to api.getcorder.com from here.
+# The Worker is reachable at corder-contact.<account>.workers.dev
+# instead; the landing reads that URL from
+# NEXT_PUBLIC_CONTACT_ENDPOINT in Vercel.
+#
+# If/when the zone is moved to Cloudflare, uncomment:
+# routes = [
+#   { pattern = "api.getcorder.com/contact", zone_name = "getcorder.com" }
+# ]
+workers_dev = true
 
 # Secrets populated via wrangler:
 #   wrangler secret put RESEND_API_KEY    -- re_xxx
