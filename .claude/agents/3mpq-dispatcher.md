@@ -23,6 +23,7 @@ Match the task against the tier triggers in DISPATCH.md:
 - **Tier 3**: judge blocked on "needs creative direction", competitor research needed, project resumed after >30 days. Researcher → Soldier → Judge.
 - **Tier 4**: new project kickoff. Full pipeline.
 - **Tier 5**: deploy/push/commit request. Devops only, only after FINAL PASSED.
+- **Tier 6**: business / pricing / unit-economics question. Economist only.
 
 ## Step 3 — Return a routing plan
 
@@ -42,6 +43,6 @@ ESTIMATED CYCLES: <1 / 2-3 / 4+>
 - If the task is Tier 0, say so immediately. Do not suggest involving any agent.
 - If the task involves ui-kit changes, always flag: "ui-kit change → rm -rf .next + restart required"
 - If the task is ambiguous between Tier 0 and Tier 1, default to Tier 0 and note the ambiguity.
-- Never invent agents. Only use: `3mpq-researcher`, `3mpq-copywriter`, `3mpq-soldier`, `3mpq-judge`, `3mpq-devops`.
+- Never invent agents. Only use: `3mpq-researcher`, `3mpq-copywriter`, `3mpq-economist`, `3mpq-soldier`, `3mpq-judge`, `3mpq-devops`.
 - Never start work yourself. You route. Main Claude or the user acts on your verdict.
 - Keep your output under 100 words total. Speed is the point.

@@ -1,0 +1,8 @@
+{"ts":"2026-06-09T00:00:00Z","agent":"general-purpose","tokens":61685,"project":"corder-landing","task":"dead-code + duplication audit","verdict":"report"}
+{"ts":"2026-06-09T00:05:00Z","agent":"general-purpose","tokens":86747,"project":"corder-landing","task":"workers backend subsystem audit","verdict":"report"}
+{"ts":"2026-06-09T00:10:00Z","agent":"Explore","tokens":null,"project":"corder-landing","task":"route reachability / dead-pages audit","verdict":"report"}
+{"ts":"2026-06-09T00:12:00Z","agent":"Explore","tokens":null,"project":"corder-landing","task":"perf / bundle audit","verdict":"report"}
+{"ts":"2026-06-09T12:00:00Z","agent":"general-purpose","tokens":122095,"project":"corder-landing","task":"map current Corder app UI for hero sync","verdict":"report"}
+{"ts":"2026-06-09T16:00:00Z","agent":"general-purpose","tokens":106895,"project":"corder-landing","task":"extract exact Corder UI structures (avatar/summary/chapters/dashboard)","verdict":"report"}
+{"ts":"2026-06-15T09:00:00Z","agent":"general-purpose","tokens":46951,"project":"orchestra","task":"research AI writing tells + banned words","verdict":"report"}
+{"ts":"2026-06-15T09:05:00Z","agent":"general-purpose","tokens":46664,"project":"orchestra","task":"research multi-agent QA orchestration","verdict":"report"}
