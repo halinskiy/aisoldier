@@ -33,6 +33,7 @@ const META = {
   "3mpq-researcher": { group: "Research & content", order: 0, type: "content", role: "Trends, competitors, direction.", writes: "research/*.md" },
   "3mpq-economist":  { group: "Research & content", order: 1, type: "content", role: "Pricing and unit economics.", writes: "pricing-brief.md" },
   "3mpq-copywriter": { group: "Research & content", order: 2, type: "content", role: "Writes the copy.", writes: "content/copy.json" },
+  "3mpq-humanizer":  { group: "Research & content", order: 3, type: "content", role: "Rewrites AI drafts into plain human text.", writes: "rewritten draft" },
   "3mpq-soldier":    { group: "Build", order: 0, type: "build", role: "Builds the sections.", writes: "src/, ui-kit/" },
   "3mpq-linter":     { group: "Deterministic gate", order: 0, type: "GATE", role: "Hard gate. Cannot be argued past.", writes: "LINT.md" },
   "3mpq-judge":      { group: "Critics (parallel, read-only)", order: 0, type: "CRITIC", role: "Visual and doctrine gate.", writes: "REVIEW.md" },

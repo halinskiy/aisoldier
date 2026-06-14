@@ -246,6 +246,39 @@ The getcorder standard, enforced as a gate:
   cubic-bezier(0.16,1,0.3,1), reduced-motion respected. Motion that only
   decorates is cut.
 
+### Collaboration & adaptation
+
+The orchestra is universal and talks to itself constantly. It is not a
+fixed assembly line.
+
+- **Adapt to the task type.** The dispatcher classifies the TYPE first
+  (build, content/social, audit, refactor, business, research, deploy)
+  and assembles the right line-up per `DISPATCH.md` profiles, then sizes
+  it. Do not force a content task through the landing-build pipeline.
+- **Amplify a sparse brief into a concrete intent.** When the ask is
+  short or vague, `director` (feel/flow) and `researcher` (facts/refs)
+  expand it into an explicit, written intent the doers align on BEFORE
+  building. Guessing silently is the failure; ask + amplify is the rule.
+- **Agents cross-check and summon each other.** A critic that spots an
+  issue another agent owns says so; the orchestrator brings that agent
+  in. Loop pairs run until clean: `humanizer <-> naturalist` (rewrite vs
+  audit), `soldier <-> critics` (build vs review), `copywriter <->
+  naturalist` (write vs de-AI). The `conductor` reconciles so the doer
+  gets one coherent action list, never ten contradictory notes.
+- **Help, do not just judge.** A blocking note must carry the fix, not
+  only the complaint. Agents exist to get the result to the ideal in the
+  user's head, even when it was described in one line.
+
+### Content / social profile (de-AI'd human text)
+
+For social posts / build-in-public / any draft that arrived sounding like
+a model: a Corder-knowledge source produces the raw content, then
+**humanizer rewrites it into plain human text** (no dashes, no bullets,
+no strange paragraphs, no legal/literary varnish, contractions, varied
+rhythm, real specifics), then **naturalist audits** it against
+`research/ai-tells-banlist.md`; the two loop until the scorecard is
+clean. No soldier, kit, or judge.
+
 ### New pipeline
 
 ```

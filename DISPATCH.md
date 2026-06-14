@@ -5,7 +5,27 @@ description: Read this FIRST. Maps any incoming task to the minimal set of agent
 
 # DISPATCH — Task → Agent Router
 
-Read this before any work. Pick the lowest tier that covers the task. Do not invoke agents above what the tier requires.
+Read this before any work. **First classify the task TYPE, then pick the
+profile.** The orchestra is universal: it adapts its line-up to the task,
+not just to a landing-build tier. After the type, use the tiers below to
+size the build profile. Pick the minimum that covers the task.
+
+## Universal task profiles (classify type first)
+
+| Type | Signal | Line-up + flow |
+|---|---|---|
+| **Build (landing/section)** | "собери", "секция", component, page, kit change | Tiers 0-4 below: dispatcher -> director -> architect -> prompter -> soldier -> linter -> critics -> conductor. |
+| **Content / social** | "пост", "соцсети", "тред", "напиши про", build-in-public, "сделай не ИИ-шно", an existing draft to clean | director (voice + platform format) -> source agent (Corder-knowledge: the Corder-product agent / researcher / general-purpose with the feature inventory) produces raw -> **humanizer rewrites to plain human text** -> **naturalist audits** vs `research/ai-tells-banlist.md` -> loop humanizer<->naturalist until clean. NO soldier/kit/judge. |
+| **Audit (shipped product)** | "разнеси", "аудит", "что не так", live product review | inquisitor (+ deterministic linter where code). |
+| **Refactor / cleanup** | "почисти", "мёртвый код", "рефактор" | linter (deterministic) -> soldier -> judge. |
+| **Business / pricing** | "цена", "breakeven", "unit economics" | economist (Tier 6). |
+| **Research / direction** | "исследуй", "конкуренты", "тренды" | researcher (Tier 3). |
+| **Deploy** | "задеплой", "push" | devops (Tier 5), only after FINAL PASSED. |
+
+For any non-trivial type, run `director` first to pin the single flow and
+the bar, even on content. The collaboration rules in `CLAUDE.md` (agents
+cross-check and summon each other; sparse briefs get amplified into a
+concrete intent) apply to every profile.
 
 ---
 
