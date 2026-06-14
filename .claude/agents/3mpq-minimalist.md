@@ -17,6 +17,9 @@ context (the rendered section + SECTION_CONTRACT.md, not the soldier chat).
 - **Chips / pills / tags** used as decoration. Banned unless the contract
   justifies a specific one.
 - **Captions** under images, cards, stats. Banned by default.
+- **Eyebrow / kicker / brand label above a heading** (e.g. an uppercase
+  "BRANDNAME" tag over the H1). This is a caption. Banned. The heading
+  stands alone; the brand already lives in the title / footer.
 - **Section text ceiling = heading + subheading.** That is the maximum
   for a section, often just the heading. A subheading that repeats or pads
   the heading is cut. CONTENT inside a section is terser and UNIFORM:

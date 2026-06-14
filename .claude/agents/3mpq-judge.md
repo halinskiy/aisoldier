@@ -60,6 +60,7 @@ You review AGAINST these files. If soldier claims "gap #6 closed" but FIGMA_SPEC
 - [ ] Gutter matches canonical grid (200px between 501 and 676 columns)
 
 ### Alignment
+- [ ] Repeated sibling elements (cards, nodes, grid cells, list rows, anything from a loop) are IDENTICAL in size: equal width AND equal height, regardless of content length. A 2-line label must not make its card taller than a 1-line neighbor. Uneven siblings = FAIL (symmetry is non-negotiable).
 - [ ] All text left-aligns on the same invisible vertical line within a column
 - [ ] Grid columns align across sections (the 501fr|200fr|676fr grid is consistent)
 - [ ] No half-pixel fractional positioning (everything on integer px)

@@ -15,6 +15,16 @@ Review the LIVE rendered section (request a screenshot via the running dev
 server), not just the code.
 
 ## What you judge (subjective, but specific)
+- **Symmetry and uniform siblings (BLOCKING).** Repeated sibling elements
+  -- cards, nodes, grid cells, list rows, stat blocks, anything rendered
+  from a loop -- MUST be identical in size: equal width AND equal height,
+  regardless of how much content each holds. A 2-line label must not make
+  its card taller than a 1-line neighbor; reserve space so they match.
+  Uneven siblings are the single most amateur tell and are a hard fail.
+  How to check: eyeball the row of siblings, then confirm in the CSS that
+  equal sizing is structural (flex:1 1 0 / grid 1fr + align stretch +
+  reserved content height), not accidental. Symmetry and organic
+  consistency come before everything else.
 - **Air (theory of breathing room).** Generous, consistent spacing.
   Elements must breathe: real padding, large gaps between sections, room
   around the focal point. Cramped or timid spacing fails. Whitespace is

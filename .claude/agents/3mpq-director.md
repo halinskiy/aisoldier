@@ -33,8 +33,9 @@ fewer words. If a second flow is creeping in, cut it.
   a section, not a target. Many sections need only the heading.
 - CONTENT inside a section is terser still and UNIFORM: every item the
   same short shape (a label, a number, one line), never paragraphs where
-  a phrase works. No captions. No helper text restating the obvious. No
-  "learn more" the flow does not need.
+  a phrase works. No captions. No eyebrow / kicker / brand label above a
+  heading (that is a caption; the heading stands alone). No helper text
+  restating the obvious. No "learn more" the flow does not need.
 - It is always easier to add than to remove. Ship the minimum; the
   minimalist removes whatever still slipped through.
 

@@ -177,6 +177,22 @@ function page(agents, contrib) {
 
   const builtins = sortByRuns(BUILTINS, byAgent).map((a, i) => agentRow(a, byAgent[a.name], maxCount, i)).join("");
 
+  // Hero equalizer: one bar per orchestra agent in pipeline order. Height
+  // = involvement (idle = a quiet floor, static). Active bars pulse like
+  // sound, staggered, so the orchestra reads as "playing". Equal widths.
+  const eqAgents = [...agents].sort((a, b) => {
+    const ga = GROUP_ORDER.indexOf(a.group), gb = GROUP_ORDER.indexOf(b.group);
+    return ga !== gb ? ga - gb : a.order - b.order;
+  });
+  const eq = eqAgents.map((a, i) => {
+    const runs = byAgent[a.name]?.count || 0;
+    const on = runs > 0;
+    const h = on ? Math.round(34 + 66 * Math.min(1, runs / maxCount)) : 12;
+    const dur = (1.7 + (i % 6) * 0.18).toFixed(2);
+    const dly = (i * 0.08).toFixed(2);
+    return `<span class="eq-bar${on ? " on" : ""}" style="height:${h}%;--dur:${dur}s;--d:${dly}s" title="${esc(a.name)}: ${runs} run(s)"></span>`;
+  }).join("");
+
   return `<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -197,6 +213,12 @@ function page(agents, contrib) {
   .kicker{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 24px}
   h1{font-family:var(--display);font-size:clamp(56px,11vw,104px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin:0 0 28px}
   .sub{font-size:22px;font-weight:500;color:var(--muted);max-width:24ch;margin:0 0 56px;line-height:1.4}
+  /* Hero equalizer: living, on-theme, data-driven. Equal-width bars. */
+  .eq{display:flex;align-items:flex-end;gap:6px;height:180px;margin:7vh 0 56px}
+  .eq-bar{flex:1 1 0;min-width:0;height:12%;background:var(--track);border-radius:7px 7px 0 0;transform-origin:bottom}
+  .eq-bar.on{background:var(--accent);animation:eq var(--dur,2s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+  @keyframes eq{from{transform:scaleY(.58)}to{transform:scaleY(1)}}
+  @media (prefers-reduced-motion:reduce){.eq-bar.on{animation:none}}
   .figures{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-end}
   .fig{display:flex;flex-direction:column;gap:6px}
   .fig .n{font-family:var(--display);font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
@@ -204,11 +226,14 @@ function page(agents, contrib) {
   .fig .l{font-size:16px;font-weight:600;color:var(--muted);letter-spacing:.01em}
 
   /* Pipeline flow: big nodes connected by arrows */
-  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:14px 10px;margin-bottom:13vh}
-  .node{flex:1 1 130px;min-width:120px;border:1.5px solid var(--line);border-radius:16px;padding:20px 18px;background:#fff;transition:transform .2s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s}
+  /* Equal cells: flex:1 1 0 -> identical width; align-items:stretch ->
+     identical height; the name reserves 2 lines so the counts line up
+     across every node regardless of label length. Symmetry over content. */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:14px 10px;margin-bottom:13vh}
+  .node{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:space-between;border:1.5px solid var(--line);border-radius:16px;padding:20px 18px;background:#fff;transition:transform .2s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s}
   .node:hover{transform:translateY(-4px);box-shadow:0 18px 40px -28px rgba(0,0,0,.4)}
   .node-on{border-color:var(--accent);background:var(--accent-soft)}
-  .node-name{display:block;font-size:16px;font-weight:700;line-height:1.2;margin-bottom:14px}
+  .node-name{display:block;font-size:16px;font-weight:700;line-height:1.2;margin-bottom:14px;min-height:2.4em}
   .node-count{font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
   .node-count i{font-style:normal;font-size:18px;font-weight:600;color:var(--dim)}
   .node-on .node-count{color:var(--accent)}
@@ -257,9 +282,9 @@ function page(agents, contrib) {
 <body><div class="wrap">
 
   <header class="hero">
-    <p class="kicker fx">Aisoldier</p>
-    <h1 class="fx" style="--d:.05s">The Orchestra</h1>
-    <p class="sub fx" style="--d:.12s">Every agent. And who is earning their seat.</p>
+    <h1 class="fx">The Orchestra</h1>
+    <p class="sub fx" style="--d:.08s">Every agent. And who is earning their seat.</p>
+    <div class="eq fx" style="--d:.16s" aria-hidden="true">${eq}</div>
     <div class="figures">
       <div class="fig fx" style="--d:.18s"><span class="n accent">${active}</span><span class="l">earning their seat</span></div>
       <div class="fig fx" style="--d:.24s"><span class="n">${idle}</span><span class="l">idle of ${total}</span></div>
