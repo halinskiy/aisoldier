@@ -114,59 +114,57 @@ function rel(ts) {
   return days + " days ago";
 }
 
-function modelBadge(model) {
-  const m = model.toLowerCase();
-  const cls = m.includes("opus") ? "opus" : m.includes("sonnet") ? "sonnet" : m.includes("haiku") ? "haiku" : "inherit";
-  return `<span class="badge badge-${cls}">${esc(model)}</span>`;
-}
-function typeBadge(type) {
-  if (!type) return "";
-  const label = { ORCH: "orchestration", content: "content", build: "build", GATE: "gate", CRITIC: "critic", ship: "ship" }[type] || type;
-  return `<span class="type type-${type}">${label}</span>`;
-}
-function toolChips(tools) {
-  if (!tools) return "";
-  const list = tools.split(",").map((t) => t.trim()).filter(Boolean);
-  const shown = list.slice(0, 10);
-  const more = list.length - shown.length;
-  return `<div class="tools">${shown.map((t) => `<span class="tool">${esc(t)}</span>`).join("")}${more > 0 ? `<span class="tool tool-more">+${more}</span>` : ""}</div>`;
+// Short flow-rail / roster-heading labels for the (sometimes long) group names.
+const STAGE_LABEL = {
+  "Route & plan": "Route & plan",
+  "Research & content": "Research & content",
+  "Build": "Build",
+  "Deterministic gate": "Deterministic gate",
+  "Critics (parallel, read-only)": "Critics",
+  "Reconcile & ship": "Reconcile & ship",
+};
+const stageLabel = (g) => STAGE_LABEL[g] || g;
+
+// One shared bar mechanic. No 6% floor: zero runs render NO bar (handled by
+// the caller). Width is the agent's share of the busiest agent's run count.
+function involveBar(count, maxCount) {
+  const pct = maxCount > 0 ? Math.min(100, Math.round((count / maxCount) * 100)) : 0;
+  return `<span class="bar"><span class="bar-fill" style="width:${pct}%"></span></span>`;
 }
 
-function contribStrip(name, c, maxCount) {
-  if (!c || c.count === 0) {
-    return `<div class="contrib contrib-zero"><span class="dot"></span>not yet invoked - candidate to drop</div>`;
+// A roster row: name + role + contribution. Active = bar + stats. Idle = calm
+// dimmed row, hollow dot, one mono line, NO bar. writeLine adds the artifact.
+function agentRow(a, contrib, maxCount, writeLine) {
+  const c = contrib;
+  const idle = !c || c.count === 0;
+  if (idle) {
+    return `<div class="row row-idle">
+      <div class="row-head"><span class="name">${esc(a.name)}</span>${a.model ? `<span class="model">${esc(a.model)}</span>` : ""}</div>
+      <p class="role">${esc(a.role || a.desc || "")}</p>
+      <div class="contrib contrib-idle"><span class="hollow"></span>not yet invoked, candidate to drop</div>
+      ${writeLine && a.writes ? `<p class="writes"><span class="k">writes</span> ${esc(a.writes)}</p>` : ""}
+    </div>`;
   }
-  const pct = maxCount ? Math.max(6, Math.round((c.count / maxCount) * 100)) : 0;
   const tok = c.tokenKnown ? fmtTok(c.tokens) : "n/a";
-  return `<div class="contrib">
-    <div class="contrib-bar"><span style="width:${pct}%"></span></div>
-    <div class="contrib-stats"><b>${c.count}</b> ${c.count === 1 ? "run" : "runs"} <span class="sep">/</span> ${tok} tok <span class="sep">/</span> ${rel(c.last)}</div>
+  return `<div class="row">
+    <div class="row-head"><span class="name">${esc(a.name)}</span>${a.model ? `<span class="model">${esc(a.model)}</span>` : ""}</div>
+    <p class="role">${esc(a.role || a.desc || "")}</p>
+    <div class="contrib">
+      ${involveBar(c.count, maxCount)}
+      <span class="stats"><b>${c.count}</b> ${c.count === 1 ? "run" : "runs"} <span class="sep">/</span> ${tok} tok <span class="sep">/</span> ${rel(c.last)}</span>
+    </div>
+    ${writeLine && a.writes ? `<p class="writes"><span class="k">writes</span> ${esc(a.writes)}</p>` : ""}
   </div>`;
 }
 
-function agentCard(a, contrib, maxCount) {
-  return `
-  <article class="card${(!contrib || contrib.count === 0) ? " card-idle" : ""}">
-    <div class="card-top">
-      <h3 class="name">${esc(a.name)}</h3>
-      ${typeBadge(a.type)}
-      ${modelBadge(a.model)}
-    </div>
-    <p class="role">${esc(a.role)}</p>
-    ${a.writes ? `<p class="writes"><span class="k">writes</span> ${esc(a.writes)}</p>` : ""}
-    ${contribStrip(a.name, contrib, maxCount)}
-    ${toolChips(a.tools)}
-  </article>`;
-}
-
-function builtinCard(a, contrib, maxCount) {
-  return `
-  <article class="card card-builtin${(!contrib || contrib.count === 0) ? " card-idle" : ""}">
-    <div class="card-top"><h3 class="name">${esc(a.name)}</h3></div>
-    <p class="role">${esc(a.desc)}</p>
-    ${contribStrip(a.name, contrib, maxCount)}
-    ${toolChips(a.tools)}
-  </article>`;
+// Sort within a stage: active first (runs desc), idle sinks to the bottom.
+function sortByRuns(list, byAgent) {
+  return [...list].sort((a, b) => {
+    const ca = byAgent[a.name]?.count || 0;
+    const cb = byAgent[b.name]?.count || 0;
+    if (cb !== ca) return cb - ca;
+    return a.order - b.order;
+  });
 }
 
 function page(agents, contrib) {
@@ -176,11 +174,32 @@ function page(agents, contrib) {
   const orchestraTotal = agents.length;
   const idle = agents.filter((a) => !byAgent[a.name] || byAgent[a.name].count === 0).length;
 
-  const groups = GROUP_ORDER.map((g) => {
+  // Stages for the flow rail and the roster. Rail is a pure flow diagram now:
+  // stage name only, no per-stage rollup (counts/load live in the roster below).
+  const stages = GROUP_ORDER.map((g) => {
     const list = agents.filter((a) => a.group === g).sort((a, b) => a.order - b.order);
-    if (!list.length) return "";
-    return `<section><h2>${esc(g)}</h2><div class="grid">${list.map((a) => agentCard(a, byAgent[a.name], maxCount)).join("")}</div></section>`;
+    return { g, list, count: list.length };
+  }).filter((s) => s.count > 0);
+
+  const railCells = stages.map((s, i) => {
+    const arrow = i < stages.length - 1 ? `<span class="rail-arrow" aria-hidden="true">-&gt;</span>` : "";
+    return `<div class="rail-cell">
+      <span class="rail-name">${esc(stageLabel(s.g))}</span>
+    </div>${arrow}`;
   }).join("");
+
+  // Roster grouped by stage, contribution as the dominant axis (runs desc).
+  const roster = stages.map((s) => {
+    const sorted = sortByRuns(s.list, byAgent);
+    return `<section class="stage">
+      <h2>${esc(stageLabel(s.g))}</h2>
+      <div class="rows">${sorted.map((a) => agentRow(a, byAgent[a.name], maxCount, true)).join("")}</div>
+    </section>`;
+  }).join("");
+
+  // Built-ins: quieter appendix. Same row grammar, no writes line, elev tint.
+  const builtinSorted = sortByRuns(BUILTINS, byAgent);
+  const builtins = builtinSorted.map((a) => agentRow(a, byAgent[a.name], maxCount, false)).join("");
 
   return `<!doctype html>
 <html lang="en"><head>
@@ -189,62 +208,111 @@ function page(agents, contrib) {
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#fff;--elev:#f7f7f6;--border:#e5e5e5;--border-strong:#d8d8d4;--fg:#161616;--muted:#6b6b68;--dim:#a0a09c;--accent:#217a50;
+  :root{--bg:#fff;--elev:#f7f7f6;--track:#f0f0ee;--border:#e5e5e5;--border-strong:#d8d8d4;--fg:#161616;--muted:#6b6b68;--dim:#a0a09c;--accent:#217a50;
     --serif:"IBM Plex Serif",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;}
   *{box-sizing:border-box}
+  /* Type scale: display h1 clamp(36-48) serif, idle-hero 40 serif, headline 22
+     serif, body 16 sans, stat 15 mono, label 12 mono. */
   body{margin:0;background:radial-gradient(circle,#ececec 1px,transparent 1px) 0 0/24px 24px,var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1120px;margin:0 auto;padding:64px 24px 96px}
-  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
-  h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5vw,56px);letter-spacing:-.02em;margin:0 0 10px}
-  .lede{font-size:18px;color:var(--muted);max-width:62ch;margin:0 0 20px}
-  .summary{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
-  .stat{font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--elev);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
-  .stat b{color:var(--fg);font-weight:500}
-  h2{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin:48px 0 14px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
-  .card{border:1px solid var(--border);border-radius:12px;background:var(--bg);padding:16px 16px 14px;transition:border-color .15s,box-shadow .15s}
-  .card:hover{border-color:var(--border-strong);box-shadow:0 8px 24px -16px rgba(0,0,0,.18)}
-  .card-builtin{background:var(--elev)}
-  .card-idle{opacity:.72;border-style:dashed}
-  .card-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
-  .name{font-family:var(--mono);font-size:14.5px;font-weight:500;margin:0;flex:1;min-width:0}
-  .role{font-size:14px;color:var(--fg);margin:0 0 9px;line-height:1.5}
-  .writes{font-size:12px;color:var(--muted);margin:0 0 10px;font-family:var(--mono)}
-  .writes .k{color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-right:6px}
-  .contrib{margin:0 0 10px}
-  .contrib-bar{height:6px;background:var(--elev);border:1px solid var(--border);border-radius:999px;overflow:hidden;margin-bottom:6px}
-  .contrib-bar span{display:block;height:100%;background:var(--accent)}
-  .contrib-stats{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-  .contrib-stats b{color:var(--fg);font-weight:600}
-  .contrib-stats .sep{color:var(--dim);margin:0 5px}
-  .contrib-zero{font-family:var(--mono);font-size:11.5px;color:var(--dim);display:flex;align-items:center;gap:7px}
-  .contrib-zero .dot{width:7px;height:7px;border-radius:50%;background:#c98b1a;flex-shrink:0}
-  .tools{display:flex;flex-wrap:wrap;gap:5px}
-  .tool{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:var(--elev);border:1px solid var(--border);border-radius:6px;padding:2px 7px}
-  .card-builtin .tool{background:var(--bg)}
-  .tool-more{color:var(--dim)}
-  .badge{font-family:var(--mono);font-size:10.5px;font-weight:500;border-radius:6px;padding:2px 7px;border:1px solid var(--border-strong);color:var(--muted)}
-  .badge-opus{border-color:var(--accent);color:var(--accent)}
-  .badge-sonnet{border-color:#b07b1a;color:#b07b1a}
-  .badge-haiku{border-color:var(--dim);color:var(--muted)}
-  .type{font-family:var(--mono);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-radius:6px;padding:2px 7px;background:var(--elev);border:1px solid var(--border);color:var(--muted)}
-  .type-GATE{border-color:var(--fg);color:var(--fg)}
-  .type-CRITIC{border-color:var(--accent);color:var(--accent)}
-  footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);color:var(--dim);font-size:12.5px;font-family:var(--mono)}
+
+  /* Masthead */
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 16px}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(36px,5vw,48px);letter-spacing:-.02em;margin:0 0 12px}
+  .lede{font-size:16px;color:var(--muted);max-width:62ch;margin:0 0 32px}
+  .summary{display:flex;flex-wrap:wrap;align-items:flex-end;gap:32px;border-top:1px solid var(--border);padding-top:24px;margin-bottom:64px}
+  .idle-hero{display:flex;flex-direction:column;gap:4px}
+  .idle-hero .big{font-family:var(--serif);font-weight:500;font-size:40px;line-height:1;color:var(--accent);letter-spacing:-.02em}
+  .idle-hero .cap{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-family:var(--mono)}
+  .stat-line{display:flex;flex-wrap:wrap;gap:24px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em}
+  .stat-line b{color:var(--fg);font-weight:500}
+
+  /* Section 1: pipeline flow rail */
+  .rail{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:64px;background:var(--bg)}
+  .rail-cell{flex:1 1 0;min-width:150px;display:flex;align-items:center;padding:16px;border-right:1px solid var(--border)}
+  .rail-cell:last-child{border-right:none}
+  .rail-name{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.25}
+  .rail-arrow{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim);padding:0 4px;flex:0 0 auto}
+
+  /* Shared bar mechanic */
+  .bar{display:block;width:100%;height:6px;background:var(--track);border-radius:999px;overflow:hidden}
+  .bar-fill{display:block;height:100%;background:var(--accent);border-radius:999px}
+
+  /* Section 2/3: roster rows */
+  .stage{margin-bottom:48px}
+  h2{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin:0 0 8px}
+  .rows{border-top:1px solid var(--border)}
+  .row{padding:16px 0;border-bottom:1px solid var(--border);transition:opacity .15s}
+  .row-idle{opacity:.6;padding:14px 0;border-bottom:1px dashed var(--border)}
+  .row-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+  .name{font-family:var(--mono);font-size:15px;font-weight:500}
+  .model{font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .role{font-size:16px;color:var(--fg);margin:0 0 10px;max-width:78ch}
+  .row-idle .role{color:var(--muted);margin-bottom:6px}
+  .contrib{display:flex;align-items:center;gap:16px;max-width:520px}
+  .contrib .bar{flex:1 1 auto;max-width:240px}
+  .stats{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+  .stats b{color:var(--fg);font-weight:500}
+  .sep{color:var(--dim);margin:0 4px}
+  .contrib-idle{font-family:var(--mono);font-size:12px;color:var(--dim);gap:8px}
+  .hollow{width:8px;height:8px;border-radius:50%;border:1px solid var(--dim);flex:0 0 auto}
+  .writes{font-family:var(--mono);font-size:12px;color:var(--muted);margin:8px 0 0}
+  .writes .k{color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-right:8px}
+
+  /* Built-ins appendix: quieter tier on elev surface */
+  .appendix{margin-top:64px;background:var(--elev);border:1px solid var(--border);border-radius:12px;padding:24px}
+  .appendix h2{margin-bottom:4px}
+  .appendix .note{font-size:16px;color:var(--muted);margin:0 0 8px}
+  .appendix .rows{border-top:1px solid var(--border-strong)}
+  .appendix .row,.appendix .row-idle{border-bottom-color:var(--border-strong)}
+  .appendix .bar{background:#eaeae8}
+
+  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);color:var(--dim);font-size:12px;font-family:var(--mono);line-height:1.7}
+
+  /* Below 1120 the rail wraps; hide arrows so none is orphaned, and divide
+     wrapped cells with a bottom border. Arrows show only on one line (>=1120). */
+  @media (max-width:1119px){
+    .rail-arrow{display:none}
+    .rail-cell{border-bottom:1px solid var(--border)}
+  }
+
+  @media (max-width:640px){
+    .wrap{padding:48px 18px 72px}
+    .rail-cell{flex:1 1 100%;border-right:none;border-bottom:1px solid var(--border)}
+    .rail-cell:last-child{border-bottom:none}
+    .rail-arrow{display:none}
+    .contrib{flex-wrap:wrap;gap:8px}
+    .contrib .bar{max-width:none;flex:1 1 100%}
+    .summary{gap:24px}
+  }
 </style></head>
 <body><div class="wrap">
   <p class="eyebrow">Aisoldier</p>
   <h1>The Orchestra</h1>
-  <p class="lede">Every agent in the ensemble, with its contribution. Bars show share of total runs; idle agents (dashed) have not earned their seat yet. Read live from .claude/agents and the contribution ledger.</p>
+  <p class="lede">Idle agents have not earned a seat.</p>
   <div class="summary">
-    <span class="stat"><b>${orchestraTotal}</b> orchestra agents</span>
-    <span class="stat"><b>${BUILTINS.length}</b> built-in</span>
-    <span class="stat"><b>${totalInv}</b> total runs logged</span>
-    <span class="stat"><b>${fmtTok(totalTok)}</b> tokens logged</span>
-    <span class="stat"><b>${idle}</b> orchestra idle (0 runs)</span>
+    <div class="idle-hero">
+      <span class="big">${idle}</span>
+      <span class="cap">of ${orchestraTotal} idle</span>
+    </div>
+    <div class="stat-line">
+      <span><b>${orchestraTotal}</b> orchestra agents</span>
+      <span><b>${BUILTINS.length}</b> built-in</span>
+      <span><b>${totalInv}</b> total runs</span>
+      <span><b>${fmtTok(totalTok)}</b> tokens</span>
+    </div>
   </div>
-  ${groups}
-  <section><h2>Built-in agents</h2><div class="grid">${BUILTINS.map((a) => builtinCard(a, byAgent[a.name], maxCount)).join("")}</div></section>
+
+  <div class="rail">${railCells}</div>
+
+  ${roster}
+
+  <section class="appendix">
+    <h2>Built-in agents</h2>
+    <p class="note">Platform agents outside the orchestra.</p>
+    <div class="rows">${builtins}</div>
+  </section>
+
   <footer>localhost:${PORT} - agents: .claude/agents - contributions: apps/orchestra/data/contributions.jsonl - log a run: node apps/orchestra/log.mjs &lt;agent&gt; &lt;tokens&gt; &lt;project&gt; "&lt;task&gt;" [verdict]</footer>
 </div></body></html>`;
 }
