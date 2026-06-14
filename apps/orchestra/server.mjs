@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 // Orchestra -- a localhost service that lists every agent in the
-// Aisoldier ensemble AND shows each agent's contribution (how many times
-// it was invoked, how many tokens it burned, how recently, and its share
-// of total involvement). Zero dependencies (Node built-in http only).
+// Aisoldier ensemble AND shows each agent's contribution (runs, tokens,
+// involvement, recency). Zero dependencies (Node built-in http only).
 //
-// Agent definitions are read LIVE from .claude/agents/*.md. Contributions
-// are read from data/contributions.jsonl (one JSON line per invocation,
-// appended via log.mjs). Agents with zero invocations are flagged as
-// candidates to drop -- the whole point is to see who earns their seat.
+// Agent definitions read LIVE from .claude/agents/*.md. Contributions read
+// from data/contributions.jsonl (appended via log.mjs). Idle agents are
+// flagged as candidates to drop -- the page exists to show who earns a seat.
 //
 //   node apps/orchestra/server.mjs            # http://localhost:7777
 //   PORT=8080 node apps/orchestra/server.mjs
 //
-// ASCII-only in user-facing text (studio discipline).
+// Type: Manrope only (readable). ASCII-only user-facing text.
 
 import { createServer } from "node:http";
 import { readdir, readFile } from "node:fs/promises";
@@ -25,39 +23,41 @@ const AGENTS_DIR = join(REPO_ROOT, ".claude", "agents");
 const LEDGER = join(HERE, "data", "contributions.jsonl");
 const PORT = Number(process.env.PORT) || 7777;
 
-// group: section the agent renders under. order: sort within section.
-// type: ORCH | content | build | GATE | CRITIC | ship. role/writes add
-// the doctrine context that is not in the .md frontmatter.
+// group: pipeline section. order: sort within section. role: one short
+// phrase (minimum text). writes: artifact (kept for /agents.json, not shown).
 const META = {
-  "3mpq-dispatcher": { group: "Route & plan", order: 0, type: "ORCH", role: "Routes the task to the minimal set of agents. Decides which verifiers run.", writes: "routing plan" },
-  "3mpq-architect":  { group: "Route & plan", order: 1, type: "ORCH", role: "Compiles brief + tokens + registry into a section contract. Minimalism baked in: heading + body by default.", writes: "SECTION_CONTRACT.md" },
-  "3mpq-prompter":   { group: "Route & plan", order: 2, type: "ORCH", role: "Composes every soldier prompt to force design-system-first reuse and injects the live constraint set.", writes: "soldier prompt" },
-  "3mpq-researcher": { group: "Research & content", order: 0, type: "content", role: "Design research, trends, competitor analysis, creative direction.", writes: "research/*.md, CORRECTIONS.md" },
-  "3mpq-economist":  { group: "Research & content", order: 1, type: "content", role: "Pricing, unit economics, breakeven, channel costs.", writes: "ECONOMICS.md, pricing-brief.md" },
-  "3mpq-copywriter": { group: "Research & content", order: 2, type: "content", role: "Writes copy. BBC style, no AI cliches, no dashes. (Audited later by naturalist.)", writes: "content/copy.json" },
-  "3mpq-soldier":    { group: "Build", order: 0, type: "build", role: "Builds sections serially against the contract, lint-on-save, self-heals before handoff.", writes: "src/, ui-kit/, docs" },
-  "3mpq-linter":     { group: "Deterministic gate", order: 0, type: "GATE", role: "Real lint/AST/regex. Font-size floors, banned typography, kit reuse, borders, one accent, tokens. Cannot be argued past.", writes: "LINT.md (block/pass)" },
-  "3mpq-judge":      { group: "Critics (parallel, read-only)", order: 0, type: "CRITIC", role: "Visual + spacing + doctrine vs spec, fresh context, written rubric, 2 clean rounds. Hard gate.", writes: "REVIEW.md" },
-  "3mpq-kitwarden":  { group: "Critics (parallel, read-only)", order: 1, type: "CRITIC", role: "Did soldier reuse the RIGHT component or build a near-duplicate that should be a variant? Is a new component justified?", writes: "KIT_REVIEW.md" },
-  "3mpq-minimalist": { group: "Critics (parallel, read-only)", order: 2, type: "CRITIC", role: "Via negativa. Flags chips, captions, redundant subheadings. What can be removed? Heading + body unless justified.", writes: "MINIMAL_REVIEW.md" },
-  "3mpq-naturalist": { group: "Critics (parallel, read-only)", order: 3, type: "CRITIC", role: "Copy naturalness. Ban-list + structure-weighted scorecard. No AI tells, no dashes, concrete numbers.", writes: "NATURAL_REVIEW.md" },
-  "3mpq-aesthete":   { group: "Critics (parallel, read-only)", order: 4, type: "CRITIC", role: "Premium feel: rhythm, alignment, restraint, hierarchy. Advisory unless a clear break.", writes: "AESTHETIC_REVIEW.md" },
-  "3mpq-completionist": { group: "Critics (parallel, read-only)", order: 5, type: "CRITIC", role: "What is missing: all states (hover/focus/active/empty/loading/error), all breakpoints, all sections.", writes: "COMPLETE_REVIEW.md" },
-  "3mpq-factcheck":  { group: "Critics (parallel, read-only)", order: 6, type: "CRITIC", role: "Copy claims vs source of truth. No invented features, specs, or numbers.", writes: "FACT_REVIEW.md" },
-  "3mpq-inquisitor": { group: "Critics (parallel, read-only)", order: 7, type: "CRITIC", role: "Final whole-product audit vs best-in-class.", writes: "AUDIT.md" },
-  "3mpq-conductor":  { group: "Reconcile & ship", order: 0, type: "ORCH", role: "Merges linter + all critic outputs into one prioritized, de-duplicated action list. Resolves contradictions.", writes: "ACTIONS.md" },
-  "3mpq-devops":     { group: "Reconcile & ship", order: 1, type: "ship", role: "Git, security, deploy. Only after FINAL PASSED.", writes: "commits, PRs, deploys" },
+  "3mpq-dispatcher": { group: "Route & plan", order: 0, type: "ORCH", role: "Routes work to the right agents.", writes: "routing plan" },
+  "3mpq-director":   { group: "Route & plan", order: 1, type: "ORCH", role: "Sets the bar: one flow, minimum text, air, effect.", writes: "DIRECTION.md" },
+  "3mpq-architect":  { group: "Route & plan", order: 2, type: "ORCH", role: "Compiles the build contract.", writes: "SECTION_CONTRACT.md" },
+  "3mpq-prompter":   { group: "Route & plan", order: 3, type: "ORCH", role: "Forces design-system-first prompts.", writes: "soldier prompt" },
+  "3mpq-researcher": { group: "Research & content", order: 0, type: "content", role: "Trends, competitors, direction.", writes: "research/*.md" },
+  "3mpq-economist":  { group: "Research & content", order: 1, type: "content", role: "Pricing and unit economics.", writes: "pricing-brief.md" },
+  "3mpq-copywriter": { group: "Research & content", order: 2, type: "content", role: "Writes the copy.", writes: "content/copy.json" },
+  "3mpq-soldier":    { group: "Build", order: 0, type: "build", role: "Builds the sections.", writes: "src/, ui-kit/" },
+  "3mpq-linter":     { group: "Deterministic gate", order: 0, type: "GATE", role: "Hard gate. Cannot be argued past.", writes: "LINT.md" },
+  "3mpq-judge":      { group: "Critics (parallel, read-only)", order: 0, type: "CRITIC", role: "Visual and doctrine gate.", writes: "REVIEW.md" },
+  "3mpq-kitwarden":  { group: "Critics (parallel, read-only)", order: 1, type: "CRITIC", role: "Guards component reuse.", writes: "KIT_REVIEW.md" },
+  "3mpq-minimalist": { group: "Critics (parallel, read-only)", order: 2, type: "CRITIC", role: "Removes the excess.", writes: "MINIMAL_REVIEW.md" },
+  "3mpq-naturalist": { group: "Critics (parallel, read-only)", order: 3, type: "CRITIC", role: "Kills AI tells in copy.", writes: "NATURAL_REVIEW.md" },
+  "3mpq-aesthete":   { group: "Critics (parallel, read-only)", order: 4, type: "CRITIC", role: "Premium feel and rhythm.", writes: "AESTHETIC_REVIEW.md" },
+  "3mpq-completionist": { group: "Critics (parallel, read-only)", order: 5, type: "CRITIC", role: "Finds what is missing.", writes: "COMPLETE_REVIEW.md" },
+  "3mpq-factcheck":  { group: "Critics (parallel, read-only)", order: 6, type: "CRITIC", role: "Verifies every claim.", writes: "FACT_REVIEW.md" },
+  "3mpq-inquisitor": { group: "Critics (parallel, read-only)", order: 7, type: "CRITIC", role: "Final product audit.", writes: "AUDIT.md" },
+  "3mpq-conductor":  { group: "Reconcile & ship", order: 0, type: "ORCH", role: "Reconciles every review.", writes: "ACTIONS.md" },
+  "3mpq-devops":     { group: "Reconcile & ship", order: 1, type: "ship", role: "Ships it.", writes: "commits, deploys" },
 };
 
 const GROUP_ORDER = ["Route & plan", "Research & content", "Build", "Deterministic gate", "Critics (parallel, read-only)", "Reconcile & ship"];
+const STAGE_SHORT = { "Critics (parallel, read-only)": "Critics" };
+const stageLabel = (g) => STAGE_SHORT[g] || g;
 
 const BUILTINS = [
-  { name: "general-purpose", desc: "Multi-step research, broad code search, execution when a match is not certain in the first tries.", tools: "all tools" },
-  { name: "Explore", desc: "Read-only fan-out search across many files and conventions. Returns the conclusion, not file dumps.", tools: "read-only" },
-  { name: "Plan", desc: "Software architect. Step-by-step implementation plans and trade-offs.", tools: "read-only planning" },
-  { name: "claude", desc: "Catch-all for tasks that do not fit a specific agent.", tools: "all tools" },
-  { name: "claude-code-guide", desc: "Questions about Claude Code, the Agent SDK, and the Anthropic API.", tools: "Bash, Read, WebFetch, WebSearch" },
-  { name: "statusline-setup", desc: "Configures the Claude Code status line.", tools: "Read, Edit" },
+  { name: "general-purpose", role: "Research, search, multi-step work.", tools: "all tools" },
+  { name: "Explore", role: "Read-only fan-out search.", tools: "read-only" },
+  { name: "Plan", role: "Implementation plans.", tools: "read-only" },
+  { name: "claude", role: "Catch-all.", tools: "all tools" },
+  { name: "claude-code-guide", role: "Claude Code and API answers.", tools: "Bash, Read, web" },
+  { name: "statusline-setup", role: "Status line config.", tools: "Read, Edit" },
 ];
 
 function parseFrontmatter(md) {
@@ -110,210 +110,174 @@ function rel(ts) {
   if (!ts) return "never";
   const days = Math.floor((Date.parse("2026-06-15T23:59:59Z") - Date.parse(ts)) / 86400000);
   if (days <= 0) return "today";
-  if (days === 1) return "1 day ago";
-  return days + " days ago";
+  return days === 1 ? "1d ago" : days + "d ago";
 }
 
-// Short flow-rail / roster-heading labels for the (sometimes long) group names.
-const STAGE_LABEL = {
-  "Route & plan": "Route & plan",
-  "Research & content": "Research & content",
-  "Build": "Build",
-  "Deterministic gate": "Deterministic gate",
-  "Critics (parallel, read-only)": "Critics",
-  "Reconcile & ship": "Reconcile & ship",
-};
-const stageLabel = (g) => STAGE_LABEL[g] || g;
-
-// One shared bar mechanic. No 6% floor: zero runs render NO bar (handled by
-// the caller). Width is the agent's share of the busiest agent's run count.
-function involveBar(count, maxCount) {
-  const pct = maxCount > 0 ? Math.min(100, Math.round((count / maxCount) * 100)) : 0;
-  return `<span class="bar"><span class="bar-fill" style="width:${pct}%"></span></span>`;
-}
-
-// A roster row: name + role + contribution. Active = bar + stats. Idle = calm
-// dimmed row, hollow dot, one mono line, NO bar. writeLine adds the artifact.
-function agentRow(a, contrib, maxCount, writeLine) {
-  const c = contrib;
-  const idle = !c || c.count === 0;
-  if (idle) {
-    return `<div class="row row-idle">
-      <div class="row-head"><span class="name">${esc(a.name)}</span>${a.model ? `<span class="model">${esc(a.model)}</span>` : ""}</div>
-      <p class="role">${esc(a.role || a.desc || "")}</p>
-      <div class="contrib contrib-idle"><span class="hollow"></span>not yet invoked, candidate to drop</div>
-      ${writeLine && a.writes ? `<p class="writes"><span class="k">writes</span> ${esc(a.writes)}</p>` : ""}
-    </div>`;
-  }
-  const tok = c.tokenKnown ? fmtTok(c.tokens) : "n/a";
-  return `<div class="row">
-    <div class="row-head"><span class="name">${esc(a.name)}</span>${a.model ? `<span class="model">${esc(a.model)}</span>` : ""}</div>
-    <p class="role">${esc(a.role || a.desc || "")}</p>
-    <div class="contrib">
-      ${involveBar(c.count, maxCount)}
-      <span class="stats"><b>${c.count}</b> ${c.count === 1 ? "run" : "runs"} <span class="sep">/</span> ${tok} tok <span class="sep">/</span> ${rel(c.last)}</span>
-    </div>
-    ${writeLine && a.writes ? `<p class="writes"><span class="k">writes</span> ${esc(a.writes)}</p>` : ""}
-  </div>`;
-}
-
-// Sort within a stage: active first (runs desc), idle sinks to the bottom.
 function sortByRuns(list, byAgent) {
   return [...list].sort((a, b) => {
-    const ca = byAgent[a.name]?.count || 0;
-    const cb = byAgent[b.name]?.count || 0;
-    if (cb !== ca) return cb - ca;
-    return a.order - b.order;
+    const ca = byAgent[a.name]?.count || 0, cb = byAgent[b.name]?.count || 0;
+    return cb !== ca ? cb - ca : a.order - b.order;
   });
+}
+
+// One row. Active = name + role + animated bar + run count. Idle = quiet
+// name + role + a small "idle" mark, no bar. Minimum text: no writes, no tools.
+function agentRow(a, c, maxCount, i) {
+  const idle = !c || c.count === 0;
+  const d = `style="--d:${(i * 0.04).toFixed(2)}s"`;
+  if (idle) {
+    return `<div class="row row-idle fx" ${d}>
+      <div class="row-main"><span class="name">${esc(a.name)}</span><span class="role">${esc(a.role || "")}</span></div>
+      <span class="idle-tag">idle</span>
+    </div>`;
+  }
+  const pct = maxCount > 0 ? Math.min(100, Math.round((c.count / maxCount) * 100)) : 0;
+  const tok = c.tokenKnown ? fmtTok(c.tokens) : "n/a";
+  return `<div class="row fx" ${d}>
+    <div class="row-main"><span class="name">${esc(a.name)}</span><span class="role">${esc(a.role || "")}</span></div>
+    <div class="meter">
+      <span class="bar"><span class="bar-fill" style="width:${pct}%;--d:${(i * 0.04 + 0.15).toFixed(2)}s"></span></span>
+      <span class="runs">${c.count}</span>
+    </div>
+    <span class="sub">${tok} / ${rel(c.last)}</span>
+  </div>`;
 }
 
 function page(agents, contrib) {
   const { byAgent, totalInv, totalTok } = contrib;
-  const allCounts = Object.values(byAgent).map((c) => c.count);
-  const maxCount = allCounts.length ? Math.max(...allCounts) : 1;
-  const orchestraTotal = agents.length;
-  const idle = agents.filter((a) => !byAgent[a.name] || byAgent[a.name].count === 0).length;
+  const counts = Object.values(byAgent).map((c) => c.count);
+  const maxCount = counts.length ? Math.max(...counts) : 1;
+  const total = agents.length;
+  const active = agents.filter((a) => byAgent[a.name]?.count > 0).length;
+  const idle = total - active;
 
-  // Stages for the flow rail and the roster. Rail is a pure flow diagram now:
-  // stage name only, no per-stage rollup (counts/load live in the roster below).
   const stages = GROUP_ORDER.map((g) => {
-    const list = agents.filter((a) => a.group === g).sort((a, b) => a.order - b.order);
-    return { g, list, count: list.length };
-  }).filter((s) => s.count > 0);
+    const list = agents.filter((a) => a.group === g).sort((x, y) => x.order - y.order);
+    const act = list.filter((a) => byAgent[a.name]?.count > 0).length;
+    return { g, list, act };
+  }).filter((s) => s.list.length);
 
-  const railCells = stages.map((s, i) => {
-    const arrow = i < stages.length - 1 ? `<span class="rail-arrow" aria-hidden="true">-&gt;</span>` : "";
-    return `<div class="rail-cell">
-      <span class="rail-name">${esc(stageLabel(s.g))}</span>
+  const flow = stages.map((s, i) => {
+    const arrow = i < stages.length - 1 ? `<span class="node-arrow" aria-hidden="true">&rarr;</span>` : "";
+    const on = s.act > 0;
+    return `<div class="node fx ${on ? "node-on" : ""}" style="--d:${(0.1 + i * 0.06).toFixed(2)}s">
+      <span class="node-name">${esc(stageLabel(s.g))}</span>
+      <span class="node-count">${s.act}<i>/${s.list.length}</i></span>
     </div>${arrow}`;
   }).join("");
 
-  // Roster grouped by stage, contribution as the dominant axis (runs desc).
+  let ri = 0;
   const roster = stages.map((s) => {
     const sorted = sortByRuns(s.list, byAgent);
     return `<section class="stage">
-      <h2>${esc(stageLabel(s.g))}</h2>
-      <div class="rows">${sorted.map((a) => agentRow(a, byAgent[a.name], maxCount, true)).join("")}</div>
+      <h2 class="fx" style="--d:${(ri++ * 0.02).toFixed(2)}s">${esc(stageLabel(s.g))}</h2>
+      <div class="rows">${sorted.map((a) => agentRow(a, byAgent[a.name], maxCount, ri++)).join("")}</div>
     </section>`;
   }).join("");
 
-  // Built-ins: quieter appendix. Same row grammar, no writes line, elev tint.
-  const builtinSorted = sortByRuns(BUILTINS, byAgent);
-  const builtins = builtinSorted.map((a) => agentRow(a, byAgent[a.name], maxCount, false)).join("");
+  const builtins = sortByRuns(BUILTINS, byAgent).map((a, i) => agentRow(a, byAgent[a.name], maxCount, i)).join("");
 
   return `<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Orchestra - Aisoldier agents</title>
+<title>The Orchestra</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#fff;--elev:#f7f7f6;--track:#f0f0ee;--border:#e5e5e5;--border-strong:#d8d8d4;--fg:#161616;--muted:#6b6b68;--dim:#a0a09c;--accent:#217a50;
-    --serif:"IBM Plex Serif",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;}
+  :root{--bg:#fcfcfb;--elev:#f5f5f3;--track:#ececea;--line:#e6e6e3;--fg:#15150f;--muted:#5f5f58;--dim:#9a9a92;--accent:#217a50;--accent-soft:#e7f1ea;
+    --font:"Manrope",-apple-system,system-ui,sans-serif;
+    --display:"Montserrat",-apple-system,system-ui,sans-serif}
   *{box-sizing:border-box}
-  /* Type scale: display h1 clamp(36-48) serif, idle-hero 40 serif, headline 22
-     serif, body 16 sans, stat 15 mono, label 12 mono. */
-  body{margin:0;background:radial-gradient(circle,#ececec 1px,transparent 1px) 0 0/24px 24px,var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1120px;margin:0 auto;padding:64px 24px 96px}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:18px;line-height:1.55;font-weight:500;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+  .wrap{max-width:1080px;margin:0 auto;padding:9vh 32px 14vh}
 
-  /* Masthead */
-  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 16px}
-  h1{font-family:var(--serif);font-weight:500;font-size:clamp(36px,5vw,48px);letter-spacing:-.02em;margin:0 0 12px}
-  .lede{font-size:16px;color:var(--muted);max-width:62ch;margin:0 0 32px}
-  .summary{display:flex;flex-wrap:wrap;align-items:flex-end;gap:32px;border-top:1px solid var(--border);padding-top:24px;margin-bottom:64px}
-  .idle-hero{display:flex;flex-direction:column;gap:4px}
-  .idle-hero .big{font-family:var(--serif);font-weight:500;font-size:40px;line-height:1;color:var(--accent);letter-spacing:-.02em}
-  .idle-hero .cap{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-family:var(--mono)}
-  .stat-line{display:flex;flex-wrap:wrap;gap:24px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em}
-  .stat-line b{color:var(--fg);font-weight:500}
+  /* Type scale: 4 sizes, all >= 16. Hero clamp(56-104), section 34, body 18, meta 16. */
+  .hero{margin-bottom:13vh}
+  .kicker{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 24px}
+  h1{font-family:var(--display);font-size:clamp(56px,11vw,104px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin:0 0 28px}
+  .sub{font-size:22px;font-weight:500;color:var(--muted);max-width:24ch;margin:0 0 56px;line-height:1.4}
+  .figures{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-end}
+  .fig{display:flex;flex-direction:column;gap:6px}
+  .fig .n{font-family:var(--display);font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .fig .n.accent{color:var(--accent)}
+  .fig .l{font-size:16px;font-weight:600;color:var(--muted);letter-spacing:.01em}
 
-  /* Section 1: pipeline flow rail */
-  .rail{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:64px;background:var(--bg)}
-  .rail-cell{flex:1 1 0;min-width:150px;display:flex;align-items:center;padding:16px;border-right:1px solid var(--border)}
-  .rail-cell:last-child{border-right:none}
-  .rail-name{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.25}
-  .rail-arrow{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim);padding:0 4px;flex:0 0 auto}
+  /* Pipeline flow: big nodes connected by arrows */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:14px 10px;margin-bottom:13vh}
+  .node{flex:1 1 130px;min-width:120px;border:1.5px solid var(--line);border-radius:16px;padding:20px 18px;background:#fff;transition:transform .2s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s}
+  .node:hover{transform:translateY(-4px);box-shadow:0 18px 40px -28px rgba(0,0,0,.4)}
+  .node-on{border-color:var(--accent);background:var(--accent-soft)}
+  .node-name{display:block;font-size:16px;font-weight:700;line-height:1.2;margin-bottom:14px}
+  .node-count{font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .node-count i{font-style:normal;font-size:18px;font-weight:600;color:var(--dim)}
+  .node-on .node-count{color:var(--accent)}
+  .node-arrow{flex:0 0 auto;color:var(--dim);font-size:22px;font-weight:700}
 
-  /* Shared bar mechanic */
-  .bar{display:block;width:100%;height:6px;background:var(--track);border-radius:999px;overflow:hidden}
-  .bar-fill{display:block;height:100%;background:var(--accent);border-radius:999px}
+  /* Roster */
+  .stage{margin-bottom:9vh}
+  h2{font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.03em;margin:0 0 8px}
+  .rows{display:flex;flex-direction:column}
+  .row{display:flex;align-items:center;gap:28px;padding:24px 8px;border-top:1px solid var(--line);transition:background .18s,padding-left .18s}
+  .row:last-child{border-bottom:1px solid var(--line)}
+  .row:hover{background:var(--elev);padding-left:16px}
+  .row-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px}
+  .name{font-size:21px;font-weight:700;letter-spacing:-.02em}
+  .role{font-size:17px;font-weight:500;color:var(--muted)}
+  .meter{flex:0 0 240px;display:flex;align-items:center;gap:16px}
+  .bar{flex:1 1 auto;height:8px;background:var(--track);border-radius:999px;overflow:hidden}
+  .bar-fill{display:block;height:100%;background:var(--accent);border-radius:999px;transform-origin:left center;animation:grow 1s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d,0s)}
+  .runs{font-family:var(--display);font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;min-width:24px;text-align:right}
+  .sub{flex:0 0 auto;font-size:16px;font-weight:500;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .row-idle{opacity:.5}
+  .row-idle:hover{opacity:.85}
+  .idle-tag{flex:0 0 auto;font-size:16px;font-weight:600;color:var(--dim)}
 
-  /* Section 2/3: roster rows */
-  .stage{margin-bottom:48px}
-  h2{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin:0 0 8px}
-  .rows{border-top:1px solid var(--border)}
-  .row{padding:16px 0;border-bottom:1px solid var(--border);transition:opacity .15s}
-  .row-idle{opacity:.6;padding:14px 0;border-bottom:1px dashed var(--border)}
-  .row-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
-  .name{font-family:var(--mono);font-size:15px;font-weight:500}
-  .model{font-family:var(--mono);font-size:12px;color:var(--dim)}
-  .role{font-size:16px;color:var(--fg);margin:0 0 10px;max-width:78ch}
-  .row-idle .role{color:var(--muted);margin-bottom:6px}
-  .contrib{display:flex;align-items:center;gap:16px;max-width:520px}
-  .contrib .bar{flex:1 1 auto;max-width:240px}
-  .stats{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
-  .stats b{color:var(--fg);font-weight:500}
-  .sep{color:var(--dim);margin:0 4px}
-  .contrib-idle{font-family:var(--mono);font-size:12px;color:var(--dim);gap:8px}
-  .hollow{width:8px;height:8px;border-radius:50%;border:1px solid var(--dim);flex:0 0 auto}
-  .writes{font-family:var(--mono);font-size:12px;color:var(--muted);margin:8px 0 0}
-  .writes .k{color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-right:8px}
+  .appendix{margin-top:11vh}
+  .appendix h2{font-size:24px;color:var(--muted)}
 
-  /* Built-ins appendix: quieter tier on elev surface */
-  .appendix{margin-top:64px;background:var(--elev);border:1px solid var(--border);border-radius:12px;padding:24px}
-  .appendix h2{margin-bottom:4px}
-  .appendix .note{font-size:16px;color:var(--muted);margin:0 0 8px}
-  .appendix .rows{border-top:1px solid var(--border-strong)}
-  .appendix .row,.appendix .row-idle{border-bottom-color:var(--border-strong)}
-  .appendix .bar{background:#eaeae8}
+  footer{margin-top:13vh;font-size:16px;color:var(--dim);line-height:1.7}
 
-  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);color:var(--dim);font-size:12px;font-family:var(--mono);line-height:1.7}
+  /* Motion */
+  .fx{opacity:0;animation:up .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:var(--d,0s)}
+  @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @media (prefers-reduced-motion:reduce){.fx,.bar-fill{animation:none;opacity:1;transform:none}}
 
-  /* Below 1120 the rail wraps; hide arrows so none is orphaned, and divide
-     wrapped cells with a bottom border. Arrows show only on one line (>=1120). */
-  @media (max-width:1119px){
-    .rail-arrow{display:none}
-    .rail-cell{border-bottom:1px solid var(--border)}
-  }
-
-  @media (max-width:640px){
-    .wrap{padding:48px 18px 72px}
-    .rail-cell{flex:1 1 100%;border-right:none;border-bottom:1px solid var(--border)}
-    .rail-cell:last-child{border-bottom:none}
-    .rail-arrow{display:none}
-    .contrib{flex-wrap:wrap;gap:8px}
-    .contrib .bar{max-width:none;flex:1 1 100%}
-    .summary{gap:24px}
+  @media (max-width:720px){
+    .wrap{padding:7vh 22px 12vh}
+    .row{flex-wrap:wrap;gap:12px}
+    .meter{flex:1 1 100%;order:3}
+    .sub{order:4}
+    .node-arrow{display:none}
+    .figures{gap:32px}
+    .fig .n{font-size:48px}
   }
 </style></head>
 <body><div class="wrap">
-  <p class="eyebrow">Aisoldier</p>
-  <h1>The Orchestra</h1>
-  <p class="lede">Idle agents have not earned a seat.</p>
-  <div class="summary">
-    <div class="idle-hero">
-      <span class="big">${idle}</span>
-      <span class="cap">of ${orchestraTotal} idle</span>
-    </div>
-    <div class="stat-line">
-      <span><b>${orchestraTotal}</b> orchestra agents</span>
-      <span><b>${BUILTINS.length}</b> built-in</span>
-      <span><b>${totalInv}</b> total runs</span>
-      <span><b>${fmtTok(totalTok)}</b> tokens</span>
-    </div>
-  </div>
 
-  <div class="rail">${railCells}</div>
+  <header class="hero">
+    <p class="kicker fx">Aisoldier</p>
+    <h1 class="fx" style="--d:.05s">The Orchestra</h1>
+    <p class="sub fx" style="--d:.12s">Every agent. And who is earning their seat.</p>
+    <div class="figures">
+      <div class="fig fx" style="--d:.18s"><span class="n accent">${active}</span><span class="l">earning their seat</span></div>
+      <div class="fig fx" style="--d:.24s"><span class="n">${idle}</span><span class="l">idle of ${total}</span></div>
+      <div class="fig fx" style="--d:.30s"><span class="n">${totalInv}</span><span class="l">runs logged</span></div>
+      <div class="fig fx" style="--d:.36s"><span class="n">${fmtTok(totalTok)}</span><span class="l">tokens</span></div>
+    </div>
+  </header>
+
+  <div class="flow">${flow}</div>
 
   ${roster}
 
-  <section class="appendix">
-    <h2>Built-in agents</h2>
-    <p class="note">Platform agents outside the orchestra.</p>
+  <section class="stage appendix">
+    <h2 class="fx">Built-in</h2>
     <div class="rows">${builtins}</div>
   </section>
 
-  <footer>localhost:${PORT} - agents: .claude/agents - contributions: apps/orchestra/data/contributions.jsonl - log a run: node apps/orchestra/log.mjs &lt;agent&gt; &lt;tokens&gt; &lt;project&gt; "&lt;task&gt;" [verdict]</footer>
+  <footer class="fx">localhost:${PORT} / live from .claude/agents / log a run with apps/orchestra/log.mjs</footer>
 </div></body></html>`;
 }
 

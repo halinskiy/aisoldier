@@ -60,9 +60,7 @@ function scan(file, text) {
     const sizeRe = /(?:text-\[(\d+)px\]|font-size:\s*(\d+)px|fontSize:\s*["'](\d+)px)/g;
     while ((m = sizeRe.exec(ln))) {
       const px = Number(m[1] || m[2] || m[3]);
-      if (px === 12 && /eyebrow|uppercase|label/i.test(ln)) continue; // eyebrow exception
-      if (px < 14) add("ERROR", file, n, "font-size-floor", `${px}px`, "min 14px mobile / 16px desktop");
-      else if (px < 16) add("WARN", file, n, "font-size-floor", `${px}px`, "below 16px desktop floor; confirm mobile-only");
+      if (px < 16) add("ERROR", file, n, "font-size-floor", `${px}px`, "min 16px; all text must read easily (no sub-16 anywhere)");
     }
     // raw hex in source (token layer excluded)
     if (isSource && !/tokens|theme|globals\.css/i.test(file)) {

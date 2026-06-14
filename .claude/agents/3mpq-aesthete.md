@@ -15,6 +15,15 @@ Review the LIVE rendered section (request a screenshot via the running dev
 server), not just the code.
 
 ## What you judge (subjective, but specific)
+- **Air (theory of breathing room).** Generous, consistent spacing.
+  Elements must breathe: real padding, large gaps between sections, room
+  around the focal point. Cramped or timid spacing fails. Whitespace is
+  the design, not the leftover.
+- **Effect.** Tasteful interactive motion that demonstrates (entrance
+  reveals, a bar that fills, a hover that responds), easing
+  cubic-bezier(0.16,1,0.3,1), reduced-motion respected. A static,
+  effectless page is a fail at this bar; motion that only decorates is
+  cut.
 - **Rhythm.** Is vertical spacing consistent and intentional, or does it
   drift? Does the section breathe, or is it cramped / sparse?
 - **Alignment.** Does everything sit on a shared grid? Optical alignment,

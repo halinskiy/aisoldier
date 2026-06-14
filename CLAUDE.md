@@ -212,6 +212,7 @@ Three principles govern it:
 
 | Agent | Type | Role |
 |---|---|---|
+| `3mpq-director` | orchestration + gate | Sets the creative bar (one flow, minimum text, big readable type, air, effect) before the build and enforces it after. The getcorder-approach owner. Blocking. |
 | `3mpq-architect` | orchestration | Compiles brief+tokens+`REGISTRY.json` into `SECTION_CONTRACT.md`; minimalism baked in (heading+body default). |
 | `3mpq-prompter` | orchestration | Composes every soldier prompt to force design-system-first reuse + injects the constraint set from the single source. |
 | `3mpq-linter` | deterministic gate | Runs `tools/ds-lint.mjs`. Blocking. Runs FIRST (cheap fail-fast before critics). |
@@ -223,13 +224,35 @@ Three principles govern it:
 | `3mpq-factcheck` | critic | Copy claims vs source of truth. No invented features/specs/numbers. |
 | `3mpq-conductor` | orchestration | Reconciles all reviews into `ACTIONS.md`; decides SHIP / ANOTHER ROUND. |
 
+### The creative bar (owned by 3mpq-director)
+
+The getcorder standard, enforced as a gate:
+- **One flow.** Build the single standard path, minimum steps. Do not
+  design for many scenarios.
+- **Minimum text.** A section's ceiling is heading + subheading (often
+  just a heading). Content inside is terser and UNIFORM (same short shape
+  per item). No captions, no helper text, no paragraphs where a phrase
+  works. Easier to add than remove.
+- **Type: the right pairing, minimal, big, readable.** Default pairing is
+  **Montserrat (headings) + Manrope (body)** - the standard pairing, which
+  the researcher VERIFIES before use. Never more than two families. About
+  3-4 sizes total. No text below 16px. Display type genuinely big. The
+  user dislikes IBM Plex for readability; favor warm, legible modern sans
+  on tools/dashboards (landing font is per-project, but lean readable).
+- **Air.** Generous, consistent spacing; elements breathe; one focal
+  point per screen.
+- **Effect.** Tasteful interactive motion that demonstrates (entrance
+  reveals, a bar that fills, responsive hover), easing
+  cubic-bezier(0.16,1,0.3,1), reduced-motion respected. Motion that only
+  decorates is cut.
+
 ### New pipeline
 
 ```
-dispatcher -> architect (SECTION_CONTRACT) -> [economist -> copywriter on new projects]
+dispatcher -> director (DIRECTION: one flow, bar) -> architect (SECTION_CONTRACT) -> [economist -> copywriter on new projects]
 -> prompter (DS-first soldier prompt) -> soldier (serial, lint-on-save)
 -> 3mpq-linter (deterministic, fail fast)
--> parallel critics: judge, kitwarden, minimalist, naturalist, aesthete, completionist, factcheck
+-> parallel critics: director, judge, kitwarden, minimalist, naturalist, aesthete, completionist, factcheck
 -> conductor (one ACTIONS.md) -> soldier fixes -> re-lint -> re-critic
 -> 2 consecutive clean rounds -> user sees it -> inquisitor -> devops
 ```

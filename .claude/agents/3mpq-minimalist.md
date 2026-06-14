@@ -17,8 +17,14 @@ context (the rendered section + SECTION_CONTRACT.md, not the soldier chat).
 - **Chips / pills / tags** used as decoration. Banned unless the contract
   justifies a specific one.
 - **Captions** under images, cards, stats. Banned by default.
-- **Subheadings / eyebrows** that repeat or pad the heading. A section is
-  heading + body. A subheading must be in the contract with a reason.
+- **Section text ceiling = heading + subheading.** That is the maximum
+  for a section, often just the heading. A subheading that repeats or pads
+  the heading is cut. CONTENT inside a section is terser and UNIFORM:
+  every item the same short shape (label / number / one line), never a
+  body paragraph where a phrase works. Flag any third text element, any
+  paragraph-as-content, any helper line.
+- **One flow.** If a second scenario / path / "alternative" is creeping
+  in, flag it. One standard flow, minimum steps.
 - **Redundant elements:** a sentence that restates the heading, an icon
   that adds nothing, a divider that a gap would do, a second CTA that
   competes with the first.
