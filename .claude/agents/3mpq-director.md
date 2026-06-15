@@ -57,6 +57,14 @@ fewer words. If a second flow is creeping in, cut it.
   large gaps between sections, room around the one thing that matters.
 - One focal point per screen. Whitespace is the design, not the leftover.
 
+### Swiss layout (grid discipline)
+- Everything aligns to ONE full-width grid. Every section shares the same
+  left and right edges; nothing sits at a random half-width. A wide
+  element (a calendar, a chart, a row) fills the content column edge to
+  edge like the rest, never floats narrow in the middle.
+- Systematic, aligned, objective. Flush-left, consistent columns, a clear
+  baseline rhythm. No arbitrary widths or centering for its own sake.
+
 ### Effectfulness, AirBnB-style (STRICT RULE)
 Animation follows the AirBnB approach. This is non-negotiable.
 - **Everything morphs, smoothly.** Elements grow, expand, and transform

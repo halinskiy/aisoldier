@@ -136,14 +136,12 @@ function agentRow(a, c, maxCount, i) {
     </div>`;
   }
   const pct = maxCount > 0 ? Math.min(100, Math.round((c.count / maxCount) * 100)) : 0;
-  const tok = c.tokenKnown ? fmtTok(c.tokens) : "n/a";
   return `<div class="row fx" ${d}>
     <div class="row-main"><span class="name">${esc(a.name)}</span><span class="role">${esc(a.role || "")}</span></div>
     <div class="meter">
       <span class="bar"><span class="bar-fill" style="width:${pct}%;--d:${(i * 0.04 + 0.15).toFixed(2)}s"></span></span>
       <span class="runs">${c.count}</span>
     </div>
-    <span class="sub">${tok} / ${rel(c.last)}</span>
   </div>`;
 }
 
@@ -151,7 +149,7 @@ function agentRow(a, c, maxCount, i) {
 // each cell shaded by that day's run count. Appears once (CSS pop), then
 // static. Window is the last WEEKS weeks ending today.
 function calendar(byDay) {
-  const WEEKS = 18, DAY = 86400000;
+  const WEEKS = 53, DAY = 86400000;
   const end = new Date("2026-06-15T00:00:00Z");
   const lastSun = new Date(end.getTime() + ((7 - end.getUTCDay()) % 7) * DAY);
   const start = new Date(lastSun.getTime() - (WEEKS * 7 - 1) * DAY);
@@ -252,15 +250,15 @@ function page(agents, contrib) {
      across every node regardless of label length. Symmetry over content. */
   /* Contributions calendar (GitHub-style). Cells pop in once, staggered. */
   .contrib-cal{margin-bottom:13vh}
-  .cal{display:flex;gap:4px;margin:0 0 16px;flex-wrap:wrap}
-  .cal-col{display:flex;flex-direction:column;gap:4px}
-  .cell{width:15px;height:15px;border-radius:4px;background:var(--track);transform-origin:center;animation:pop .5s cubic-bezier(.34,1.42,.5,1) both;animation-delay:var(--d,0s)}
+  .cal{display:flex;gap:4px;margin:0 0 16px;width:100%}
+  .cal-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px}
+  .cell{width:100%;aspect-ratio:1;border-radius:4px;background:var(--track);transform-origin:center;animation:pop .5s cubic-bezier(.34,1.42,.5,1) both;animation-delay:var(--d,0s)}
   .cell.l1{background:#cfe8da}
   .cell.l2{background:#7cc39c}
   .cell.l3{background:var(--accent)}
   @keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
   .cal-legend{display:flex;align-items:center;gap:6px;font-size:16px;color:var(--muted)}
-  .cal-legend .cell{width:14px;height:14px;animation:none}
+  .cal-legend .cell{flex:0 0 auto;width:16px;height:16px;aspect-ratio:auto;animation:none}
   @media (prefers-reduced-motion:reduce){.cell{animation:none}}
 
   .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:14px 10px;margin-bottom:13vh}
