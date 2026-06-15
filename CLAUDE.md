@@ -241,10 +241,14 @@ The getcorder standard, enforced as a gate:
   on tools/dashboards (landing font is per-project, but lean readable).
 - **Air.** Generous, consistent spacing; elements breathe; one focal
   point per screen.
-- **Effect.** Tasteful interactive motion that demonstrates (entrance
-  reveals, a bar that fills, responsive hover), easing
-  cubic-bezier(0.16,1,0.3,1), reduced-motion respected. Motion that only
-  decorates is cut.
+- **Effect, AirBnB-style (STRICT).** Animation follows the AirBnB
+  approach: everything morphs smoothly (grows / expands / transforms into
+  place, not hard cuts), soft spring easing (gentle overshoot welcome,
+  e.g. cubic-bezier(0.34,1.42,0.5,1) entrances, cubic-bezier(0.2,0.8,0.2,1)
+  hover), generous durations, choreographed + staggered. Be creative with
+  interesting morphs; a flat fade is lazy. Appearance plays ONCE then
+  rests (no infinite loops unless a true live indicator). Owned by
+  director + aesthete. Reduced-motion respected.
 
 ### Collaboration & adaptation
 

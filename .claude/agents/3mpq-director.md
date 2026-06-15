@@ -57,12 +57,25 @@ fewer words. If a second flow is creeping in, cut it.
   large gaps between sections, room around the one thing that matters.
 - One focal point per screen. Whitespace is the design, not the leftover.
 
-### Effectfulness (demonstrate, do not decorate)
-- Tasteful interactive motion: entrance reveals, a bar that fills, a
-  hover that responds, a state that animates. It should make the idea
-  clearer and the page feel alive, like getcorder.
-- Easing cubic-bezier(0.16,1,0.3,1). Nothing bouncy. Respect
-  prefers-reduced-motion. Motion that only decorates gets cut.
+### Effectfulness, AirBnB-style (STRICT RULE)
+Animation follows the AirBnB approach. This is non-negotiable.
+- **Everything morphs, smoothly.** Elements grow, expand, and transform
+  into place rather than cut or pop hard. Shared-element / layout morphs,
+  cards that smoothly expand, a soft spring settle. The feel is fluid and
+  premium, never mechanical.
+- **Be creative with the morphs.** Interesting, characterful transitions
+  are expected, not optional. A flat fade is the lazy default; prefer a
+  morph that makes the change feel alive.
+- **AirBnB-grade smoothness.** Soft spring easing (a gentle overshoot is
+  welcome, e.g. cubic-bezier(0.34,1.42,0.5,1) for entrances;
+  cubic-bezier(0.2,0.8,0.2,1) for hover/state). Generous durations
+  (0.4-0.9s), choreographed and staggered, never abrupt. This supersedes
+  the old "nothing bouncy" line: a tasteful spring is the point; only a
+  cheap, jarring bounce is banned.
+- **Animate appearance once.** Entrance morphs play one time on load,
+  then rest. No element animates forever (no infinite loops) unless it is
+  a genuine live indicator. Idle decoration that never settles is cut.
+- Motion must demonstrate, not decorate. Respect prefers-reduced-motion.
 
 ## Your verdict
 Write `DIRECTION.md` (pre-build: the single flow + the creative bar) and,

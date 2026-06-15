@@ -91,8 +91,9 @@ async function loadAgents() {
 
 async function loadContributions() {
   let raw = "";
-  try { raw = await readFile(LEDGER, "utf8"); } catch { return { byAgent: {}, totalInv: 0, totalTok: 0 }; }
+  try { raw = await readFile(LEDGER, "utf8"); } catch { return { byAgent: {}, byDay: {}, totalInv: 0, totalTok: 0 }; }
   const byAgent = {};
+  const byDay = {};
   let totalInv = 0, totalTok = 0;
   for (const line of raw.split("\n")) {
     if (!line.trim()) continue;
@@ -101,8 +102,10 @@ async function loadContributions() {
     a.count++; totalInv++;
     if (typeof r.tokens === "number") { a.tokens += r.tokens; totalTok += r.tokens; a.tokenKnown = true; }
     if (!a.last || r.ts > a.last) a.last = r.ts;
+    const day = String(r.ts).slice(0, 10);
+    if (day) byDay[day] = (byDay[day] || 0) + 1;
   }
-  return { byAgent, totalInv, totalTok };
+  return { byAgent, byDay, totalInv, totalTok };
 }
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -144,8 +147,33 @@ function agentRow(a, c, maxCount, i) {
   </div>`;
 }
 
+// GitHub-style contributions calendar: weeks as columns (Mon..Sun rows),
+// each cell shaded by that day's run count. Appears once (CSS pop), then
+// static. Window is the last WEEKS weeks ending today.
+function calendar(byDay) {
+  const WEEKS = 18, DAY = 86400000;
+  const end = new Date("2026-06-15T00:00:00Z");
+  const lastSun = new Date(end.getTime() + ((7 - end.getUTCDay()) % 7) * DAY);
+  const start = new Date(lastSun.getTime() - (WEEKS * 7 - 1) * DAY);
+  let cols = "";
+  for (let w = 0; w < WEEKS; w++) {
+    let col = "";
+    for (let d = 0; d < 7; d++) {
+      const i = w * 7 + d;
+      const dt = new Date(start.getTime() + i * DAY);
+      const key = dt.toISOString().slice(0, 10);
+      const cnt = byDay[key] || 0;
+      const lvl = cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : 3;
+      col += `<span class="cell l${lvl}" style="--d:${(i * 0.004).toFixed(3)}s" title="${key}: ${cnt} run(s)"></span>`;
+    }
+    cols += `<div class="cal-col">${col}</div>`;
+  }
+  return cols;
+}
+
 function page(agents, contrib) {
-  const { byAgent, totalInv, totalTok } = contrib;
+  const { byAgent, byDay, totalInv, totalTok } = contrib;
+  const cal = calendar(byDay || {});
   const counts = Object.values(byAgent).map((c) => c.count);
   const maxCount = counts.length ? Math.max(...counts) : 1;
   const total = agents.length;
@@ -161,7 +189,7 @@ function page(agents, contrib) {
   const flow = stages.map((s, i) => {
     const arrow = i < stages.length - 1 ? `<span class="node-arrow" aria-hidden="true">&rarr;</span>` : "";
     const on = s.act > 0;
-    return `<div class="node fx ${on ? "node-on" : ""}" style="--d:${(0.1 + i * 0.06).toFixed(2)}s">
+    return `<div class="node morph ${on ? "node-on" : ""}" style="--d:${(0.08 + i * 0.09).toFixed(2)}s">
       <span class="node-name">${esc(stageLabel(s.g))}</span>
       <span class="node-count">${s.act}<i>/${s.list.length}</i></span>
     </div>${arrow}`;
@@ -214,12 +242,13 @@ function page(agents, contrib) {
   .kicker{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 24px}
   h1{font-family:var(--display);font-size:clamp(56px,11vw,104px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin:0 0 28px}
   .sub{font-size:22px;font-weight:500;color:var(--muted);max-width:24ch;margin:0 0 56px;line-height:1.4}
-  /* Hero equalizer: living, on-theme, data-driven. Equal-width bars. */
+  /* Hero equalizer: equal-width bars that morph UP once on load (AirBnB
+     spring), then rest. No looping. */
   .eq{display:flex;align-items:flex-end;gap:6px;height:180px;margin:7vh 0 56px}
-  .eq-bar{flex:1 1 0;min-width:0;height:12%;background:var(--track);border-radius:7px 7px 0 0;transform-origin:bottom}
-  .eq-bar.on{background:var(--accent);animation:eq var(--dur,2s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
-  @keyframes eq{from{transform:scaleY(.58)}to{transform:scaleY(1)}}
-  @media (prefers-reduced-motion:reduce){.eq-bar.on{animation:none}}
+  .eq-bar{flex:1 1 0;min-width:0;background:var(--track);border-radius:7px 7px 0 0;transform-origin:bottom;animation:eqgrow .9s cubic-bezier(.34,1.18,.64,1) both;animation-delay:var(--d,0s)}
+  .eq-bar.on{background:var(--accent)}
+  @keyframes eqgrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @media (prefers-reduced-motion:reduce){.eq-bar{animation:none}}
   .figures{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-end}
   .fig{display:flex;flex-direction:column;gap:6px}
   .fig .n{font-family:var(--display);font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
@@ -230,10 +259,28 @@ function page(agents, contrib) {
   /* Equal cells: flex:1 1 0 -> identical width; align-items:stretch ->
      identical height; the name reserves 2 lines so the counts line up
      across every node regardless of label length. Symmetry over content. */
+  /* Contributions calendar (GitHub-style). Cells pop in once, staggered. */
+  .contrib-cal{margin-bottom:13vh}
+  .cal{display:flex;gap:4px;margin:0 0 16px;flex-wrap:wrap}
+  .cal-col{display:flex;flex-direction:column;gap:4px}
+  .cell{width:15px;height:15px;border-radius:4px;background:var(--track);transform-origin:center;animation:pop .5s cubic-bezier(.34,1.42,.5,1) both;animation-delay:var(--d,0s)}
+  .cell.l1{background:#cfe8da}
+  .cell.l2{background:#7cc39c}
+  .cell.l3{background:var(--accent)}
+  @keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+  .cal-legend{display:flex;align-items:center;gap:6px;font-size:16px;color:var(--muted)}
+  .cal-legend .cell{width:14px;height:14px;animation:none}
+  @media (prefers-reduced-motion:reduce){.cell{animation:none}}
+
   .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:14px 10px;margin-bottom:13vh}
-  .node{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:space-between;border:1.5px solid var(--line);border-radius:16px;padding:20px 18px;background:#fff;transition:transform .2s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s}
-  .node:hover{transform:translateY(-4px);box-shadow:0 18px 40px -28px rgba(0,0,0,.4)}
+  /* AirBnB-style: nodes morph in with a soft spring (scale + rise) once,
+     then a smooth morph on hover (grow, lift, soft shadow). */
+  .node{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:space-between;border:1.5px solid var(--line);border-radius:20px;padding:22px 20px;background:#fff;transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s cubic-bezier(.2,.8,.2,1),background .45s cubic-bezier(.2,.8,.2,1)}
+  .node.morph{animation:morphin .85s cubic-bezier(.34,1.42,.5,1) both;animation-delay:var(--d,0s)}
+  @keyframes morphin{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:none}}
+  .node:hover{transform:translateY(-8px) scale(1.035);box-shadow:0 28px 56px -30px rgba(0,0,0,.32);border-color:var(--accent)}
   .node-on{border-color:var(--accent);background:var(--accent-soft)}
+  @media (prefers-reduced-motion:reduce){.node.morph{animation:none}}
   .node-name{display:block;font-size:16px;font-weight:700;line-height:1.2;margin-bottom:14px;min-height:2.4em}
   .node-count{font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
   .node-count i{font-style:normal;font-size:18px;font-weight:600;color:var(--dim)}
@@ -293,6 +340,12 @@ function page(agents, contrib) {
       <div class="fig fx" style="--d:.36s"><span class="n">${fmtTok(totalTok)}</span><span class="l">tokens</span></div>
     </div>
   </header>
+
+  <section class="contrib-cal">
+    <h2 class="fx">Contributions</h2>
+    <div class="cal fx" style="--d:.06s">${cal}</div>
+    <div class="cal-legend fx" style="--d:.1s">Less<span class="cell l0"></span><span class="cell l1"></span><span class="cell l2"></span><span class="cell l3"></span>More</div>
+  </section>
 
   <div class="flow">${flow}</div>
 

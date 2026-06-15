@@ -29,11 +29,14 @@ server), not just the code.
   Elements must breathe: real padding, large gaps between sections, room
   around the focal point. Cramped or timid spacing fails. Whitespace is
   the design, not the leftover.
-- **Effect.** Tasteful interactive motion that demonstrates (entrance
-  reveals, a bar that fills, a hover that responds), easing
-  cubic-bezier(0.16,1,0.3,1), reduced-motion respected. A static,
-  effectless page is a fail at this bar; motion that only decorates is
-  cut.
+- **Effect, AirBnB-style (strict).** Animation follows the AirBnB
+  approach: everything morphs smoothly (grows / expands / transforms into
+  place, never a hard cut), with soft spring easing (a gentle overshoot
+  is welcome, e.g. cubic-bezier(0.34,1.42,0.5,1) for entrances), generous
+  durations, choreographed and staggered. Be creative with interesting
+  morphs; a flat fade is the lazy default. Appearance animates ONCE then
+  rests (no infinite loops unless a real live indicator). A static page,
+  or jarring/cheap motion, fails. Reduced-motion respected.
 - **Rhythm.** Is vertical spacing consistent and intentional, or does it
   drift? Does the section breathe, or is it cramped / sparse?
 - **Alignment.** Does everything sit on a shared grid? Optical alignment,
