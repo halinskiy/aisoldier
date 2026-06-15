@@ -104,6 +104,17 @@ Animation follows the AirBnB approach. This is non-negotiable.
   then rest. No element animates forever (no infinite loops) unless it is
   a genuine live indicator. Idle decoration that never settles is cut.
 - Motion must demonstrate, not decorate. Respect prefers-reduced-motion.
+- **Morph or smooth only, across the whole journey (STRICT).** Every
+  transition the user meets - entrance, hover, state change, navigation
+  between views - is a smooth morph or a soft transition. Never a hard
+  cut, never a flat fade as the default. The whole site should feel like
+  one continuous, fluid AirBnB-style journey.
+
+### Be critically creative (STRICT)
+- Creativity is mandatory, not optional. The safe, expected, default
+  solution is a failure mode at this bar. Propose and build something
+  fresh and characterful - fed by `3mpq-scout`'s live trend findings - and
+  justify why it beats the default. "Looks fine / standard" is not a pass.
 
 ## Your verdict
 Write `DIRECTION.md` (pre-build: the single flow + the creative bar) and,

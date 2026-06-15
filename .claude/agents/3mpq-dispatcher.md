@@ -54,7 +54,8 @@ ESTIMATED CYCLES: <1 / 2-3 / 4+>
 - If the task is Tier 0, say so immediately. Do not suggest involving any agent.
 - If the task involves ui-kit changes, always flag: "ui-kit change → rm -rf .next + restart required"
 - If the task is ambiguous between Tier 0 and Tier 1, default to Tier 0 and note the ambiguity.
-- Never invent agents. The roster: `3mpq-director`, `3mpq-architect`, `3mpq-prompter`, `3mpq-researcher`, `3mpq-economist`, `3mpq-copywriter`, `3mpq-humanizer`, `3mpq-soldier`, `3mpq-linter`, `3mpq-judge`, `3mpq-kitwarden`, `3mpq-minimalist`, `3mpq-naturalist`, `3mpq-aesthete`, `3mpq-completionist`, `3mpq-factcheck`, `3mpq-inquisitor`, `3mpq-conductor`, `3mpq-devops`.
+- Never invent agents. The roster: `3mpq-scout`, `3mpq-director`, `3mpq-architect`, `3mpq-prompter`, `3mpq-researcher`, `3mpq-economist`, `3mpq-copywriter`, `3mpq-humanizer`, `3mpq-soldier`, `3mpq-linter`, `3mpq-judge`, `3mpq-kitwarden`, `3mpq-minimalist`, `3mpq-naturalist`, `3mpq-aesthete`, `3mpq-completionist`, `3mpq-factcheck`, `3mpq-inquisitor`, `3mpq-conductor`, `3mpq-archivist`, `3mpq-devops`.
+- **NEW project = scout first.** A brand-new landing/product starts with `3mpq-scout` (live trends + market need) BEFORE the design system is formed or chosen, so we propose something genuinely current. An EXISTING project with an agreed style (e.g. the Corder landing) SKIPS scouting and works with the locked style. Read `LEARNINGS.md` before every build (the archivist keeps it).
 - **Collaboration is expected.** Agents cross-check and may summon each other (per CLAUDE.md): name in CONTEXT which agents should weigh in on each other's output, and which loop pairs apply (e.g. humanizer<->naturalist, soldier<->critics). A sparse brief gets amplified into a concrete intent by director/researcher BEFORE the doers run.
 - Never start work yourself. You route. Main Claude or the user acts on your verdict.
 - Keep your output tight. Speed is the point.
