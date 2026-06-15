@@ -65,6 +65,26 @@ fewer words. If a second flow is creeping in, cut it.
 - Systematic, aligned, objective. Flush-left, consistent columns, a clear
   baseline rhythm. No arbitrary widths or centering for its own sake.
 
+### Grid first (STRICT, first prompt)
+- The FIRST prompt of any build lays down the Swiss grid and shows it as
+  a faint, toggleable overlay: transparent column guides (gutters) over
+  the content, aligned to the content column (e.g. 12 columns). A small
+  sticky toggle sits in a corner so the user can turn the guides on/off.
+- Default: ON for the first prompt (so the user can verify alignment and
+  give corrections), OFF from the second prompt onward. The toggle stays.
+- Build every element ON this grid; the overlay is the proof.
+
+### 3MPQ design system + variables (STRICT)
+- Use the 3MPQ design system and its tokens. Colors, spacing, radii, and
+  type come from the 3MPQ variables (`ui-kit/TOKENS.md` /
+  `REGISTRY.json`), never ad-hoc values. On a standalone surface that
+  cannot import the kit, mirror the 3MPQ token values and names.
+
+### Illustrations
+- If illustrations are used at all, they follow the AirBnB style: soft,
+  warm, friendly, consistent line/illustration language. No clip-art, no
+  stocky 3D, no mismatched styles. Prefer none over off-style.
+
 ### Effectfulness, AirBnB-style (STRICT RULE)
 Animation follows the AirBnB approach. This is non-negotiable.
 - **Everything morphs, smoothly.** Elements grow, expand, and transform

@@ -46,6 +46,7 @@ const META = {
   "3mpq-inquisitor": { group: "Critics (parallel, read-only)", order: 7, type: "CRITIC", role: "Final product audit.", writes: "AUDIT.md" },
   "3mpq-conductor":  { group: "Reconcile & ship", order: 0, type: "ORCH", role: "Reconciles every review.", writes: "ACTIONS.md" },
   "3mpq-devops":     { group: "Reconcile & ship", order: 1, type: "ship", role: "Ships it.", writes: "commits, deploys" },
+  "3mpq-archivist":  { group: "Reconcile & ship", order: 2, type: "ORCH", role: "Remembers mistakes so they never repeat.", writes: "LEARNINGS.md, RETRO.md" },
 };
 
 const GROUP_ORDER = ["Route & plan", "Research & content", "Build", "Deterministic gate", "Critics (parallel, read-only)", "Reconcile & ship"];
@@ -226,6 +227,17 @@ function page(agents, contrib) {
   body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:18px;line-height:1.55;font-weight:500;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
   .wrap{max-width:1080px;margin:0 auto;padding:9vh 32px 14vh}
 
+  /* Swiss grid overlay (gutters). Faint 12-column guide aligned to the
+     content column. Toggle in the corner; default on for the first
+     prompt, off from the second onward. */
+  .grid-overlay{position:fixed;inset:0;z-index:40;pointer-events:none;display:flex;justify-content:center;opacity:0;transition:opacity .3s cubic-bezier(.2,.8,.2,1)}
+  body.grid-on .grid-overlay{opacity:1}
+  .grid-cols{width:100%;max-width:1080px;padding:0 32px;display:grid;grid-template-columns:repeat(12,1fr);gap:24px;height:100%}
+  .grid-c{background:rgba(33,122,80,.05);border-left:1px solid rgba(33,122,80,.09);border-right:1px solid rgba(33,122,80,.09)}
+  .grid-toggle{position:fixed;bottom:22px;right:22px;z-index:60;font-family:var(--font);font-size:16px;font-weight:600;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 18px;cursor:pointer;box-shadow:0 8px 24px -12px rgba(0,0,0,.3);transition:all .3s cubic-bezier(.2,.8,.2,1)}
+  .grid-toggle:hover{transform:translateY(-2px)}
+  body.grid-on .grid-toggle{color:#fff;background:var(--accent);border-color:var(--accent)}
+
   /* Type scale: 4 sizes, all >= 16. Hero clamp(56-104), section 34, body 18, meta 16. */
   .hero{margin-bottom:13vh}
   .kicker{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 24px}
@@ -316,19 +328,10 @@ function page(agents, contrib) {
     .fig .n{font-size:48px}
   }
 </style></head>
-<body><div class="wrap">
-
-  <header class="hero">
-    <h1 class="fx">The Orchestra</h1>
-    <p class="sub fx" style="--d:.08s">Every agent. And who is earning their seat.</p>
-    <div class="eq fx" style="--d:.16s" aria-hidden="true">${eq}</div>
-    <div class="figures">
-      <div class="fig fx" style="--d:.18s"><span class="n accent">${active}</span><span class="l">earning their seat</span></div>
-      <div class="fig fx" style="--d:.24s"><span class="n">${idle}</span><span class="l">idle of ${total}</span></div>
-      <div class="fig fx" style="--d:.30s"><span class="n">${totalInv}</span><span class="l">runs logged</span></div>
-      <div class="fig fx" style="--d:.36s"><span class="n">${fmtTok(totalTok)}</span><span class="l">tokens</span></div>
-    </div>
-  </header>
+<body class="grid-on">
+  <div class="grid-overlay" aria-hidden="true"><div class="grid-cols">${Array.from({ length: 12 }).map(() => '<span class="grid-c"></span>').join("")}</div></div>
+  <button type="button" class="grid-toggle" onclick="document.body.classList.toggle('grid-on')">Grid</button>
+  <div class="wrap">
 
   <section class="contrib-cal">
     <h2 class="fx">Contributions</h2>
