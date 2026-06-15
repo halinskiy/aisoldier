@@ -186,15 +186,6 @@ function page(agents, contrib) {
     return { g, list, act };
   }).filter((s) => s.list.length);
 
-  const flow = stages.map((s, i) => {
-    const arrow = i < stages.length - 1 ? `<span class="node-arrow" aria-hidden="true">&rarr;</span>` : "";
-    const on = s.act > 0;
-    return `<div class="node morph ${on ? "node-on" : ""}" style="--d:${(0.08 + i * 0.09).toFixed(2)}s">
-      <span class="node-name">${esc(stageLabel(s.g))}</span>
-      <span class="node-count">${s.act}<i>/${s.list.length}</i></span>
-    </div>${arrow}`;
-  }).join("");
-
   let ri = 0;
   const roster = stages.map((s) => {
     const sorted = sortByRuns(s.list, byAgent);
@@ -347,8 +338,6 @@ function page(agents, contrib) {
     <div class="cal-legend fx" style="--d:.1s">Less<span class="cell l0"></span><span class="cell l1"></span><span class="cell l2"></span><span class="cell l3"></span>More</div>
   </section>
 
-  <div class="flow">${flow}</div>
-
   ${roster}
 
   <section class="stage appendix">
@@ -356,7 +345,6 @@ function page(agents, contrib) {
     <div class="rows">${builtins}</div>
   </section>
 
-  <footer class="fx">localhost:${PORT} / live from .claude/agents / log a run with apps/orchestra/log.mjs</footer>
 </div></body></html>`;
 }
 
