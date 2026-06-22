@@ -15,7 +15,8 @@
     "framer-motion": "^12.0.0",
     "lenis": "^1.1.20",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.0.0"
+    "tailwind-merge": "^3.0.0",
+    "@aisoldier/ui-kit": "file:../../ui-kit"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
