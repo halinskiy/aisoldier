@@ -20,6 +20,9 @@ export type { LogoWaveProps } from "./components/brand/LogoWave";
 export { Logo3mpq } from "./components/brand/Logo3mpq";
 export type { Logo3mpqProps } from "./components/brand/Logo3mpq";
 
+export { Mascot } from "./components/brand/Mascot";
+export type { MascotProps, MascotMood } from "./components/brand/Mascot";
+
 export { EyebrowLabel } from "./components/section/EyebrowLabel";
 export type { EyebrowLabelProps } from "./components/section/EyebrowLabel";
 
@@ -31,6 +34,17 @@ export type { SectionHeaderProps } from "./components/section/SectionHeader";
 
 export { SectionDivider } from "./components/section/SectionDivider";
 export type { SectionDividerProps } from "./components/section/SectionDivider";
+
+export { SectionColophon } from "./components/section/SectionColophon";
+export type { SectionColophonProps } from "./components/section/SectionColophon";
+
+export { DarkSection } from "./components/section/DarkSection";
+
+export { SpecStrip } from "./components/section/SpecStrip";
+export type { SpecStripProps, SpecStripTruth } from "./components/section/SpecStrip";
+
+export { ModeSwitcher } from "./components/section/ModeSwitcher";
+export type { ModeSwitcherTab } from "./components/section/ModeSwitcher";
 
 export { ImageCard } from "./components/section/ImageCard";
 export type { ImageCardProps, ImageCardImage } from "./components/section/ImageCard";
@@ -61,6 +75,9 @@ export type { BlurRevealProps } from "./components/motion/BlurReveal";
 
 export { SplitText } from "./components/motion/SplitText";
 export type { SplitTextProps } from "./components/motion/SplitText";
+
+export { useEnhancementEnabled } from "./components/motion/useEnhancementEnabled";
+export type { UseEnhancementEnabledOptions } from "./components/motion/useEnhancementEnabled";
 
 export { Button } from "./components/ui/Button";
 export type { ButtonProps } from "./components/ui/Button";

@@ -26,6 +26,7 @@
     "NavSticky": { "path": "nav/NavSticky.tsx", "useWhen": "sticky site header", "neverFor": "rebuild a nav inline" },
     "HeroPinned": { "path": "section/HeroPinned.tsx", "useWhen": "scroll-pinned hero" },
     "DarkSection": { "path": "section/DarkSection.tsx", "useWhen": "a dark-scoped section wrapper", "neverFor": "ad-hoc dark colors" },
+    "SpecStrip": { "path": "section/SpecStrip.tsx", "props": ["items", "direction", "mono", "tone", "accentDot"], "useWhen": "one quiet hairline strip of terse facts: a horizontal credibility row (replaces chip soup) or a vertical label+detail truth strip", "neverFor": "a scatter of coloured proof pills, a bento grid of cards, or animated numbers (use MetricsBar)" },
     "SectionDivider": { "path": "section/SectionDivider.tsx", "useWhen": "hairline between sections" },
     "SectionHeader_": { "path": "section/SectionHeader.tsx", "alias": true },
     "EditorialQuote": { "path": "section/EditorialQuote.tsx", "useWhen": "a pull quote" },
@@ -34,9 +35,9 @@
     "BrowserFrame": { "path": "section/BrowserFrame.tsx", "useWhen": "browser-chrome around a screenshot", "neverFor": "a macOS app window (that is a project-local variant pending promotion)" },
     "ContactStrip": { "path": "section/ContactStrip.tsx", "useWhen": "contact CTA strip" },
     "PressStrip": { "path": "section/PressStrip.tsx", "useWhen": "as-seen-in press row" },
-    "StickyFeatureList": { "path": "section/StickyFeatureList.tsx", "useWhen": "sticky-visual + scroll feature list" },
+    "StickyFeatureList": { "path": "section/StickyFeatureList.tsx", "props": ["items", "header", "defaultVisual", "cardStyle", "itemMinHeight", "showOrdinal"], "useWhen": "sticky-visual + scroll feature list; item.body is string|ReactNode; showOrdinal (default off) gates the Chapter NN kicker" },
     "ModeSwitcher": { "path": "section/ModeSwitcher.tsx", "useWhen": "toggle between content modes" },
-    "FooterEditorial": { "path": "section/FooterEditorial.tsx", "useWhen": "the studio editorial footer" }
+    "FooterEditorial": { "path": "section/FooterEditorial.tsx", "props": ["wordmark", "tagline", "links", "columns", "legal", "builtWith", "topHref", "topLabel", "hideBottomBar"], "useWhen": "the studio editorial footer; pass columns for labeled groups or links for a flat sitemap; FooterLink.external adds target+rel" }
   },
   "motion": {
     "BlurReveal": { "path": "motion/BlurReveal.tsx", "useWhen": "entry blur-reveal on scroll" },

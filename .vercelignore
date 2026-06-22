@@ -1,0 +1,18 @@
+# Exclude other projects
+projects/template-design/
+projects/template-design/node_modules/
+projects/vendo-ai/
+projects/vendo-ai/node_modules/
+
+# Exclude dev artifacts
+.claude/
+research/
+.playwright-mcp/
+.wrangler/
+apps/activation-worker/.wrangler/
+apps/autoclicker/
+apps/orchestra/.wrangler/
+
+# Keep root node_modules (monorepo)
+# Keep tracer (being deployed)
+# Keep ui-kit (being used)

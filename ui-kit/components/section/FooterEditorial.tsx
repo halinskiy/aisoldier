@@ -7,16 +7,32 @@ import { TextLink } from "../ui/TextLink";
 /*  Types                                                                      */
 /* -------------------------------------------------------------------------- */
 
-export type FooterLink = { label: string; href: string };
+export type FooterLink = {
+  label: string;
+  href: string;
+  /** Opens in a new tab with rel="noopener noreferrer". */
+  external?: boolean;
+};
+
+export type FooterColumn = {
+  /** Small-caps column label (e.g. "Product", "Open source"). */
+  label: string;
+  links: FooterLink[];
+};
 
 export type FooterEditorialProps = {
-  /** Oversized typographic mark — the author/brand name. */
+  /** Oversized typographic mark, the author/brand name. */
   wordmark: string;
-  /** Short line beneath the nav grid. IBM Plex Sans, not serif. */
+  /** Short line beneath the nav grid. Sans, not serif. */
   tagline?: string;
-  /** Nav columns — simple flat arrays. */
+  /** Flat sitemap nav. Ignored when `columns` is provided. */
   links?: FooterLink[];
-  /** Small print on the bottom rule — © line. */
+  /**
+   * Labeled nav columns (label + links). When provided, renders a labeled
+   * column grid instead of the flat `links` row (contract S7b style).
+   */
+  columns?: FooterColumn[];
+  /** Small print on the bottom rule, the copyright line. */
   legal?: string;
   /** Optional right-aligned bottom string (e.g. "Built with Booquarium"). */
   builtWith?: ReactNode;
@@ -37,16 +53,18 @@ const DATA_SOURCE_DEFAULT = "ui-kit/components/section/FooterEditorial.tsx";
 /* -------------------------------------------------------------------------- */
 
 /**
- * Editorial footer — large typographic wordmark + sitemap + tagline + legal.
+ * Editorial footer: large typographic wordmark + sitemap + tagline + legal.
  *
  * Light-theme default: the studio's "one colour at the bottom" pattern is
- * the oversized serif wordmark in `--color-text`, a hairline bottom rule,
- * and a small-caps eyebrow nav column.
+ * the oversized display wordmark in `--color-text`, a hairline bottom rule,
+ * and a small-caps nav. Pass `columns` for labeled column groups, or `links`
+ * for a flat sitemap row.
  */
 export function FooterEditorial({
   wordmark,
   tagline,
   links = [],
+  columns,
   legal,
   builtWith,
   topHref = "#top",
@@ -55,6 +73,7 @@ export function FooterEditorial({
   className,
   dataSource,
 }: FooterEditorialProps) {
+  const hasColumns = !!columns && columns.length > 0;
   return (
     <footer
       data-component="FooterEditorial"
@@ -67,7 +86,7 @@ export function FooterEditorial({
       }}
     >
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-10">
-        {/* Row 1 — oversized wordmark. overflow-x protects long wordmarks
+        {/* Row 1 - oversized wordmark. overflow-x protects long wordmarks
             from horizontal page-scroll, but we MUST keep overflow-y visible
             so descenders (y, p, q) on the last line aren't clipped. The
             h2 gets explicit padding-bottom to reserve descender space. */}
@@ -85,29 +104,68 @@ export function FooterEditorial({
           </h2>
         </div>
 
-        {/* Row 2 — sitemap + tagline */}
+        {/* Row 2 - nav + tagline */}
         <div className="mt-12 grid grid-cols-1 gap-8 border-t border-[var(--color-border)] pt-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
-          {links.length > 0 && (
+          {hasColumns ? (
             <nav
               aria-label="Footer"
-              data-component="FooterSitemap"
+              data-component="FooterColumns"
               data-source={dataSource ?? DATA_SOURCE_DEFAULT}
-              className="flex flex-wrap items-center gap-x-8 gap-y-3"
+              className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3"
             >
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="inline-block font-sans text-[14px] font-medium uppercase tracking-[0.062em] text-[var(--color-text)] transition-colors duration-150 hover:text-[var(--color-accent)]"
-                  style={{
-                    transitionTimingFunction:
-                      "cubic-bezier(0.16, 1, 0.3, 1)",
-                  }}
-                >
-                  {link.label}
-                </a>
+              {columns!.map((col) => (
+                <div key={col.label} className="flex flex-col gap-4">
+                  <span className="font-sans text-[16px] font-semibold uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
+                    {col.label}
+                  </span>
+                  <ul className="flex flex-col gap-3">
+                    {col.links.map((link) => (
+                      <li key={link.href}>
+                        <a
+                          href={link.href}
+                          {...(link.external
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                          className="inline-block font-sans text-[16px] font-medium text-[var(--color-text)] transition-colors duration-150 hover:text-[var(--color-accent)]"
+                          style={{
+                            transitionTimingFunction:
+                              "cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
             </nav>
+          ) : (
+            links.length > 0 && (
+              <nav
+                aria-label="Footer"
+                data-component="FooterSitemap"
+                data-source={dataSource ?? DATA_SOURCE_DEFAULT}
+                className="flex flex-wrap items-center gap-x-8 gap-y-3"
+              >
+                {links.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    {...(link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    className="inline-block font-sans text-[16px] font-medium uppercase tracking-[0.062em] text-[var(--color-text)] transition-colors duration-150 hover:text-[var(--color-accent)]"
+                    style={{
+                      transitionTimingFunction:
+                        "cubic-bezier(0.16, 1, 0.3, 1)",
+                    }}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </nav>
+            )
           )}
 
           {tagline && (
@@ -119,7 +177,7 @@ export function FooterEditorial({
           )}
         </div>
 
-        {/* Row 3 — legal + built-with (hidden when hideBottomBar=true) */}
+        {/* Row 3 - legal + built-with (hidden when hideBottomBar=true) */}
         {!hideBottomBar && (
           <div
             className="mt-10 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 font-sans text-[16px] text-[var(--color-text-subtle)] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
@@ -131,7 +189,7 @@ export function FooterEditorial({
               <TextLink
                 href={topHref}
                 tone="subtle"
-                className="font-sans text-[14px] uppercase tracking-[0.062em]"
+                className="whitespace-nowrap font-sans text-[16px] uppercase tracking-[0.062em]"
                 aria-label={topLabel}
               >
                 <span>{topLabel}</span>

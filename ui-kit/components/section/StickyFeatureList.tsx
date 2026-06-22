@@ -21,7 +21,8 @@ import { EASE_OUT } from "../../lib/motion";
 export type StickyFeatureItemData = {
   number: string;
   title: string;
-  body: string;
+  /** Body copy. Accepts a string or a ReactNode (e.g. a mono path span). */
+  body: ReactNode;
   /** Optional ReactNode rendered in the sticky visual panel when this item is active. */
   visual?: ReactNode;
 };
@@ -34,8 +35,14 @@ export type StickyFeatureListProps = {
   defaultVisual?: ReactNode;
   /** Override styles on the sticky card container. */
   cardStyle?: React.CSSProperties;
-  /** Min height per scroll item — increase to slow down switching (e.g. "60vh") */
+  /** Min height per scroll item, increase to slow down switching (e.g. "60vh") */
   itemMinHeight?: string;
+  /**
+   * Show the "Chapter NN" ordinal label above each item title. Default OFF.
+   * The ordinal is a kicker (sub-16px, uppercase, accent when active); leave it
+   * off unless the section genuinely reads as numbered chapters.
+   */
+  showOrdinal?: boolean;
   className?: string;
   dataSource?: string;
 };
@@ -44,19 +51,20 @@ const DATA_SOURCE_DEFAULT =
   "ui-kit/components/section/StickyFeatureList.tsx";
 
 /* -------------------------------------------------------------------------- */
-/*  Context — lets <StickyFeatureItem> announce itself to the parent.          */
+/*  Context - lets <StickyFeatureItem> announce itself to the parent.          */
 /* -------------------------------------------------------------------------- */
 
 type Ctx = {
   register: (index: number) => void;
   activeIndex: number;
   itemMinHeight?: string;
+  showOrdinal: boolean;
 };
 
 const StickyFeatureCtx = createContext<Ctx | null>(null);
 
 /* -------------------------------------------------------------------------- */
-/*  StickyFeatureList — the pinned-visual + scrolling-list wrapper.            */
+/*  StickyFeatureList - the pinned-visual + scrolling-list wrapper.            */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -75,6 +83,7 @@ export function StickyFeatureList({
   defaultVisual,
   cardStyle,
   itemMinHeight,
+  showOrdinal = false,
   className,
   dataSource,
 }: StickyFeatureListProps) {
@@ -150,7 +159,7 @@ export function StickyFeatureList({
         </div>
 
         {/* Scroll list */}
-        <StickyFeatureCtx.Provider value={{ register, activeIndex, itemMinHeight }}>
+        <StickyFeatureCtx.Provider value={{ register, activeIndex, itemMinHeight, showOrdinal }}>
           <ol className="flex w-full min-w-0 flex-col">
             {items.map((item, i) => (
               <StickyFeatureItem
@@ -168,7 +177,7 @@ export function StickyFeatureList({
 }
 
 /* -------------------------------------------------------------------------- */
-/*  StickyFeatureItem — one row in the scrolling list.                         */
+/*  StickyFeatureItem - one row in the scrolling list.                         */
 /* -------------------------------------------------------------------------- */
 
 function StickyFeatureItem({
@@ -235,19 +244,21 @@ function StickyFeatureItem({
         }}
       />
 
-      <span
-        className={cn(
-          "font-sans text-[12px] font-medium uppercase leading-[1.2] tracking-[0.062em] transition-colors duration-500",
-        )}
-        style={{
-          color: active
-            ? "var(--color-accent)"
-            : "var(--color-text-subtle)",
-          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      >
-        Chapter {number}
-      </span>
+      {ctx?.showOrdinal && (
+        <span
+          className={cn(
+            "font-sans text-[16px] font-medium uppercase leading-[1.2] tracking-[0.062em] transition-colors duration-500",
+          )}
+          style={{
+            color: active
+              ? "var(--color-accent)"
+              : "var(--color-text-subtle)",
+            transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          Chapter {number}
+        </span>
+      )}
 
       <h3
         className="font-serif font-medium text-[var(--color-text)] transition-opacity duration-500"
@@ -277,7 +288,7 @@ function StickyFeatureItem({
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Default sticky visual — a minimal book-spine / chapter-card illustration.  */
+/*  Default sticky visual - a minimal book-spine / chapter-card illustration.  */
 /* -------------------------------------------------------------------------- */
 
 function DefaultChapterVisual({
@@ -290,7 +301,7 @@ function DefaultChapterVisual({
   return (
     <div className="absolute inset-0 flex flex-col justify-between p-8">
       {/* Top: eyebrow row */}
-      <div className="flex items-center justify-between font-sans text-[12px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
+      <div className="flex items-center justify-between font-sans text-[16px] font-medium uppercase tracking-[0.062em] text-[var(--color-text-subtle)]">
         <span>Inside</span>
         <span>{number}</span>
       </div>
@@ -310,7 +321,7 @@ function DefaultChapterVisual({
         </span>
       </div>
 
-      {/* Book-spine hint — stacked vertical lines on the right edge */}
+      {/* Book-spine hint - stacked vertical lines on the right edge */}
       <div className="pointer-events-none absolute right-6 top-1/2 flex -translate-y-1/2 flex-col gap-[6px]" aria-hidden>
         {Array.from({ length: 14 }).map((_, i) => (
           <span

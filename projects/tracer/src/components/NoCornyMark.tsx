@@ -1,0 +1,40 @@
+/**
+ * NoCornyMark - Tracer's own brand identity (NOT the 3mpq fallback logo).
+ *
+ * A squiggle that resolves into a single record dot: the line is the
+ * "recording", the dot is the record button. Monochrome ink line + the one
+ * record-red dot. Strokes use currentColor so it themes to ink on light and
+ * paper on dark; the dot is always the accent. Pixel-honest, no gradient.
+ *
+ * Project-local (Tracer owns this mark). Pairs with the "NoCorny Tracer"
+ * wordmark in the nav and footer.
+ */
+type NoCornyMarkProps = {
+  /** Mark height in px. Width scales with the viewBox. Default 18. */
+  size?: number;
+  className?: string;
+};
+
+export function NoCornyMark({ size = 18, className }: NoCornyMarkProps) {
+  return (
+    <svg
+      width={(size * 34) / 18}
+      height={size}
+      viewBox="0 0 34 18"
+      fill="none"
+      aria-hidden
+      className={className}
+    >
+      {/* the squiggle: a recorded waveform settling into a flat line */}
+      <path
+        d="M1 9C2.6 9 2.6 4 4.2 4C5.8 4 5.8 14 7.4 14C9 14 9 3 10.6 3C12.2 3 12.2 15 13.8 15C15.4 15 15.4 6 17 6C18.6 6 18.6 11 20.2 11C21.4 11 22 9 23 9"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* the record dot - the one accent element */}
+      <circle cx="29" cy="9" r="4" fill="var(--color-accent)" />
+    </svg>
+  );
+}

@@ -1,0 +1,168 @@
+{
+  "nav": {
+    "logo": "NoCorny Tracer",
+    "links": [
+      { "label": "How it works", "href": "#how" },
+      { "label": "Features", "href": "#features" },
+      { "label": "Ownership", "href": "#ownership" },
+      { "label": "FAQ", "href": "#faq" },
+      { "label": "GitHub", "href": "https://github.com/nocorny/tracer", "external": true }
+    ],
+    "cta_secondary": "Sign in",
+    "cta_primary": "Download for macOS"
+  },
+
+  "hero": {
+    "headline": "Your recordings. Not theirs.",
+    "subheading": "Hit record. The file lands in your Dropbox. You get a clean shareable link. Viewers need no account. Free forever.",
+    "cta_primary": "Download for macOS",
+    "cta_secondary": "Star on GitHub",
+    "spec_row": [
+      "Free forever",
+      "MIT licensed",
+      "~12MB",
+      "No account to watch",
+      "Your Dropbox"
+    ]
+  },
+
+  "how_it_works": {
+    "heading": "Record, own, share.",
+    "steps": [
+      {
+        "title": "Hit record",
+        "body": "Press the global hotkey. A red dot appears. Record whatever you need."
+      },
+      {
+        "title": "It lands in your Dropbox",
+        "body": "The file goes straight to ~/Dropbox/Tracer/. NoCorny never touches it."
+      },
+      {
+        "title": "Send the link",
+        "body": "A clean tracer.nocorny.com/v/... link is already in your clipboard. Done."
+      }
+    ]
+  },
+
+  "features": {
+    "heading": "What it does.",
+    "items": [
+      {
+        "title": "Your files, in your Dropbox",
+        "body": "Videos live in ~/Dropbox/Tracer/. Move them, delete them, or share them without us."
+      },
+      {
+        "title": "AI titles and descriptions",
+        "body": "Tracer transcribes the audio and writes a title and description. Edit them or turn the feature off."
+      },
+      {
+        "title": "Searchable transcripts",
+        "body": "Every word is captioned and searchable. Click a line in the transcript to jump to that moment."
+      },
+      {
+        "title": "One click to share",
+        "body": "The link is in your clipboard the instant you stop recording. No upload dialog, no waiting screen."
+      },
+      {
+        "title": "See who watched",
+        "body": "View counts and viewer names. No heatmaps, no tracking pixels, no cookies."
+      },
+      {
+        "title": "No watermarks. Ever.",
+        "body": "Your viewer page has your recording on it. Nothing else. No Tracer branding, no upgrade prompt."
+      }
+    ]
+  },
+
+  "ownership": {
+    "heading": "You own this.",
+    "subheading": "Loom keeps your recordings on Loom's servers. Tracer hands the file to your Dropbox and gets out of the way.",
+    "truths": [
+      {
+        "label": "Zero video on our servers",
+        "detail": "The file is yours from the moment you stop recording. It never touches NoCorny infrastructure."
+      },
+      {
+        "label": "No watermarks",
+        "detail": "The viewer page shows your recording. There is no Tracer badge, no upgrade prompt."
+      },
+      {
+        "label": "Revoke any time",
+        "detail": "Disconnect Dropbox and the link stops working. You control access, not us."
+      },
+      {
+        "label": "Open source",
+        "detail": "The app and the web viewer are MIT licensed. Read every line at github.com/nocorny/tracer."
+      }
+    ]
+  },
+
+  "faq": {
+    "heading": "Questions.",
+    "items": [
+      {
+        "question": "Is it really free?",
+        "answer": "Yes. There is no paid tier, no Pro plan, no trial. Tracer is free and MIT licensed. The app and the web viewer are both open source. We made it to use it ourselves; NoCorny Agency is the studio behind it."
+      },
+      {
+        "question": "Why Dropbox specifically?",
+        "answer": "Because it is a folder you already own and already trust. When the file lands in ~/Dropbox/Tracer/, you can open it in Finder, move it, back it up, or delete it. That is what ownership actually means. Cap stores to S3 or Google Drive; those are fine if you are a developer. Dropbox is what the rest of us already have."
+      },
+      {
+        "question": "What happens if I disconnect my Dropbox?",
+        "answer": "The share links stop working. The files stay in your Dropbox exactly where they landed. Tracer does not delete or move anything on your behalf."
+      },
+      {
+        "question": "Do viewers need an account?",
+        "answer": "No. Send someone a tracer.nocorny.com/v/... link and they can watch. No signup prompt, no cookie banner, no account wall."
+      },
+      {
+        "question": "Is Tracer macOS only?",
+        "answer": "The recorder is macOS only, yes. The viewer page works in any browser. Windows and Linux support is not planned."
+      },
+      {
+        "question": "How do the AI titles and transcripts work?",
+        "answer": "Tracer transcribes the audio from your recording using a small language model. It then generates a title and description from the transcript. Both are editable before you share, and you can turn the feature off entirely in settings."
+      },
+      {
+        "question": "How is this different from Loom?",
+        "answer": "Loom stores your recordings on Loom's servers, behind a Loom account, with a Loom watermark on the viewer page. The free plan caps you at 25 videos and 5 minutes each. With Tracer, your file goes straight to your Dropbox, the viewer page has no branding, there are no limits, and it is free forever."
+      }
+    ]
+  },
+
+  "final_cta": {
+    "heading": "Stop renting your screen recordings.",
+    "body": "Download Tracer, connect your Dropbox, and keep every recording you ever make.",
+    "cta_primary": "Download for macOS",
+    "note": "Free forever. ~12MB. MIT licensed."
+  },
+
+  "footer": {
+    "tagline": "A macOS screen recorder that hands your footage back to you.",
+    "columns": [
+      {
+        "label": "Product",
+        "links": [
+          { "label": "Download", "href": "/download" },
+          { "label": "Dashboard", "href": "/dashboard" }
+        ]
+      },
+      {
+        "label": "Open source",
+        "links": [
+          { "label": "GitHub", "href": "https://github.com/nocorny/tracer", "external": true },
+          { "label": "MIT license", "href": "https://github.com/nocorny/tracer/blob/main/LICENSE", "external": true },
+          { "label": "Releases", "href": "https://github.com/nocorny/tracer/releases", "external": true }
+        ]
+      },
+      {
+        "label": "NoCorny",
+        "links": [
+          { "label": "Agency", "href": "https://nocorny.com", "external": true }
+        ]
+      }
+    ],
+    "legal": "2026, MIT licensed, no cookies, no trackers."
+  }
+}

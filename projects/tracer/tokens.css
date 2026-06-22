@@ -1,0 +1,115 @@
+/*
+ * tracer — Complete token set
+ *
+ * Record-red accent. The red record dot is the central motif of the whole
+ * page (Tracer is a screen recorder). One accent only; everything else is a
+ * warm-neutral light palette. Type pairing is set in layout.tsx via
+ * next/font CSS variables and referenced here.
+ */
+
+@theme {
+  /* =====================================================================
+   * ACCENT — Record red
+   * The colour of the record dot. Reads as "live", "capture", "now".
+   * ===================================================================== */
+  --color-accent: #e5484d;
+  --color-accent-hover: #cc3b42;
+  --color-accent-deep: #a32a30;
+  --color-accent-subtle: rgba(229, 72, 77, 0.08);
+  --color-accent-soft: rgba(229, 72, 77, 0.16);
+
+  /* =====================================================================
+   * NEUTRAL — warm-paper light palette
+   * ===================================================================== */
+  --color-bg: #ffffff;
+  --color-surface: #f7f6f4;
+  --color-surface-2: #fafaf8;
+  --color-surface-3: #f2f1ee;
+  --color-border: #eceae6;
+  --color-border-strong: #d9d6d0;
+  --color-text: #161412;
+  --color-text-muted: #6b6862;
+  --color-text-subtle: #9b988f;
+  --color-text-faint: #d4d2cc;
+
+  /* Dark-break surface (DarkSection + cinematic hero panels) */
+  --color-ink-surface: #141210;
+  --color-on-dark: #f5f3ef;
+
+  /* On-dark glass + hairlines for the cinematic hero stage. Single source so
+   * no rgba(255,255,255,..) literal lives in component files. */
+  --color-on-dark-glass: rgba(245, 243, 239, 0.04);
+  --color-on-dark-glass-strong: rgba(245, 243, 239, 0.06);
+  --color-on-dark-hairline: rgba(245, 243, 239, 0.1);
+  --color-on-dark-hairline-strong: rgba(245, 243, 239, 0.18);
+  /* Frosted nav surface once scrolled onto the light page. */
+  --color-nav-scrim: rgba(255, 255, 255, 0.8);
+  /* Dot-grid dot colour on the dark stage. */
+  --color-dot-dark: #333333;
+  /* Shadow cast by elevated cards on the dark stage. */
+  --shadow-dark-lg: 0 24px 64px -20px rgba(0, 0, 0, 0.65);
+
+  /* =====================================================================
+   * TYPOGRAPHY — Geist (display) + Hanken Grotesk (body) + Geist Mono
+   * Pairing verified by scout (TRENDS.md): Geist is the dev-tool gold
+   * standard; Hanken Grotesk is a warm, legible body workhorse. Geist Mono is
+   * the SAME type system, used for ONE role only: the share-link string and
+   * ~/Dropbox/Tracer/ paths. Stays within the two-family rule.
+   * ===================================================================== */
+  --font-display: var(--font-geist), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-hanken), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  /* Kit components reference the Tailwind `font-serif` utility for their
+   * display wordmarks (NavSticky, FooterEditorial, FAQ question). Map it to the
+   * Geist display face so the kit inherits this project's pairing rather than a
+   * browser serif. Stays within the two-family rule (Geist + Hanken). */
+  --font-serif: var(--font-geist), system-ui, -apple-system, sans-serif;
+
+  /* Display scale tuned for a genuinely big cinematic hero line. */
+  --text-display-xl: clamp(56px, 8.5vw, 132px);
+  --text-display-lg: clamp(44px, 6vw, 92px);
+  --text-display-md: clamp(34px, 4.5vw, 64px);
+
+  --text-h1: clamp(30px, 3.6vw, 52px);
+  --text-h2: clamp(24px, 2.6vw, 38px);
+  --text-h3: 20px;
+
+  --text-body-xl: 22px;
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-eyebrow: 16px;
+
+  --lh-display: 1.02;
+  --lh-h1: 1.08;
+  --lh-h2: 1.14;
+  --lh-body: 1.6;
+
+  --ls-display: -0.02em;
+  --ls-eyebrow: 0.04em;
+
+  /* =====================================================================
+   * RADIUS
+   * ===================================================================== */
+  --radius-window: 12px;
+  --radius-button: 8px;
+  --radius-pill: 999px;
+
+  /* =====================================================================
+   * MOTION — AirBnB-style: soft spring entrance, smooth ease for states
+   * ===================================================================== */
+  --ease-spring: cubic-bezier(0.34, 1.42, 0.5, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-minimize: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* =====================================================================
+   * SHADOW — light-theme only, secondary to borders
+   * ===================================================================== */
+  --shadow-sm: 0 1px 2px rgba(22, 20, 18, 0.04);
+  --shadow-md: 0 8px 24px -8px rgba(22, 20, 18, 0.12);
+  --shadow-lg: 0 24px 64px -16px rgba(22, 20, 18, 0.18);
+}
+
+::selection {
+  background: rgba(229, 72, 77, 0.18);
+  color: inherit;
+}

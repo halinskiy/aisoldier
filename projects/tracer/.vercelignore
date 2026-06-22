@@ -1,0 +1,21 @@
+# Vercel will automatically include:
+# - This project's src/, public/, content/, etc.
+# - The symlinked ../../ui-kit (via node_modules/@aisoldier/ui-kit)
+# - The root package.json for monorepo resolution
+
+# Exclude unneeded projects
+/projects/template-design/
+/projects/template-design/node_modules/
+/projects/vendo-ai/
+/projects/vendo-ai/node_modules/
+/projects/*/node_modules/
+
+# Exclude dev & CI artifacts
+/.claude/
+/research/
+/.playwright-mcp/
+/.wrangler/
+/apps/activation-worker/.wrangler/
+/apps/autoclicker/
+/apps/orchestra/.wrangler/
+/tools/

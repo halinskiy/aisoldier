@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "../../tokens.css";
+/* Native CSS scroll-driven reveal used by the Features bento (.st-reveal).
+   Triple-gated (supports + reduced-motion + data-motion) inside the file. */
+@import "../../../../ui-kit/components/motion/scroll-timeline-reveal.css";
+
+/* Tailwind v4 scans the shared kit for utility classes used by imported
+   components. Without this, kit classes get tree-shaken out. */
+@source "../../../../ui-kit";
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-padding-top: 88px;
+}
+
+body {
+  min-height: 100vh;
+  font-size: 16px;
+  line-height: var(--lh-body);
+  overflow-x: hidden;
+}
+
+/* Display headings default to the display face. */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: var(--ls-display);
+}
+
+/* =====================================================================
+ * Dot-grid background - default atmosphere surface.
+ * ===================================================================== */
+.dot-grid {
+  background-image: radial-gradient(circle, var(--color-border-strong) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dot-grid-dark {
+  background-image: radial-gradient(circle, var(--color-dot-dark) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* =====================================================================
+ * Dark scope - used by DarkSection and the cinematic hero stage.
+ * Scopes all child text to the on-dark paper ramp.
+ * ===================================================================== */
+.dark-scope {
+  background: var(--color-ink-surface);
+  color: var(--color-on-dark);
+}
+.dark-scope :where(h1, h2, h3, h4, h5, h6, p, li, span, a) {
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
