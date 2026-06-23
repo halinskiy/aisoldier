@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3107",
     "typecheck": "tsc --noEmit",
-    "vercel-build": "bash -c 'pwd && ls -la ../../ 2>/dev/null || echo \"../../ not found, trying absolute paths\" && npm run build'"
+    "vercel-build": "bash -c 'pwd && ls -la . && echo \"=== root ===\" && ls -la /vercel/path0 && npm run build'"
   },
   "dependencies": {
     "next": "^15.1.0",
