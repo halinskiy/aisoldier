@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3107",
     "typecheck": "tsc --noEmit",
-    "vercel-build": "bash -c 'ls -la ./node_modules/@aisoldier 2>/dev/null || echo \"ui-kit not found in node_modules\" && npm run build'"
+    "vercel-build": "bash -c 'ls -la ../../ui-kit 2>/dev/null && npm run build || (echo \"ui-kit not at ../../, checking upward\" && ls -la /vercel/path0/../ui-kit 2>/dev/null && npm run build)'"
   },
   "dependencies": {
     "next": "^15.1.0",
