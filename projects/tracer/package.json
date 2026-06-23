@@ -6,7 +6,8 @@
     "dev": "next dev -p 3107",
     "build": "next build",
     "start": "next start -p 3107",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "bash -c 'if [ -L node_modules/@aisoldier/ui-kit ]; then rm node_modules/@aisoldier/ui-kit; fi && if [ ! -d node_modules/@aisoldier/ui-kit ]; then cp -r ../../ui-kit node_modules/@aisoldier/; fi'"
   },
   "dependencies": {
     "next": "^15.1.0",
