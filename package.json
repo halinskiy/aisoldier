@@ -1,0 +1,16 @@
+{
+  "name": "aisoldier",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aisoldier monorepo — shim package.json so Vercel detects Next.js at the root. The actual projects live in projects/.",
+  "scripts": {
+    "build": "npm --prefix projects/tracer run build",
+    "dev": "npm --prefix projects/tracer run dev",
+    "start": "npm --prefix projects/tracer run start"
+  },
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

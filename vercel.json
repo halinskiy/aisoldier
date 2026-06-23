@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm --prefix projects/tracer run build",
+  "outputDirectory": "projects/tracer/.next",
+  "installCommand": "npm install --prefix projects/tracer",
+  "nodeVersion": "24.x"
+}
