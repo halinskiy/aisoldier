@@ -1,7 +1,6 @@
-# Vercel will automatically include:
-# - This project's src/, public/, content/, etc.
-# - The symlinked ../../ui-kit (via node_modules/@aisoldier/ui-kit)
-# - The root package.json for monorepo resolution
+# Include the ui-kit symlink (must come before exclusions)
+!ui-kit/
+ui-kit/**
 
 # Exclude unneeded projects
 /projects/template-design/
