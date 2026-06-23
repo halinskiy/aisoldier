@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { NoCornyMark } from "../NoCornyMark";
 import copy from "@content/copy.json";
@@ -24,12 +24,35 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
 
+  // Active-section sliding dot marker: a single accent dot that translates
+  // between the active nav link as sections scroll into view (V2 dot thread).
+  const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const [dot, setDot] = useState<{ left: number; visible: boolean }>({
+    left: 0,
+    visible: false,
+  });
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Position the sliding dot under the active link's center.
+  useEffect(() => {
+    const href = `#${activeId}`;
+    const link = linkRefs.current[href];
+    const container = navRef.current;
+    if (!link || !container) {
+      setDot((d) => ({ ...d, visible: false }));
+      return;
+    }
+    const lr = link.getBoundingClientRect();
+    const cr = container.getBoundingClientRect();
+    setDot({ left: lr.left - cr.left + lr.width / 2, visible: true });
+  }, [activeId, scrolled]);
 
   // Active-link scroll-spy: mark the nav link whose section owns the viewport
   // middle. Drives aria-current + a font-weight + accent-underline state.
@@ -76,14 +99,14 @@ export function Nav() {
           href="#top"
           className="flex items-center gap-2.5 transition-opacity duration-150 [transition-timing-function:var(--ease-out)] hover:opacity-70"
         >
-          <NoCornyMark size={18} className="text-current" />
+          <NoCornyMark size={18} pulse className="text-current" />
           <span className="font-[family-name:var(--font-display)] text-[18px] font-semibold tracking-[-0.01em] text-current">
             {nav.logo}
           </span>
         </a>
 
-        {/* links */}
-        <nav aria-label="Primary" className="flex items-center gap-8">
+        {/* links + the single sliding active-section dot marker */}
+        <nav ref={navRef} aria-label="Primary" className="relative flex items-center gap-8">
           {nav.links.map((link) => {
             const isExternal = "external" in link && link.external;
             const active = !isExternal && link.href === `#${activeId}`;
@@ -91,6 +114,9 @@ export function Nav() {
               <a
                 key={link.href}
                 href={link.href}
+                ref={(el) => {
+                  linkRefs.current[link.href] = el;
+                }}
                 aria-current={active ? "true" : undefined}
                 {...(isExternal
                   ? { target: "_blank", rel: "noopener noreferrer" }
@@ -100,14 +126,15 @@ export function Nav() {
                 }`}
               >
                 {link.label}
-                <span
-                  aria-hidden
-                  className="absolute -bottom-1.5 left-0 h-[2px] rounded-full bg-[var(--color-accent)] transition-[width] duration-200 [transition-timing-function:var(--ease-out)]"
-                  style={{ width: active ? "100%" : "0%" }}
-                />
               </a>
             );
           })}
+          {/* one accent dot that slides between the active links */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -bottom-2 h-[7px] w-[7px] -translate-x-1/2 rounded-full bg-[var(--color-accent)] transition-[left,opacity] duration-200 [transition-timing-function:var(--ease-out)]"
+            style={{ left: dot.left, opacity: dot.visible ? 1 : 0 }}
+          />
         </nav>
 
         {/* CTAs */}

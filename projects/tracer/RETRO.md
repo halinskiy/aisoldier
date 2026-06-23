@@ -15,6 +15,44 @@ Format:
 
 ---
 
+## 2026-06-23 — 3mpq-soldier — V2 creative rebuild (whole page)
+
+### What took longer than it should have?
+The AmbientDrift hydration mismatch. I gave the component a module-level
+`driftSeq` counter to name its injected `@keyframes`. SSR rendered three drift
+instances (names 1/2/3); the client hydration re-ran the initializer and the
+shared counter continued (4/5/6), so the `<style>` content differed and React
+regenerated the WHOLE tree on hydration. The downstream symptom was subtle and
+cost me two screenshot cycles: `?motion=0` would not land on the rest state
+because the regenerated client tree re-ran the morph instead of resting. I
+chased it as a `useEnhancementEnabled` bug before reading the headless console
+and seeing "Hydration failed". Fix: derive the keyframe name from `useId()`
+(stable across SSR/client). Lesson: ANY per-instance unique id a component
+injects into the DOM (keyframe name, clipPath id, gradient id) must come from
+`useId`, never a module counter or `Math.random`, or it breaks hydration.
+
+### What did I miss that the user or judge caught?
+Nothing external this round (single builder, pre-review). Self-caught: the
+Chrome `--virtual-time-budget` screenshot tool freezes framer-motion mid-flight,
+so the live hero reads blurred/empty in the captured frame even though it is
+correct in a real browser. I could verify the rest states (`?motion=0`) and that
+the reveal fires (t+1.2s), but NOT a clean full-chain live settle. I documented
+this honestly as an open item for critics rather than claiming a live pass I
+could not screenshot.
+
+### What will I do differently next time?
+- Use `useId` for any injected DOM id from the FIRST line of a motion primitive
+  that injects a `<style>` or SVG def; do not even write the counter version.
+- When `?motion=0` does not visually rest, check the headless CONSOLE for a
+  hydration mismatch BEFORE suspecting the gate hook; a regenerated tree re-runs
+  every effect and defeats the static path.
+- For live-motion verification, accept that virtual-time screenshots prove the
+  rest state (?motion=0) + that the reveal triggers (early frame), and flag the
+  full live settle for a wall-clock check, instead of burning cycles trying to
+  freeze framer at the perfect frame.
+- DarkSection `bleed` over forking: when a kit section's fixed inner shell fights
+  a project grid, add a prop to the kit, do not re-implement the dark stage.
+
 ## 2026-06-22 — 3mpq-soldier — fix round 1 (ACTIONS A-S)
 
 ### What took longer than it should have?

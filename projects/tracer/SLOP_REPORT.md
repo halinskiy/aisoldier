@@ -1,76 +1,96 @@
 # SLOP_REPORT -- Tracer (NoCorny) redesign
 
 Auditor: 3mpq-slophunter. Live: http://localhost:3107 @ 1440px + 500px.
-Reference: research/ai-design-slop.md.
+Reference: research/ai-design-slop.md. Driven with REAL wall-clock scroll
+(CDP, no virtual-time) so framer scroll-in sections render and rest before
+each capture. Captures: /tmp/tracer-audit/.
 
-## Round 2 (re-audit after de-slop round 1)
+## Round 3 (re-audit of the V2 creative rebuild)
 
 ### Verdict: CLEAN
 
 Deterministic gates green:
-- `ds-lint projects/tracer/src` -> 0 errors, 0 warnings (17 files)
+- `ds-lint projects/tracer/src` -> 0 errors, 0 warnings (22 files)
 - `slop-scan projects/tracer/src` -> PASS (0 blocking signals)
+- `slop-scan content/copy.json` -> PASS
+- Rendered kit set (AmbientDrift, BlurReveal, useEnhancementEnabled,
+  BentoGrid, DarkSection, FooterEditorial, SpecStrip) -> 0 errors. 6 WARNs,
+  all em-dashes inside JSDoc docblocks (BentoGrid:63/98, BlurReveal:37/63/93,
+  useEnhancementEnabled:6) -- code comments, never rendered. Kit-hygiene
+  cleanup, not a Tracer offender.
 
-### Round-1 offenders -- all four resolved (verified in render + code)
+### Brief items confirmed
 
-1. "CHAPTER 01/02/03" eyebrow + sub-16px -- RESOLVED. No EyebrowLabel/kicker
-   imported in tracer; no "chapter"/"eyebrow"/"kicker" string in src. Hero
-   goes straight to h1; HowItWorks uses StickyFeatureList numbers (`01`/`02`/
-   `03`) as list ordinals, not a caption above a heading.
-2. Footer sub-16px (14px) -- RESOLVED. FooterEditorial has zero sub-16px text.
-   StickyFeatureList has zero sub-16px text (the one `[12px]` hit was a
-   `rounded-[12px]` radius, not a font size).
-3. Raw hex/rgba outside tokens -- RESOLVED. Zero raw hex or rgba() in any
-   `*.tsx`. All literals live in tokens.css; SVG strokes use currentColor /
-   var(). Accent shades (`#e5484d`/`#cc3b42`/`#a32a30`) only in tokens.css.
-4. Glassmorphism on hero recorder pill -- RESOLVED. RecorderPill
-   (HeroMorphStage.tsx:191) now renders solid `--color-on-dark-glass-strong`
-   + a `--color-on-dark-hairline-strong` border + `--shadow-dark-lg`. No
-   backdrop-blur on the pill or any other hero surface.
+1. **Dev grid overlay (pink stripes): GONE from the render.** `GridOverlay`
+   is imported NOWHERE (page.tsx / layout.tsx do not mount it). Live DOM check:
+   `.grid-overlay` absent, no "grid on/off" button. The file
+   (`components/dev/GridOverlay.tsx`) is now orphaned dead code -- safe to
+   delete in the next refactor, but it does not render. The floating circle in
+   the bottom-left of the desktop shots is the Next.js dev route-status
+   indicator (injected by `next dev`), not page content; absent in prod.
 
-### Type front cleared 70 (was 62)
+2. **AmbientDrift is tasteful, not a blob/mesh tell.** Three instances, one
+   per dark stage (Hero right margin top 18%, Ownership left 6%, FinalCta left
+   12%). Opacity 0.10/0.10/0.11 (clamped <=0.12 in-component), duration
+   32/34/30s (clamped >=20), translate-only drift, static opacity (no breathe),
+   z-index:0 behind content that sits at z-[1], pointer-events:none. In the
+   render it reads as a faint warm vignette in the margin (visible only as a
+   soft glow at the hero top edge and a center-left wash in FinalCta), never a
+   defined orb and never crossing a text edge. Halts on reduced-motion /
+   ?motion=0. This is the sanctioned atmosphere loop, not gradient-mesh slop.
 
-No sub-16px text anywhere. Smallest text token is `--text-body: 16px`
-(and `--text-eyebrow: 16px`). Every `1[0-5]px` literal in src is a non-text
-dimension (record dot `12px`, sync dot `10px`, `--radius-window: 12px`, nav
-`blur(12px)`). Type scale is a real display+body system: Geist (display) +
-Hanken Grotesk (body) + Geist Mono for path/link strings only (one Geist
-family system). Two families, ~4 sizes, big display clamps. No gradient
-text, no bg-clip-text, no Title Case soup.
+3. **Hero background is a near-solid dark studio stage.** `--color-ink-surface`
+   + `dot-grid-dark` + the faint drift. Zero purple, zero multi-hue mesh, zero
+   floating colored orb. The recorder pill is a SOLID bordered surface
+   (`on-dark-glass-strong` + hairline + shadow), NOT a backdrop-blur glass card.
 
-### Color / accent
+4. **One accent, no AI color tells.** Only `#e5484d` and its shades. Zero
+   purple/violet/indigo, zero gradient text, zero gradient buttons, zero emoji
+   icons. The Dropbox glyph is monochrome currentColor (not brand blue). Border
+   on every surface (cards, pills, FAQ rows, footer columns). The only
+   `backdrop-filter` is Nav's scrolled-state scrim over a solid token bg + real
+   border -- the canonical functional frosted nav, not stacked glass.
 
-One accent only: `#e5484d` (record red) + its hover/deep/soft/subtle shades.
-Zero purple / violet / indigo. Zero gradient text or gradient buttons.
-The four `*-gradient()` uses are all sanctioned, non-slop:
-- two `radial-gradient(circle, ... 1px, transparent 1px)` = doctrine dot-grid
-- one `linear-gradient` = a 1px vertical hairline fading at both ends
-- one `radial-gradient(var(--color-accent-soft) -> transparent)` = a faint
-  single-accent ambient glow under the protagonist (not a multi-hue wash)
+5. **Motion is demonstrative, not decorative.** Hero morph (record -> Dropbox
+   -> share link) plays once and rests on the link card. TruthRail's red dot
+   travels down the rail on scroll-in, lights each guarantee, dissolves, rests
+   with all four lit. CTAConvergence re-stages the chain once into the live
+   link pill beside Download, then rests. Every `repeat: Infinity` is the record
+   dot's live pulse (Hero pill, plus the traveling dot's halo bounded to its
+   in-motion beat) -- the one sanctioned live-indicator loop. No identical
+   fade-everything, no perpetual float, no scroll-jack.
 
-### Note (not an offender)
+## Seven-front scorecard (round 3)
 
-`Nav.tsx:60` keeps `backdropFilter: blur(12px) saturate(1.4)` -- but ONLY on
-the scrolled state, over a solid `--color-nav-scrim` background with a real
-border. That is the canonical functional frosted-nav scrim (a fixed bar over
-scrolling content), not the decorative stacked-glass-cards slop the brief
-flagged on the hero pill. Restrained, single surface, justified. Leave it.
-
-## Seven-front scorecard (round 2)
-
-| Front                       | R1 | R2 | Notes |
+| Front                       | R2 | R3 | Notes |
 |-----------------------------|----|----|-------|
-| Structure                   | 84 | 86 | Demonstrative morph hero (record -> Dropbox -> link), not the centered-hero/3-card template spine. One focal point per screen. |
-| Type                        | 62 | 84 | All >=16px now; real Geist + Hanken pairing; big display; no gradient text. Cleared 70. |
-| Color                       | 88 | 90 | One accent #E5484D; zero purple/gradients; gradients are dot-grid + hairline + single-accent glow only. |
-| Surface / decoration        | 70 | 86 | Hero glass pill -> solid bordered surface; borders + shadow-as-secondary on every card; nav blur is functional, not decorative. |
-| Iconography / illustration  | 86 | 86 | Monochrome Dropbox glyph (not brand-blue), custom record/squiggle mark, currentColor SVGs. No emoji, no stock 3D blobs. |
-| Motion                      | 84 | 86 | AirBnB soft-spring morph, plays once then rests on the share-link card; the single infinite loop is the live record dot (true live indicator). Reduced-motion + ?motion=0 fall back to beat 5 statically. |
-| Content authenticity        | 88 | 88 | Real product facts (own Dropbox, ~/Dropbox/Tracer/, tracer.nocorny.com/v/..., MIT, ~12MB). No fake logos/stats/avatars. |
+| Structure                   | 86 | 90 | Own narrative spine: dark morph hero -> light scroll-rail how-it-works -> Swiss feature grid -> dark ownership rail -> two-col FAQ -> dark CTA convergence -> big-type footer. One focal point per screen; light/dark/light rhythm. Not the centered-hero/3-card template. |
+| Type                        | 84 | 86 | Geist (display) + Hanken (body) + Geist Mono for path/link strings only. All >=16px (smallest text token 16px; every 1x-px literal is a non-text dimension). Big display clamps. No gradient text, no Title Case soup. |
+| Color                       | 90 | 92 | One accent #E5484D + shades. Zero purple/gradient/mesh/orb. Gradients limited to dot-grid + 1px hairline + the single-accent ambient radial. |
+| Surface / decoration        | 86 | 90 | Borders on every surface; shadow secondary. Recorder pill + capture/folder cards are solid bordered, not backdrop-blur glass. Nav blur is the one functional scrim. radius via tokens (window/button/pill), no rounded-3xl soup. |
+| Iconography / illustration  | 86 | 88 | Custom NoCorny mark (waveform + record dot), monochrome Dropbox glyph, currentColor copy/tick SVGs. No emoji, no stock 3D, consistent set. |
+| Motion                      | 86 | 90 | AirBnB soft-spring morphs, choreographed + staggered, play once then rest. AmbientDrift = clamped atmosphere. Infinite loops only on the live record dot. Reduced-motion / ?motion=0 land statically on rest state, CLS 0. |
+| Content authenticity        | 88 | 88 | Real product facts (own Dropbox, ~/Dropbox/Tracer/, tracer.nocorny.com/v/k7r2-mx9p, MIT, ~12MB, macOS-only). No fake logos/stats/avatars/testimonials. Copy clean (slop-scan PASS). |
 
-No front <= 50, no three fronts <= 70 -> CLEAN.
+No front <= 50, no three fronts <= 70 -> **CLEAN**.
+
+## Mobile (500px honest width)
+
+`document.body.scrollWidth === clientWidth === 500` (no overflow). Deliberate
+single-screen stub: NoCorny mark, "macOS only. Download on your desktop.",
+one Download button. Per the desktop-only mandate.
 
 ## Cross-summon
 
-None required. Copy passed slop-scan; no fake claims spotted; mobile stub +
-reduced-motion fallbacks present.
+None required. Copy passed slop-scan + naturalist-domain checks clean; no fake
+claims; reduced-motion + mobile-stub fallbacks present.
+
+## Non-blocking cleanup notes (for deslopper / next refactor, not offenders)
+
+1. `projects/tracer/src/components/dev/GridOverlay.tsx` -- orphaned dead code
+   (the V2 alignment overlay). Not mounted, not rendered. Delete it and its
+   `.grid-overlay*` rules in globals.css to remove the pink-stripe machinery
+   entirely. Fix: rm the file + the CSS block.
+2. Em-dashes in JSDoc docblocks of rendered kit components (BentoGrid:63/98,
+   BlurReveal:37/63/93, useEnhancementEnabled:6). Not user-facing; ds-lint WARN
+   not ERROR. Fix: swap "--" for ASCII in those comments during kit hygiene.

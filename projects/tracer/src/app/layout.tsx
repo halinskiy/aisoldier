@@ -39,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       className={`${geist.variable} ${hanken.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
     >
       <head>
         {/* Pre-hydration motion bootstrap: resolve the ?motion=0 QA flag onto

@@ -79,6 +79,9 @@ export type { SplitTextProps } from "./components/motion/SplitText";
 export { useEnhancementEnabled } from "./components/motion/useEnhancementEnabled";
 export type { UseEnhancementEnabledOptions } from "./components/motion/useEnhancementEnabled";
 
+export { AmbientDrift } from "./components/motion/AmbientDrift";
+export type { AmbientDriftProps } from "./components/motion/AmbientDrift";
+
 export { Button } from "./components/ui/Button";
 export type { ButtonProps } from "./components/ui/Button";
 

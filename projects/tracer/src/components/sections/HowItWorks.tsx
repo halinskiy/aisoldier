@@ -1,21 +1,23 @@
-"use client";
-
-import { StickyFeatureList } from "@ui-kit/components/section/StickyFeatureList";
 import { BlurReveal } from "@ui-kit/components/motion/BlurReveal";
 
-import { RecordPanel, DropboxPanel, LinkPanel } from "../MorphPanels";
+import { GridPage } from "../GridPage";
+import {
+  HowItWorksScroll,
+  RecordVisual,
+  DropboxVisual,
+  LinkVisual,
+} from "../HowItWorksScroll";
 import copy from "@content/copy.json";
 
 /**
- * S3 - How it works. The hero morph restaged at reading pace as a scroll-driven
- * 3-step: Hit record / It lands in your Dropbox / Send the link. Uses the kit
- * StickyFeatureList (pinned visual + scrolling list); each step's visual is a
- * static frame of the matching hero beat. The ~/Dropbox/Tracer/ path renders in
- * Geist Mono inside the Dropbox panel.
+ * S3 - How it works. The hero chain re-staged at reading pace as three
+ * full-width scroll panels (record / lands in your Dropbox / send the link),
+ * with the record-red dot threading down a rail as the through-line. On the ONE
+ * page grid: H2 spans cols 1-7, the panels span the full 1-12. Replaces the v1
+ * StickyFeatureList. The ~/Dropbox/Tracer/ path renders in Geist Mono inline.
  */
 const MONO_PATH = "~/Dropbox/Tracer/";
 
-/** Render any "~/Dropbox/Tracer/" substring inside a step body in Geist Mono. */
 function withMonoPath(body: string) {
   if (!body.includes(MONO_PATH)) return body;
   const parts = body.split(MONO_PATH);
@@ -36,10 +38,9 @@ function withMonoPath(body: string) {
 
 export function HowItWorks() {
   const { how_it_works } = copy;
-  const visuals = [<RecordPanel key="r" />, <DropboxPanel key="d" />, <LinkPanel key="l" />];
+  const visuals = [<RecordVisual key="r" />, <DropboxVisual key="d" />, <LinkVisual key="l" />];
 
-  const items = how_it_works.steps.map((step, i) => ({
-    number: `0${i + 1}`,
+  const panels = how_it_works.steps.map((step, i) => ({
     title: step.title,
     body: withMonoPath(step.body),
     visual: visuals[i],
@@ -47,27 +48,26 @@ export function HowItWorks() {
 
   return (
     <section id="how" className="scroll-mt-24 bg-[var(--color-bg)]">
-      <div className="mx-auto w-full max-w-[1200px] px-8 py-24 md:py-32">
-        <BlurReveal>
-          <h2
-            className="font-[family-name:var(--font-display)] font-semibold text-[var(--color-text)]"
-            style={{
-              fontSize: "var(--text-display-md)",
-              lineHeight: "var(--lh-h2)",
-              letterSpacing: "var(--ls-display)",
-            }}
-          >
-            {how_it_works.heading}
-          </h2>
-        </BlurReveal>
-
-        <div className="mt-16">
-          {/* No itemMinHeight override: the kit's natural per-item rhythm
-              (py-10) keeps the three steps compact instead of stretching the
-              sticky runway into large empty voids. */}
-          <StickyFeatureList items={items} />
+      <GridPage className="py-24 md:py-32">
+        <div className="col-span-12 lg:col-span-7">
+          <BlurReveal>
+            <h2
+              className="font-[family-name:var(--font-display)] font-semibold text-[var(--color-text)]"
+              style={{
+                fontSize: "var(--text-display-md)",
+                lineHeight: "var(--lh-h2)",
+                letterSpacing: "var(--ls-display)",
+              }}
+            >
+              {how_it_works.heading}
+            </h2>
+          </BlurReveal>
         </div>
-      </div>
+
+        <div className="col-span-12 mt-12">
+          <HowItWorksScroll panels={panels} />
+        </div>
+      </GridPage>
     </section>
   );
 }

@@ -1,5 +1,55 @@
 # Tracer — Decision Log
 
+## 2026-06-23 (V2) — One grid via .grid-page + DarkSection bleed
+**Decision:** Defined `.grid-page` once (globals.css) + grid tokens, and added a
+`bleed` prop to kit `DarkSection` so dark stages bleed full-viewport while their
+content sits on the same `.grid-page` tracks as the light sections.
+**Why:** the contract demands every section content edge align at 1440px. A
+shared container is the only honest way; per-section max-widths were the v1 sin.
+Extending DarkSection (rather than forking it) keeps the kit the source of truth.
+Verified with the dev GridOverlay: hero/how/features/ownership/faq/cta left
+content edges all land on column 1.
+
+## 2026-06-23 (V2) — FAQ two-column split: sequential 4/3
+**Decision:** Column A = items 0-3, Column B = items 4-6 (sequential, not
+odd/even). **Why:** the longest answers cluster early (Dropbox, Loom); a
+sequential split keeps the heavier column on the left where the eye lands first
+and reads top to bottom naturally, and the open answer height never makes the
+columns feel lopsided since only one is open at a time.
+
+## 2026-06-23 (V2) — CTA layout: Option B (inline row)
+**Decision:** Headline cols 1-8; the convergence resolves into an inline row
+(Download button + link pill) spanning cols 1-12 below the headline, note line
+under it. Chose B over A (composition right cols 7-12) because the convergence IS
+the resolution INTO the button+pill row, so the morph and the rest state occupy
+the same place. A split would have shown the composition somewhere and then the
+button elsewhere, breaking the "the chain becomes the CTA" payoff.
+
+## 2026-06-23 (V2) — No ambient drift on light sections
+**Decision:** AmbientDrift only on the three dark stages (Hero, Ownership, CTA);
+How-it-works and Features get none. **Why:** the contract makes light-section
+drift optional and off-by-default; on How-it-works the scroll-scrubbed dot rail
+is the life, and on Features the layout-arrange entrance is. A drift there would
+compete and read as the gimmick the brief warns against.
+
+## 2026-06-23 (V2) — AmbientDrift keyframe name via useId
+**Decision:** AmbientDrift derives its injected `@keyframes` name from
+`useId()`, not a module-level counter. **Why:** the counter incremented
+differently on SSR vs client (3 instances), so the injected `<style>` content
+mismatched and React regenerated the whole tree on hydration. That broke
+`?motion=0` (the regenerated client tree re-ran the morph instead of resting).
+`useId` is stable across SSR/client, so no mismatch. Caught by inspecting the
+headless console; now zero hydration mismatch on / and /?motion=0.
+
+## 2026-06-23 (V2) — Live morph timeline not captured under virtual-time
+**Decision:** Verified the rest states via `?motion=0` screenshots and the live
+reveal firing at t+1.2s; documented that Chrome `--virtual-time-budget` freezes
+framer-motion mid-flight (leaving the hero blurred/empty in the fast-forwarded
+frame) so a clean full-chain live screenshot was not obtainable here. **Why:**
+flagged honestly for critic re-verification in a wall-clock browser rather than
+claiming a live pass I could not screenshot. The static DOM is correct and v1
+shipped the identical BlurReveal, so the risk is low but not self-verified.
+
 ## 2026-06-22 (fix round 1) — Kept bespoke Nav; did NOT migrate to NavSticky
 **Decision:** Per ACTIONS H, the preferred path was to extend kit `NavSticky`
 with `transparentRest` + `secondaryCta` and delete the bespoke `Nav`. After

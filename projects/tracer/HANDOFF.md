@@ -24,6 +24,28 @@ Gates: `node ../../tools/ds-lint.mjs projects/tracer/src` and
 - Pre-hydration motion bootstrap: inline `<head>` script in `layout.tsx` sets
   `html[data-motion="off"]` when `?motion=0`, before first paint.
 
+## The ONE grid (V2 — read this before moving anything)
+
+Every section's content sits inside `GridPage` (`src/components/GridPage.tsx`),
+which applies `.grid-page` (defined once in `globals.css`): max-width
+`--grid-max` (1280px), outer `--grid-gutter` (64px), 12 equal columns,
+`--grid-colgap` (24px). DO NOT give a section its own max-width or narrower
+padding; narrow by spanning fewer columns (`col-span-7` / `col-span-8` for
+headings, `col-span-12` for content). Dark stages bleed full-viewport via the
+kit `DarkSection` `bleed` prop, but their inner `GridPage` keeps content on the
+same tracks. A dev-only `GridOverlay` (bottom-right "grid on/off" toggle,
+localStorage) draws the 12 columns so you can check alignment; it never ships to
+production.
+
+## The dot thread (the page's protagonist)
+
+The record-red dot (`--color-accent`) recurs section to section: nav squiggle
+terminal dot (one-shot pulse) + sliding active-link dot -> hero live REC dot ->
+how-it-works rail dot (REC -> sync -> tick) -> features "One click to share"
+copy->tick -> ownership traveling dot lighting each truth row -> FAQ ring->dot
+open marker -> CTA dot arrives and resolves into the link pill -> footer
+wordmark dot. Keep any new dot the same accent and the same "one focal point".
+
 ## Section order + theme rhythm (src/app/page.tsx)
 
 Nav (light) -> Hero (DARK) -> How it works (light) -> Features (light) ->
@@ -32,48 +54,55 @@ dark/light boundary is a smooth surface change (no hard cut).
 
 | # | Section | File | Kit vs custom | Notes |
 |---|---|---|---|---|
-| 1 | Nav | `sections/Nav.tsx` | custom (uses `NoCornyMark`) | Sticky, transparent over the dark hero (light text) then inverts to ink + blurred surface on scroll. Squiggle mark + wordmark, links, Sign in (ghost) + red Download. Active-link scroll-spy (IntersectionObserver over #how/#features/#ownership/#faq) sets aria-current + font-semibold + an accent underline on the current section's link. |
-| 2 | Hero | `sections/Hero.tsx` | custom dark stage; kit `BlurReveal` + `SpecStrip` + custom `HeroMorphStage` | The centerpiece. Headline + 1 sub + CTAs + the morph + one SpecStrip row. At REST the morph stage shows ONE composed share-link card directly under the CTA (provenance row + share link + red tick); artifact + spec row read as one credibility cluster. |
-| 3 | How it works | `sections/HowItWorks.tsx` | kit `StickyFeatureList` + custom `MorphPanels` | 3 steps; each step's pinned visual is a static frame of the matching hero beat. |
-| 4 | Features | `sections/Features.tsx` | kit `BentoGrid`/`BentoCell` + `.st-reveal` | Icon-free 3x2 uniform bento, 6 cells. |
-| 5 | Ownership | `sections/Ownership.tsx` | kit `DarkSection` + `SpecStrip` (vertical) | The emotional core. 4 truth rows, one accent dot each. |
-| 6 | FAQ | `sections/Faq.tsx` | kit `FAQAccordion` mode="single" | 7 items, one open at a time. |
-| 7a | Final CTA | `sections/FinalCta.tsx` | kit `DarkSection` | One verb, one red Download, one note line. |
-| 7b | Footer | `sections/Footer.tsx` | kit `FooterEditorial` | Oversized wordmark + 3 labeled columns (Product / Open source / NoCorny) + tagline + legal. External links carry target/rel. No invented "built with" line. |
-| -- | Mobile stub | `MobileStub.tsx` | custom | Single screen below md (mark, one line, Download). Desktop hidden below md; stub hidden md+. |
+| 1 | Nav | `sections/Nav.tsx` | custom (uses `NoCornyMark`) | Sticky, transparent over the dark hero then inverts to ink + blur on scroll. Squiggle mark (one-shot `pulse`) + wordmark, links, Sign in (ghost) + red Download. Scroll-spy drives a SINGLE accent dot that slides between the active links (`-bottom-2`, `left` morph). |
+| 2 | Hero | `sections/Hero.tsx` | custom dark stage; kit `BlurReveal` + `AmbientDrift` + `SpecStrip` + custom `HeroMorphStage` | Headline+sub+CTAs cols 1-8, morph 1-12, spec row 1-12. Alive from frame 1 (dot pulse + timer tick + drift). At REST the morph shows ONE share-link card. |
+| 3 | How it works | `sections/HowItWorks.tsx` | custom `HowItWorksScroll` (+ `.st-reveal`) | H2 cols 1-7; three full-width scroll panels (text + visual), record-dot rail threading REC->sync->tick. |
+| 4 | Features | `sections/Features.tsx` | kit `BentoGrid`/`BentoCell` + Framer | Icon-free 3x2 bento full 1-12. Cells layout-arrange in on scroll (translate+scale 0.94, staggered, once). ONE live cell (items[3], "One click to share") copy->red tick. |
+| 5 | Ownership | `sections/Ownership.tsx` | kit `DarkSection` (bleed) + `AmbientDrift` + custom `TravelingDot`/TruthRail | H2+sub cols 1-7; 4 truth rows (label 1-6, detail 7-12). A red dot travels down the rail lighting each row dot, then dissolves. |
+| 6 | FAQ | `sections/Faq.tsx` | custom `FAQTwoCol` | H2 cols 1-7; full-width two-column accordion (split 4/3), ring->red-dot open marker, single-open, height+blur seam. |
+| 7a | Final CTA | `sections/FinalCta.tsx` | kit `DarkSection` (bleed) + `AmbientDrift` + custom `CTAConvergence` | Headline cols 1-8; the B2 convergence (dot->capture->Dropbox->link pill beside Download). Note line. No body para, no 2nd CTA. |
+| 7b | Footer | `sections/Footer.tsx` | kit `FooterEditorial` | Oversized wordmark + 3 labeled columns + tagline + legal. |
+| -- | Mobile stub | `MobileStub.tsx` | custom | Single screen below md (mark, one line, Download). |
 
 ## Custom (project-local) components
 
-- `HeroMorphStage.tsx` -- CUSTOM EMBED. The cinematic morph (REC -> condense ->
-  Dropbox folder transient -> share-link card -> red tick). Framer Motion, gated
-  by the kit `useEnhancementEnabled({minWidth:1024})`. The red record dot pulse
-  (beat 1) is the ONLY infinite loop on the whole page (a true live indicator).
-  At REST exactly ONE element is on the stage: the elevated `ShareLinkCard`
-  (provenance row + share link + red tick) on `--color-on-dark-glass`. The
-  recorder pill (beats 1-2) and the Dropbox folder (beat 3) are TRANSIENTS, gone
-  at rest. A faint vertical thread (`--color-on-dark-hairline`) traces the
-  journey. No glassmorphism (backdrop-blur removed). Under reduced-motion /
-  `?motion=0` / under 1024px it renders statically on the resting card (no
-  flash). Beat timings live in the `useEffect`. NOT a kit component; product
-  specific. All on-dark colors come from `tokens.css`; SVG strokes are
-  `currentColor`. If another product needs a morph storyboard, generalise first.
-- `MorphPanels.tsx` -- static light-surface frames (RecordPanel / DropboxPanel /
-  LinkPanel) passed as `visual` to the How-it-works StickyFeatureList. Project-local.
-- `NoCornyMark.tsx` -- Tracer's own brand mark (squiggle into a record dot). NOT
-  the 3mpq fallback. Strokes are `currentColor`; the dot is `--color-accent`.
+- `GridPage.tsx` -- the ONE grid wrapper. Use it for any new section.
+- `HeroMorphStage.tsx` -- CUSTOM EMBED. Record pill -> file-capture card ->
+  Dropbox folder -> share-link card -> red tick. Alive from frame 1 (dot pulse +
+  timer, no setTimeout gate). Morphs travel by position+content+blur(2px), no
+  scale below 0.94, never scale-from-0. Gated by `useEnhancementEnabled({minWidth:1024})`;
+  static lands on the resting share-link card. Beat timings in the `useEffect`.
+- `HowItWorksScroll.tsx` -- CUSTOM EMBED. Three scroll panels + the record-dot
+  rail (Framer `useScroll` for the rail position; `.st-reveal` for panel text).
+  `RecordVisual` / `DropboxVisual` / `LinkVisual` are the per-panel frames.
+- `TravelingDot.tsx` (export `TruthRail`) -- CUSTOM EMBED. IntersectionObserver
+  triggers the dot to walk `rowRefs` offsets, lighting each row dot; dissolves
+  at the end. Static renders all rows lit.
+- `FAQTwoCol.tsx` -- CUSTOM EMBED. Lifted `openId` state for single-open across
+  both columns; native `<button>` triggers + `AnimatePresence` height+blur seam.
+  Split is `Math.ceil(n/2)` (col A) / rest (col B).
+- `CTAConvergence.tsx` -- CUSTOM EMBED. IntersectionObserver triggers the 4-beat
+  chain; rests on the Download button + live link pill (real clipboard copy,
+  auto-tick after 1.5s). Reuses HeroMorphStage's visual vocabulary, distinct
+  composition. Static lands on the rest row.
+- `GridOverlay.tsx` (in `dev/`) -- dev-only 12-col guide; never in production.
+- `NoCornyMark.tsx` -- Tracer's brand mark (squiggle into a record dot), one-shot
+  `pulse` prop on the terminal dot. Strokes `currentColor`; dot `--color-accent`.
 
 ## Promoted / extended in the kit this project
 
-- `SpecStrip` -> `ui-kit/components/section/SpecStrip.tsx` (registered in
-  `index.ts`, `INDEX.md`, `REGISTRY.json` as `section.SpecStrip`). Horizontal
-  credibility row + vertical truth strip. Used by Hero (horizontal) and
-  Ownership (vertical). Vertical label column is a firm 280px so all detail rows
-  share one left edge. Import from `@ui-kit/components/section/SpecStrip`.
-- `StickyFeatureList` extended: `showOrdinal` prop (default OFF) gates the
-  "Chapter NN" kicker; `item.body` accepts `string | ReactNode`. Tracer uses
-  both (ordinal off; step-2 body wraps the mono path).
-- `FooterEditorial` extended: `FooterLink.external` adds `target=_blank
-  rel=noopener noreferrer`; optional labeled `columns` prop; all text >= 16px.
+- `AmbientDrift` -> `ui-kit/components/motion/AmbientDrift.tsx` (registered in
+  `index.ts`, `INDEX.md`, `REGISTRY.json` as `motion.AmbientDrift`). One slow
+  blurred glow per dark stage. Opacity clamped <=0.12, duration >=20s,
+  translation-only, pauses under reduced-motion + `?motion=0`. Uses `useId` for a
+  hydration-stable keyframe name. Used by Hero, Ownership, CTA. Import from
+  `@ui-kit/components/motion/AmbientDrift`.
+- `DarkSection` extended: `bleed` prop drops the inner max-width + horizontal
+  padding so the project supplies its own grid (the dark bg still bleeds
+  full-viewport). Used by Ownership + Final CTA in V2.
+- `SpecStrip` -> `section.SpecStrip` (Hero horizontal row). Vertical truth strip
+  no longer used (replaced by TruthRail).
+- `StickyFeatureList` / `FooterEditorial` extended in fix round 1 (see CHANGELOG).
 
 ## Favicon
 
@@ -83,13 +112,18 @@ dark/light boundary is a smooth surface change (no hard cut).
 
 ## Motion notes
 
-- Entrances: kit `BlurReveal` (handles reduced-motion AND `?motion=0`, renders
-  children visibly, animates once). Features cells use the kit native CSS
-  `.st-reveal` (triple-gated, CLS 0).
-- Hero morph: plays once on load then rests. Hover/state uses `--ease-out`;
-  entrance/spring uses `--ease-spring`.
-- Lenis smooth scroll is wired in `src/components/providers/LenisProvider.tsx`
-  (root layout). Anchor links scroll smoothly.
+- Two continuous loops on the whole page, no more: the live record dot pulse +
+  `AmbientDrift` (one instance per dark stage; same primitive, three placements).
+  Everything else plays ONCE then rests.
+- Every "thing becomes another thing" morph uses a `filter: blur(2px)` seam and
+  travels by position+content, never scale-from-0, never below ~0.92 scale.
+- Entrances: kit `BlurReveal` (handles reduced-motion AND `?motion=0`). Big beats
+  use `--ease-spring`; state nudges (hover, copy->tick, accordion open, nav dot)
+  use `--ease-out` under 300ms. `:active` scale 0.97 on buttons.
+- `?motion=0` (and reduced-motion) lands EVERY section on its composed rest
+  state: dot frozen, timer at final, drift off, FAQ closed/first-state, CTA on
+  the link-pill+Download row. Verified by screenshot.
+- Lenis smooth scroll is wired in `src/components/providers/LenisProvider.tsx`.
 
 ## Build infra note (important if you touch config)
 
@@ -104,12 +138,13 @@ was lost.
 
 ## Known limitations / honest gaps
 
-- How-it-works pinned visuals cross-fade between beats on scroll (kit
-  AnimatePresence). They now fill ~half the panel at full opacity; in a static
-  headless screenshot the panel can briefly read mid-transition, but renders
-  confidently in a real browser on scroll.
+- LIVE morph timeline not self-verified by screenshot: Chrome
+  `--virtual-time-budget` freezes framer-motion mid-flight, so the fast-forwarded
+  frame shows the hero blurred/empty. The `?motion=0` rest states are all
+  correct, and the reveal fires at t+1.2s, but the full live chain settling
+  visible needs a wall-clock browser check (critics: please confirm the hero +
+  CTA rest visible and the chains play once). v1 shipped the identical
+  BlurReveal, so the risk is low.
 - `ui-kit/components` (full scope) still reports ~87 pre-existing ds-lint errors
-  in components Tracer does NOT import (CmdKSearch, MetricsBar, system docs,
-  Badge, LogoBelt, etc.): mostly intentional sub-16px and comment glyphs. Every
-  kit component Tracer DOES render is 0-error. Cleaning the rest is a separate
-  kit-hygiene pass (see DECISIONS), not this project's scope.
+  in components Tracer does NOT import. Every kit component Tracer DOES render
+  (incl. the V2 AmbientDrift + DarkSection) is 0-error. Out of scope here.

@@ -1,5 +1,78 @@
 # Tracer — Changelog
 
+## 2026-06-23 — V2 creative rebuild (soldier, from SECTION_CONTRACT_V2)
+Raised the WHOLE page to the hero's ambition. v1 src was untouched (prior
+session hit the limit before changing anything); this is the real V2.
+
+THE ONE GRID
+- Added grid tokens to `tokens.css`: `--grid-max:1280px`, `--grid-gutter:64px`,
+  `--grid-cols:12`, `--grid-colgap:24px`.
+- Added `.grid-page` (defined once in globals.css) + `GridPage.tsx` wrapper.
+  EVERY section now docks to it; no per-section max-width survives. Readability
+  is span-controlled (headings cols 1-7/1-8, content 1-12). Dark backgrounds
+  bleed full-viewport via DarkSection `bleed` while content stays on the grid.
+- Dev-only `GridOverlay.tsx` (12-col guide, localStorage toggle, default ON,
+  absent in production). Confirmed every section's left content edge aligns at
+  1440px via the overlay.
+
+NEW PRIMITIVE (promoted to kit)
+- `AmbientDrift` -> `ui-kit/components/motion/AmbientDrift.tsx` (+ index.ts +
+  REGISTRY `motion.AmbientDrift`). One slow blurred glow per dark stage. Opacity
+  clamped <=0.12, duration clamped >=20s, translation-only, pauses under
+  reduced-motion + ?motion=0. Used on Hero, Ownership, CTA. `useId` for a
+  hydration-stable keyframe name (the module-counter version mismatched SSR vs
+  client and broke ?motion=0 by regenerating the tree; fixed).
+
+KIT
+- `DarkSection` gained a `bleed` prop (drop inner max-width + padding so the
+  project supplies its own grid). INDEX.md updated.
+
+PER-SECTION
+- Hero: alive from frame 1 (dot pulses + timer ticks immediately, no setTimeout
+  gate; AmbientDrift drifting on paint). HeroMorphStage beat 2 re-spec'd: the REC
+  pill becomes a file-capture CARD of comparable footprint (no scale-to-speck),
+  morphs travel by position+content+blur(2px) seam, scale floor >=0.94. Headline
+  + sub + CTAs on cols 1-8, morph stage 1-12, spec row 1-12. `:active` scale 0.97
+  on CTAs.
+- How it works: REPLACED StickyFeatureList with `HowItWorksScroll.tsx` (three
+  full-width scroll panels, dot rail threading REC -> sync -> tick, panel
+  entrances via `.st-reveal`). Removed `MorphPanels.tsx`.
+- Features: layout-arrange entrance (cells spring from translate+scale 0.94,
+  staggered, soft spring, once) + ONE live cell ("One click to share") with a
+  copy -> record-red tick blur-morph. Full 1-12.
+- Ownership: REPLACED static SpecStrip rows with `TravelingDot.tsx` (TruthRail):
+  a record-red dot travels down the left rail lighting each truth-row dot, then
+  dissolves with all four lit. Two-column rows on the grid + AmbientDrift.
+- FAQ: REPLACED single-column FAQAccordion with `FAQTwoCol.tsx` (full-width
+  two-column, sequential split 4/3, hairline column + row dividers, ring ->
+  filled record-red dot open marker, single-open, native button triggers,
+  height+blur seam). The headline grid fix.
+- Final CTA: REPLACED the BlurReveal band with `CTAConvergence.tsx` (B2): on
+  scroll-in the dot arrives -> blooms to capture card -> Dropbox folder + sync
+  dot -> resolves into the live link pill BESIDE the Download button; copy
+  affordance auto-ticks after 1.5s and stays interactive (real clipboard copy).
+  Rest = headline (1-8) + pill + Download + "Free forever. ~12MB. MIT licensed."
+  Dark bleed stage + AmbientDrift. No body paragraph, no second CTA.
+- Nav: squiggle terminal dot one-shot pulse on paint (NoCornyMark `pulse`);
+  single accent dot that slides between active links on scroll (replaces the
+  per-link underline).
+
+GATES
+- ds-lint projects/tracer/src: 0 errors. AmbientDrift + DarkSection: 0 errors.
+  (Pre-existing 87 kit errors are in components tracer never renders; unchanged.)
+- slop-scan src + copy.json: PASS.
+- next build: passes (full typecheck, externalDir kit).
+- ?motion=0 lands every stage on its composed rest state (verified by
+  screenshot). Mobile stub intact, no overflow at 500px. Zero console errors,
+  no hydration mismatch on / or /?motion=0.
+
+OPEN (for critics to re-verify in a REAL browser): the live morph/BlurReveal
+timeline could not be cleanly captured under Chrome `--virtual-time-budget`
+(it freezes framer animations mid-flight, leaving the hero blurred/empty in the
+fast-forwarded frame). Static render is fully correct; the t+1.2s shot shows the
+reveal firing. v1 shipped the identical BlurReveal. Re-confirm the hero rests
+visible in a wall-clock browser.
+
 ## 2026-06-22 — fix round 1 (soldier, from ACTIONS.md)
 Worked the reconciled 7-critic action list top to bottom.
 

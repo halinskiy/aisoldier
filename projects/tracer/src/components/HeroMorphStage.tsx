@@ -6,60 +6,61 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useEnhancementEnabled } from "@ui-kit/components/motion/useEnhancementEnabled";
 
 /* -------------------------------------------------------------------------- */
-/*  HeroMorphStage                                                             */
+/*  HeroMorphStage (V2)                                                        */
 /* -------------------------------------------------------------------------- */
 /**
  * The cinematic morph that performs Tracer's whole promise once on load, then
  * rests on ONE composed artifact. A single protagonist (the red record dot)
- * threads three honest states; the stage RESTS as one generous share-link card
- * directly under the CTA, the frame people screenshot.
+ * threads four honest states. V2 fixes the v1 "odd / half-static / shrinks to a
+ * tiny object" read:
  *
- *   beat 1  REC          macOS menu-bar recorder pill springs in; red dot pulses
- *                        live (the ONLY permitted infinite loop); timer 00:00->00:04.
- *   beat 2  CONDENSE     the recording frame condenses into a travelling capture.
- *   beat 3  DROPBOX      the capture passes through a ~/Dropbox/Tracer/ folder
- *                        (monochrome Dropbox glyph). This is a TRANSIENT, the
- *                        morph passes through it and it leaves the stage.
- *   beat 4  LINK         the clean share-link card grows into the resting frame
- *                        showing tracer.nocorny.com/v/k7r2-mx9p.
- *   beat 5  COPY->TICK   the copy affordance becomes a record-red tick; rests.
+ *   - ALIVE FROM FRAME 1. The record dot pulses and the REC timer ticks the
+ *     instant the stage paints (gated only by useEnhancementEnabled, never
+ *     deferred behind a setTimeout). Three things move before beat 2: dot,
+ *     timer, and (in the section) the ambient drift.
+ *   - NEVER SHRINKS. Every beat holds a confident, legible size. Morphs travel
+ *     by POSITION + CONTENT + a blur(2px) cross-fade seam, never scale-from-0,
+ *     never below a 0.92 scale floor. Beat 2 is a file-capture CARD of
+ *     comparable footprint to the REC pill, not a condensed speck.
  *
- * At rest (beat 5) exactly ONE element is on the stage: the share-link card, an
- * elevated dark card centered under the CTA. The recorder pill and the Dropbox
- * folder are transients that are gone once the story finishes. A faint vertical
- * thread traces the journey so "it travelled here" reads after motion ends.
+ *   beat 1  REC       macOS recorder pill; red dot pulses live; timer 00:00->00:04.
+ *   beat 2  CAPTURE   the pill becomes a file-capture card (waveform thumbnail),
+ *                     same visual weight, sliding toward Dropbox under a blur seam.
+ *   beat 3  DROPBOX   the card morphs into the ~/Dropbox/Tracer/ folder + red sync dot.
+ *   beat 4  LINK      resolves into the resting share-link card (the screenshot frame),
+ *                     copy affordance -> record-red tick.
  *
- * Gated by useEnhancementEnabled (viewport >= 1024, no reduced-motion, no
- * ?motion=0). When the gate is false the stage renders statically on beat 5
- * (the resting share-link card), so the meaning survives without the headline.
- * CLS = 0: the stage reserves a fixed height in every mode.
+ * At rest (beat 4) exactly ONE element is on the stage: the share-link card.
+ * The recorder pill, capture card and folder are transients gone once the story
+ * ends. Gated by useEnhancementEnabled (>=1024, no reduced-motion, no ?motion=0):
+ * when false the stage renders statically on the resting share-link card. CLS 0.
  *
  * Project-local custom embed (noted in HANDOFF.md). Geist Mono is used ONLY for
- * the timer, the path label, and the share-link string.
+ * the timer, path label, and share-link string.
  */
 
 const PATH = "~/Dropbox/Tracer/";
 const SHARE = "tracer.nocorny.com/v/k7r2-mx9p";
 
-const SPRING = { type: "spring" as const, stiffness: 180, damping: 22, mass: 0.9 };
+const SPRING = { type: "spring" as const, stiffness: 170, damping: 21, mass: 0.9 };
 const SMOOTH = { duration: 0.2, ease: [0.2, 0.8, 0.2, 1] as const };
 
-const STAGE_H = 300;
+const STAGE_H = 320;
 
-type Beat = 1 | 2 | 3 | 4 | 5;
+type Beat = 1 | 2 | 3 | 4;
 
 export function HeroMorphStage() {
   const enhance = useEnhancementEnabled({ minWidth: 1024 });
   const prefersReduced = useReducedMotion();
-  // Start on the final state so SSR + the static fallback both land on beat 5.
-  const [beat, setBeat] = useState<Beat>(5);
+  // SSR + static fallback land on the final state (resting share-link card).
+  const [beat, setBeat] = useState<Beat>(4);
   const [timer, setTimer] = useState("00:04");
   const [copied, setCopied] = useState(true);
+  // Alive flag: when enhanced, the dot pulses + timer ticks from frame 1.
+  const live = enhance && !prefersReduced;
 
-  // Drive the sequence only when the enhancement is enabled. Otherwise the
-  // initial beat-5 state stays put (static fallback).
   useEffect(() => {
-    if (!enhance || prefersReduced) return;
+    if (!live) return;
 
     let mounted = true;
     const timeouts: ReturnType<typeof setTimeout>[] = [];
@@ -68,32 +69,28 @@ export function HeroMorphStage() {
       timeouts.push(setTimeout(() => mounted && fn(), ms));
     };
 
-    // reset to the start of the story
+    // Start of the story: dot + timer alive immediately, no dead air.
     setBeat(1);
     setTimer("00:00");
     setCopied(false);
 
-    // beat 1: timer ticks 00:00 -> 00:04
-    at(400, () => {
-      let s = 0;
-      const iv = setInterval(() => {
-        if (!mounted) return;
-        s += 1;
-        setTimer(`00:0${Math.min(s, 4)}`);
-        if (s >= 4) clearInterval(iv);
-      }, 750);
-      intervals.push(iv);
-    });
+    // Timer ticks 00:00 -> 00:04 from frame 1 (no 400ms gate).
+    let s = 0;
+    const iv = setInterval(() => {
+      if (!mounted) return;
+      s += 1;
+      setTimer(`00:0${Math.min(s, 4)}`);
+      if (s >= 4) clearInterval(iv);
+    }, 800);
+    intervals.push(iv);
 
-    // beat 2: condense + detach
-    at(3600, () => setBeat(2));
-    // beat 3: pass through Dropbox
-    at(4400, () => setBeat(3));
-    // beat 4: link materializes
-    at(5500, () => setBeat(4));
-    // beat 5: copy -> red tick, rest
-    at(6800, () => {
-      setBeat(5);
+    // beat 2: pill becomes file-capture card, slides toward Dropbox
+    at(3400, () => setBeat(2));
+    // beat 3: card morphs into Dropbox folder + sync dot
+    at(4500, () => setBeat(3));
+    // beat 4: resolves into share-link card, copy -> red tick, rest
+    at(5800, () => {
+      setBeat(4);
       setCopied(true);
     });
 
@@ -102,14 +99,13 @@ export function HeroMorphStage() {
       timeouts.forEach(clearTimeout);
       intervals.forEach(clearInterval);
     };
-  }, [enhance, prefersReduced]);
+  }, [live]);
 
-  // Transients: the recorder pill (beats 1-2) and the Dropbox folder (beat 3).
-  // The share-link card is the resting frame (beats 4-5). At rest only it shows.
-  const recorderVisible = beat <= 2;
-  const condensed = beat === 2;
+  // Transients vs the resting frame. Each leaves the stage once its job is done.
+  const recorderVisible = beat === 1;
+  const captureVisible = beat === 2;
   const folderVisible = beat === 3;
-  const linkVisible = beat >= 4;
+  const linkVisible = beat === 4;
 
   return (
     <div
@@ -117,7 +113,7 @@ export function HeroMorphStage() {
       style={{ minHeight: STAGE_H }}
       aria-hidden
     >
-      {/* faint vertical thread tracing the journey the capture travelled */}
+      {/* faint vertical thread tracing the journey */}
       <span
         className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2"
         style={{
@@ -126,29 +122,36 @@ export function HeroMorphStage() {
         }}
       />
 
-      {/* faint ambient glow under the protagonist, never a loop */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, var(--color-accent-soft) 0%, transparent 68%)",
-          opacity: 0.5,
-        }}
-      />
-
-      {/* ===================== TRANSIENT: recorder pill (beats 1-2) ========= */}
+      {/* ===================== TRANSIENT: recorder pill (beat 1) =========== */}
       <motion.div
         className="absolute"
         initial={false}
         animate={{
           opacity: recorderVisible ? 1 : 0,
-          scale: condensed ? 0.42 : 1,
-          y: recorderVisible ? -84 : -40,
+          x: recorderVisible ? 0 : -40,
+          y: recorderVisible ? -88 : -72,
+          filter: recorderVisible ? "blur(0px)" : "blur(2px)",
         }}
-        transition={recorderVisible ? SPRING : { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+        transition={SPRING}
         style={{ pointerEvents: "none" }}
       >
-        <RecorderPill timer={timer} pulse={beat === 1} />
+        <RecorderPill timer={timer} pulse={live && beat === 1} />
+      </motion.div>
+
+      {/* ===================== TRANSIENT: file-capture card (beat 2) ======= */}
+      <motion.div
+        className="absolute"
+        initial={false}
+        animate={{
+          opacity: captureVisible ? 1 : 0,
+          x: captureVisible ? 0 : beat < 2 ? -36 : 36,
+          y: captureVisible ? -36 : -16,
+          filter: captureVisible ? "blur(0px)" : "blur(2px)",
+        }}
+        transition={SPRING}
+        style={{ pointerEvents: "none" }}
+      >
+        <CaptureCard />
       </motion.div>
 
       {/* ===================== TRANSIENT: Dropbox folder (beat 3) ========== */}
@@ -157,8 +160,9 @@ export function HeroMorphStage() {
         initial={false}
         animate={{
           opacity: folderVisible ? 1 : 0,
-          scale: folderVisible ? 1 : 0.6,
-          y: folderVisible ? 0 : -24,
+          x: folderVisible ? 0 : beat < 3 ? -28 : 28,
+          y: folderVisible ? 0 : -12,
+          filter: folderVisible ? "blur(0px)" : "blur(2px)",
         }}
         transition={SPRING}
         style={{ pointerEvents: "none" }}
@@ -166,14 +170,15 @@ export function HeroMorphStage() {
         <DropboxFolder syncing />
       </motion.div>
 
-      {/* ===================== RESTING FRAME: share-link card (beats 4-5) == */}
+      {/* ===================== RESTING FRAME: share-link card (beat 4) ===== */}
       <motion.div
         className="absolute w-full max-w-[560px] px-2"
         initial={false}
         animate={{
           opacity: linkVisible ? 1 : 0,
-          scale: linkVisible ? 1 : 0.92,
-          y: linkVisible ? 0 : 28,
+          scale: linkVisible ? 1 : 0.94,
+          y: linkVisible ? 24 : 40,
+          filter: linkVisible ? "blur(0px)" : "blur(2px)",
         }}
         transition={SPRING}
         style={{ pointerEvents: "none" }}
@@ -191,7 +196,7 @@ export function HeroMorphStage() {
 function RecorderPill({ timer, pulse }: { timer: string; pulse: boolean }) {
   return (
     <div
-      className="flex items-center gap-3 rounded-[var(--radius-pill)] px-4 py-2.5"
+      className="flex items-center gap-3 rounded-[var(--radius-pill)] px-5 py-3"
       style={{
         background: "var(--color-on-dark-glass-strong)",
         border: "1px solid var(--color-on-dark-hairline-strong)",
@@ -199,39 +204,78 @@ function RecorderPill({ timer, pulse }: { timer: string; pulse: boolean }) {
       }}
     >
       {/* the live record dot - the ONLY permitted infinite loop */}
-      <span className="relative flex h-[12px] w-[12px] items-center justify-center">
+      <span className="relative flex h-[13px] w-[13px] items-center justify-center">
         {pulse && (
           <motion.span
             className="absolute inset-0 rounded-full"
             style={{ background: "var(--color-accent)" }}
-            animate={{ scale: [1, 1.9, 1], opacity: [0.5, 0, 0.5] }}
+            animate={{ scale: [1, 1.9, 1], opacity: [0.55, 0, 0.55] }}
             transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
           />
         )}
         <span
-          className="relative h-[12px] w-[12px] rounded-full"
+          className="relative h-[13px] w-[13px] rounded-full"
           style={{ background: "var(--color-accent)" }}
         />
       </span>
-      <span className="font-[family-name:var(--font-mono)] text-[16px] tabular-nums text-[var(--color-on-dark)] opacity-50">
+      <span className="font-[family-name:var(--font-mono)] text-[18px] tabular-nums text-[var(--color-on-dark)] opacity-60">
         {timer}
       </span>
       <span
-        className="mx-1 h-[16px] w-px"
+        className="mx-1 h-[18px] w-px"
         style={{ background: "var(--color-on-dark-hairline-strong)" }}
       />
-      <span className="font-[family-name:var(--font-display)] text-[16px] font-medium text-[var(--color-on-dark)] opacity-80">
+      <span className="font-[family-name:var(--font-display)] text-[18px] font-medium text-[var(--color-on-dark)] opacity-90">
         Recording
       </span>
-      {/* a stop affordance, native-honest */}
       <span
-        className="ml-1 flex h-[22px] w-[22px] items-center justify-center rounded-[var(--radius-button)]"
+        className="ml-1 flex h-[24px] w-[24px] items-center justify-center rounded-[var(--radius-button)]"
         style={{ border: "1px solid var(--color-on-dark-hairline-strong)" }}
       >
-        <span
-          className="h-[9px] w-[9px] rounded-[2px] bg-[var(--color-on-dark)] opacity-70"
-        />
+        <span className="h-[10px] w-[10px] rounded-[2px] bg-[var(--color-on-dark)] opacity-70" />
       </span>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Transient: file-capture card (beat 2). Same visual weight as the pill.    */
+/* -------------------------------------------------------------------------- */
+
+function CaptureCard() {
+  return (
+    <div
+      className="flex items-center gap-4 rounded-[var(--radius-window)] px-5 py-4"
+      style={{
+        background: "var(--color-on-dark-glass)",
+        border: "1px solid var(--color-on-dark-hairline)",
+        boxShadow: "var(--shadow-dark-lg)",
+        minWidth: 280,
+      }}
+    >
+      {/* the protagonist red dot stays on the card as it travels */}
+      <span
+        className="h-[13px] w-[13px] shrink-0 rounded-full"
+        style={{ background: "var(--color-accent)" }}
+      />
+      {/* a small waveform thumbnail: the recording, captured */}
+      <span className="flex items-end gap-[3px]" aria-hidden>
+        {[10, 18, 8, 22, 14, 20, 9, 16].map((h, i) => (
+          <span
+            key={i}
+            className="w-[3px] rounded-full bg-[var(--color-on-dark)] opacity-50"
+            style={{ height: h }}
+          />
+        ))}
+      </span>
+      <div className="ml-1 flex flex-col gap-1">
+        <span className="font-[family-name:var(--font-display)] text-[16px] font-medium text-[var(--color-on-dark)] opacity-90">
+          Capture saved
+        </span>
+        <span className="font-[family-name:var(--font-mono)] text-[16px] text-[var(--color-on-dark)] opacity-50">
+          recording.mp4
+        </span>
+      </div>
     </div>
   );
 }
@@ -241,7 +285,6 @@ function RecorderPill({ timer, pulse }: { timer: string; pulse: boolean }) {
 /* -------------------------------------------------------------------------- */
 
 function DropboxGlyph() {
-  // The standard Dropbox open-box mark, monochrome (on-dark at 60%), NOT blue.
   return (
     <svg
       width="22"
@@ -276,7 +319,6 @@ function DropboxFolder({ syncing }: { syncing: boolean }) {
           {PATH}
         </span>
         <span className="flex items-center gap-2 text-[16px] text-[var(--color-on-dark)] opacity-40">
-          {/* the protagonist red dot, now the sync dot */}
           <span
             className="h-[8px] w-[8px] rounded-full"
             style={{ background: "var(--color-accent)" }}
@@ -304,7 +346,6 @@ function ShareLinkCard({ copied }: { copied: boolean }) {
         boxShadow: "var(--shadow-dark-lg)",
       }}
     >
-      {/* path provenance row: where it lives */}
       <div className="flex items-center gap-2.5">
         <DropboxGlyph />
         <span className="font-[family-name:var(--font-mono)] text-[16px] text-[var(--color-on-dark)] opacity-50">
@@ -324,7 +365,6 @@ function ShareLinkCard({ copied }: { copied: boolean }) {
         style={{ background: "var(--color-on-dark-hairline)" }}
       />
 
-      {/* the share link + copy affordance: the frame people screenshot */}
       <div className="flex items-center gap-3">
         <span className="min-w-0 flex-1 truncate font-[family-name:var(--font-mono)] text-[19px] text-[var(--color-on-dark)] opacity-90">
           {SHARE}
@@ -345,7 +385,7 @@ function ShareLinkCard({ copied }: { copied: boolean }) {
               height="18"
               viewBox="0 0 14 14"
               fill="none"
-              initial={{ scale: 0.6, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={SMOOTH}
             >

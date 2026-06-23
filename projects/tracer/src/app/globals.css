@@ -55,6 +55,21 @@ h1, h2, h3 {
   color: inherit;
 }
 
+/* =====================================================================
+ * THE ONE GRID — .grid-page. Defined once; every section's inner content
+ * is a grid child of this. max-width is the content ceiling; the outer
+ * gutter is identical on every section. A section BACKGROUND may bleed
+ * full-viewport (the dark stages), but its CONTENT sits on these tracks.
+ * ===================================================================== */
+.grid-page {
+  max-width: var(--grid-max);
+  margin-inline: auto;
+  padding-inline: var(--grid-gutter);
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  column-gap: var(--grid-colgap);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }

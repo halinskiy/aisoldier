@@ -42,7 +42,8 @@
   "motion": {
     "BlurReveal": { "path": "motion/BlurReveal.tsx", "useWhen": "entry blur-reveal on scroll" },
     "MarqueeInfinite": { "path": "motion/MarqueeInfinite.tsx", "useWhen": "infinite logo/pill marquee" },
-    "SplitText": { "path": "motion/SplitText.tsx", "useWhen": "per-word/char text reveal" }
+    "SplitText": { "path": "motion/SplitText.tsx", "useWhen": "per-word/char text reveal" },
+    "AmbientDrift": { "path": "motion/AmbientDrift.tsx", "useWhen": "one slow blurred low-opacity glow drifting behind a dark stage; opacity clamped <=0.12, duration >=20s, translation-only, pauses under reduced-motion + ?motion=0", "neverFor": "any focal element, a light section, or a shape the user is meant to read" }
   },
   "consent": {
     "CookieConsent": { "path": "consent/CookieConsent.tsx", "useWhen": "GDPR consent gate; mount once", "neverFor": "rebuilding consent inline" }

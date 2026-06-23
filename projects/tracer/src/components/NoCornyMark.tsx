@@ -1,3 +1,7 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+
 /**
  * NoCornyMark - Tracer's own brand identity (NOT the 3mpq fallback logo).
  *
@@ -6,16 +10,25 @@
  * record-red dot. Strokes use currentColor so it themes to ink on light and
  * paper on dark; the dot is always the accent. Pixel-honest, no gradient.
  *
+ * The terminal dot is where the page's record-red protagonist is BORN. With
+ * `pulse`, it plays ONE soft scale pulse on first paint then rests (not a loop).
+ * Reduced-motion / ?motion=0: no pulse, dot renders full red statically.
+ *
  * Project-local (Tracer owns this mark). Pairs with the "NoCorny Tracer"
  * wordmark in the nav and footer.
  */
 type NoCornyMarkProps = {
   /** Mark height in px. Width scales with the viewBox. Default 18. */
   size?: number;
+  /** One-shot pulse on the terminal dot on first paint (birth signal). */
+  pulse?: boolean;
   className?: string;
 };
 
-export function NoCornyMark({ size = 18, className }: NoCornyMarkProps) {
+export function NoCornyMark({ size = 18, pulse = false, className }: NoCornyMarkProps) {
+  const prefersReduced = useReducedMotion();
+  const animate = pulse && !prefersReduced;
+
   return (
     <svg
       width={(size * 34) / 18}
@@ -33,8 +46,17 @@ export function NoCornyMark({ size = 18, className }: NoCornyMarkProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* the record dot - the one accent element */}
-      <circle cx="29" cy="9" r="4" fill="var(--color-accent)" />
+      {/* the record dot - the one accent element, born with a one-shot pulse */}
+      <motion.circle
+        cx="29"
+        cy="9"
+        r="4"
+        fill="var(--color-accent)"
+        style={{ transformOrigin: "29px 9px" }}
+        initial={animate ? { scale: 1 } : false}
+        animate={animate ? { scale: [1, 1.18, 1] } : undefined}
+        transition={{ duration: 0.7, ease: [0.34, 1.42, 0.5, 1], delay: 0.2 }}
+      />
     </svg>
   );
 }

@@ -88,6 +88,16 @@
   --ls-eyebrow: 0.04em;
 
   /* =====================================================================
+   * GRID — the ONE page grid (V2). Every section docks to this; readability
+   * is controlled by which columns content spans, never by a per-section
+   * max-width. Dark backgrounds bleed full-viewport; content stays on track.
+   * ===================================================================== */
+  --grid-max: 1280px;
+  --grid-gutter: 64px;
+  --grid-cols: 12;
+  --grid-colgap: 24px;
+
+  /* =====================================================================
    * RADIUS
    * ===================================================================== */
   --radius-window: 12px;

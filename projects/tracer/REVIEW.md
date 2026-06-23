@@ -4,6 +4,70 @@ Reviews by 3mpq-judge. Nothing reaches the user until the verdict is **PASSED**.
 
 ---
 
+## 2026-06-23 — V2 CREATIVE REBUILD review (whole page raised to hero level)
+
+**Reviewer:** 3mpq-judge
+**Live target:** http://localhost:3107 (1440px desktop). Driven with REAL wall-clock CDP (Chrome on :9333, scroll-into-view + 1.5-3s waits per section), not a single static capture. Scroll-scrubbed sections and the CTA convergence were captured live.
+**Verdict:** ISSUES (1 item: 1 WARN). No FAIL. The page is otherwise a clean pass; the single WARN does not affect the production user experience and is not user-visible.
+
+Independent screenshots (my own, wall-clock driven), all in `/tmp/aisoldier-judge/tracer-v2/`:
+- `01-hero-settled.png` (hero composed rest), `alive-t700.png` (hero alive mid-morph at T+0.7s)
+- `h-03-how-mid.png` (How-it-works scroll-scrubbed, traveling dot rail)
+- `05-features.png` (6-cell bento + tick cell)
+- `06-ownership.png` (dark, 4 lit truth-row dots on the rail)
+- `h-08-faq-open-right.png` (FAQ full-width two-column, ring->dot open marker)
+- `h-11-cta-rest.png` (CTA B2 convergence composed rest)
+- `m0-01-hero.png` / `m0-02-cta.png` (?motion=0 static rest)
+- `m0-03-mobile500.png` (500px stub, no overflow)
+- CDP data: `cdp-results.json`, `cdp-results2.json`, `cdp-motion0.json`
+
+---
+
+### Dev-overlay removal — CONFIRMED CLEAN
+
+- `GridOverlay` is NOT imported in `page.tsx` or anywhere under `src/` (only referenced in its own file + two JSDoc comments). Rendered HTML grep for `grid-overlay`/`column-stripe` returns ZERO. No pink stripes, no toggle button, no dev overlay on the page. The "N" badge bottom-left is the standard Next.js dev-tools indicator (dev-only, never shipped), not a leftover toggle.
+
+### V2 contract — VERIFIED PASS (measured, not assumed)
+
+1. **ONE grid — PASS.** Every `.grid-page` on the page measures identically: `left:80 right:1360 width:1280`, `max-width:1280px`, `padding-inline:64px`. Confirmed across Nav, Hero, How, Features, Ownership, FAQ, CTA, Footer. No per-section narrow shell ( `narrowShells` scan found only the H1 `max-width:885px` which is an honest cols-1-8 span boundary, not a centering shell, and one `inline-flex max-w-full` pill — neither is a section max-width). FAQ is full-width two-column (col lefts at x=144 and x=769 = col 1 and col 7), grid 80-1360, NO centered-narrow strip, `narrow:null`. The headline grid fix is delivered.
+
+2. **HERO alive from frame 1 — PASS (wall-clock proven).** REC timer ticks live: sampled `00:00` (T+0.7s) -> `00:01` (T+1.9s) -> `00:03` (T+3.1s). Three infinite ambient-drift loops running (32s/34s/30s, opacity clamped <=0.12 by the kit `Math.min(...,0.12)`). At T+0.7s the headline is mid blur-reveal (page is animating on paint, not static). Plays once then rests on the composed link-pill + Dropbox folder + red tick object (a single connected unit with a visible vertical thread, NOT v1's two disconnected pills). No beat shrinks to a speck (subPx/min-object scans clean; morph is position+blur, not scale-from-0).
+
+3. **How-it-works — PASS.** Scroll-scrubbed re-stage renders on scroll (height 1326px, multi-panel). Traveling record-red dot rail on the left. Panel 2 = Dropbox card + Synced dot + `~/Dropbox/Tracer/` (Geist Mono); panel 3 = share-link pill + red tick. `hasDropbox/hasPath/hasLink` all true. Dot hand-off REC -> sync -> tick confirmed.
+
+4. **Features — PASS.** 6-cell bento, uniform cells, all bordered. Exactly ONE cell ("One click to share", items[3]) carries the copy->tick red micro-morph; no other colored element in the grid. No icons.
+
+5. **Ownership (dark) — PASS.** `rgb(20,18,16)` dark stage. Single record-red dot travels the left rail; at rest all 4 truth-row dots lit red, two-column within (label cols 1-6, detail cols 7-12), hairline row dividers.
+
+6. **CTA B2 convergence — PASS.** Dark stage `rgb(20,18,16)`. Designed composition, NOT a recolored band: headline "Stop renting your screen recordings." (cols 1-8) + Download button (x=144, w=209) sitting BESIDE the live `tracer.nocorny.com/v/k7r2-mx9p` link pill with red tick + "Free forever. ~12MB. MIT licensed." note line. `hasLink/hasDownload/hasNote/hasHeadline` all true. Plays on scroll, rests composed. This fully resolves the v1 "flat band" failure.
+
+7. **No regression — PASS (with one WARN, below).**
+   - Theme rhythm measured top-to-bottom: Hero dark `rgb(20,18,16)` -> How `#fff` -> Features `#fff` -> Ownership dark -> FAQ `#fff` -> CTA dark -> Footer light. No cream flash.
+   - One accent: blue/violet DOM scan returned ZERO suspect elements. Accent is `#E5484D` only.
+   - `>=16px`: live rendered-DOM sub-16px scan returned EMPTY. The v1 kit offenders are fixed (FooterEditorial no longer has 14px links; `StickyFeatureList` with its 12px "Chapter" kicker is RETIRED and not imported). `ds-lint src/` = 0 errors over 22 files. `slop-scan src/` and `copy.json` both PASS.
+   - `?motion=0`: lands on composed rest (h1 opacity 1, share link present, CTA composed, note line present). Zero infinite animations running (drift paused). CLS held (stage reserves height).
+   - Mobile 500px: `scrollWidth===clientWidth` (500===500), no overflow. Stub = mark + wordmark + one line + one Download button.
+   - Copy matches copy.json. Favicon: served 200 at `/icon.svg` via Next metadata `<link rel="icon" ...icon.svg>` (the `/favicon.ico` 404 is expected and irrelevant; the metadata icon is the shipped favicon).
+   - Console on the NORMAL page (no query): ZERO errors.
+
+---
+
+### Issue requiring fix
+
+| # | Severity | What | Where | Expected | Actual | Fix |
+|---|---|---|---|---|---|---|
+| 1 | **WARN** | Hydration mismatch console error on the `?motion=0` path only | `src/app/layout.tsx:39` `<html>` + the pre-paint bootstrap script (`:48-53`) that sets `document.documentElement.dataset.motion='off'` before hydration | Clean `?motion=0` with no console error (soldier's own RETRO flags hydration mismatches as a known trap; contract global wants the static path clean) | On `?motion=0` React logs "A tree hydrated but some attributes of the server rendered HTML didn't match" for `data-motion="off"` on `<html>`. The bootstrap mutates the attribute pre-hydration; SSR markup has no attribute, so they diverge. The rest state still renders correctly and the page is unaffected — but the warning is real. The NORMAL page (no query) is clean. | Add `suppressHydrationWarning` to the `<html>` element in `layout.tsx` (the standard Next.js pattern for a pre-paint attribute bootstrap, same as theme scripts). One line. Re-verify `?motion=0` console is then clean. |
+
+---
+
+### Verdict rationale
+
+The four V2 mandates are met and measured: the hero reads alive from frame 1 (timer ticking, drift drifting, mid-morph on paint), one full-width grid docks every section (all `.grid-page` identical at 80-1360), every section has a designed alive moment threaded by the record-red dot protagonist (nav -> hero -> how rail -> features tick -> ownership rail -> FAQ open marker -> CTA convergence), and the CTA is a real B2 composition with the link pill beside the Download button. The dev GridOverlay/stripes are gone. No FAIL-severity items.
+
+The single WARN (#1) is a `?motion=0`-only hydration warning that does not touch the production user experience, does not break the static rest state, and is invisible to a normal visitor. It is a one-line `suppressHydrationWarning` fix. Because the contract calls for a clean static path and the soldier's RETRO already names this exact trap, I am logging it as ISSUES rather than waving it through — but it is the ONLY blocker, and it is minor. Fix #1, confirm the `?motion=0` console is clean, and this is a PASS.
+
+---
+
 ## 2026-06-22 — Full product review (Tracer redesign, all 7 sections)
 
 **Reviewer:** 3mpq-judge
