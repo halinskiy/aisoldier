@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3107",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node -e \"const fs = require('fs'); const path = require('path'); const uikitPath = './node_modules/@aisoldier/ui-kit'; if (fs.existsSync(uikitPath)) { const stat = fs.lstatSync(uikitPath); if (stat.isSymbolicLink()) { const target = fs.readlinkSync(uikitPath); console.log('symlink:', target); } else { console.log('ui-kit is a directory'); } }\""
+    "postinstall": "bash -c 'test -L node_modules/@aisoldier/ui-kit && (echo \"symlink exists, target: $(readlink node_modules/@aisoldier/ui-kit)\" && test -d $(readlink node_modules/@aisoldier/ui-kit) && echo \"target exists\" || echo \"target does NOT exist, fixing...\") || echo \"not a symlink\"'"
   },
   "dependencies": {
     "next": "^15.1.0",
