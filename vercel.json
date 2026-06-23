@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && cd projects/tracer && npm run build",
+  "buildCommand": "npm install && cd projects/tracer && npm install && npm run build",
   "outputDirectory": "projects/tracer/.next",
   "installCommand": "npm install --include=dev"
 }
