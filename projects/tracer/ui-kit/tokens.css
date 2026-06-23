@@ -1,0 +1,134 @@
+/*
+ * Aisoldier UI Kit — Tailwind v4 @theme tokens
+ *
+ * Every project's globals.css must do:
+ *     @import "tailwindcss";
+ *     @import "<relpath>/ui-kit/tokens.css";
+ *     @import "../../tokens.css";  // project override
+ *
+ * The tailwindcss import is intentionally NOT here — if it were, any project
+ * importing this file from outside node_modules would fail PostCSS resolution
+ * (ui-kit has no node_modules of its own). Keep the kit file declarative-only.
+ *
+ * Only --color-accent (and its derivatives) may be overridden per project.
+ * See ui-kit/TOKENS.md for the full token documentation.
+ */
+
+@theme {
+  /* ======================================================================
+   * ACCENT (override per project)
+   * ====================================================================== */
+  --color-accent: #0f62fe;
+  --color-accent-hover: #0043ce;
+  --color-accent-subtle: rgba(15, 98, 254, 0.08);
+
+  /* ======================================================================
+   * NEUTRAL — LIGHT (default)
+   * ====================================================================== */
+  --color-bg: #ffffff;
+  --color-surface: #fafafa;
+  --color-surface-2: #f5f5f5;
+  --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
+  --color-text: #212121;
+  --color-text-muted: #525252;
+  --color-text-subtle: #a3a3a3;
+  --color-text-faint: #d4d4d4;
+
+  /* ======================================================================
+   * TYPOGRAPHY
+   * ====================================================================== */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, serif;
+
+  /* Display scale (clamp-based) */
+  --text-display-xl: clamp(64px, 8vw, 128px);
+  --text-display-lg: clamp(48px, 6vw, 96px);
+  --text-display-md: clamp(36px, 4.5vw, 64px);
+
+  /* Heading scale (clamp-based) */
+  --text-h1: clamp(32px, 3.5vw, 48px);
+  --text-h2: clamp(24px, 2.5vw, 36px);
+  --text-h3: 20px;
+
+  /* Body */
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-body-sm: 14px;
+  --text-eyebrow: 12px;
+
+  /* ======================================================================
+   * RADII
+   * ====================================================================== */
+  --radius-window: 12px;
+  --radius-button: 8px;
+  --radius-pill: 9999px;
+
+  /* ======================================================================
+   * MOTION
+   * ====================================================================== */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-minimize: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-micro: 150ms;
+  --duration-menu: 150ms;
+  --duration-modal: 200ms;
+  --duration-section: 400ms;
+  --duration-theme: 800ms;
+
+  /* ======================================================================
+   * SURFACES — DOT GRID
+   * ====================================================================== */
+  --dot-grid-light: radial-gradient(circle, #e5e5e5 1px, transparent 1px);
+  --dot-grid-dark: radial-gradient(circle, #333 1px, transparent 1px);
+  --dot-grid-size: 24px 24px;
+}
+
+/* ========================================================================
+ * DARK THEME (opt-in, on .dark class on <html>)
+ * ======================================================================== */
+.dark {
+  --color-bg: #161616;
+  --color-surface: #1e1e1e;
+  --color-surface-2: #262626;
+  --color-border: #393939;
+  --color-border-strong: #525252;
+  --color-text: #f4f4f4;
+  --color-text-muted: rgba(244, 244, 244, 0.7);
+  --color-text-subtle: rgba(244, 244, 244, 0.5);
+  --color-text-faint: rgba(244, 244, 244, 0.3);
+}
+
+/* ========================================================================
+ * GLOBAL DEFAULTS
+ * ======================================================================== */
+:root {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+body {
+  font-size: var(--text-body);
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(250, 204, 21, 0.35);
+  color: inherit;
+}
+
+/* Minimum body size enforcement — doctrine rule #4 */
+p,
+li,
+span,
+div {
+  /* 16px minimum for body text. 12px reserved for uppercase eyebrow labels. */
+}

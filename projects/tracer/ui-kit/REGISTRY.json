@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "purpose": "Machine-readable component registry. Single source of truth read by 3mpq-architect, 3mpq-prompter, 3mpq-kitwarden and the linter. A component listed here is REUSED (pick a variant), never re-created or forked. If nothing fits, propose a NEW component to add to ui-kit/ and register it here in the same session.",
+    "import": "@aisoldier/ui-kit",
+    "rule": "A button is a button: reuse primary/secondary/tertiary/ghost. A header, a pricing table, a marquee are genuinely different: new components. Variant vs fork: tweaking a copied component is a fork and must become a prop on the original.",
+    "seeded": "2026-06-15 (v1 seed from ui-kit/components; expand as the kit grows)"
+  },
+  "primitives": {
+    "Button": { "path": "ui/Button.tsx", "variants": ["primary", "secondary", "tertiary", "ghost"], "props": ["size", "iconLeft", "iconRight", "href", "disabled"], "useWhen": "any clickable call to action", "neverFor": "a nav header, a tab, a chip, a card" },
+    "TextLink": { "path": "ui/TextLink.tsx", "props": ["href", "external"], "useWhen": "inline text link", "neverFor": "a primary CTA (use Button)" },
+    "Input": { "path": "ui/Input.tsx", "props": ["type", "placeholder", "error"], "useWhen": "single-line form field", "neverFor": "multi-line (use Textarea)" },
+    "Textarea": { "path": "ui/Textarea.tsx", "props": ["rows", "placeholder"], "useWhen": "multi-line form field" },
+    "Select": { "path": "ui/Select.tsx", "props": ["options", "value"], "useWhen": "choose one from a list" },
+    "SegmentedToggle": { "path": "ui/SegmentedToggle.tsx", "props": ["options", "value"], "useWhen": "switch between 2-3 mutually exclusive views (e.g. monthly/yearly)" },
+    "Badge": { "path": "ui/Badge.tsx", "variants": ["default", "accent"], "useWhen": "a short status label", "neverFor": "decoration; chips as filler are banned by the minimalist" }
+  },
+  "section": {
+    "SectionHeader": { "path": "section/SectionHeader.tsx", "props": ["eyebrow", "heading", "body"], "useWhen": "the heading block of a section", "neverFor": "adding a subheading by default; minimum is heading + body" },
+    "EyebrowLabel": { "path": "section/EyebrowLabel.tsx", "useWhen": "uppercase 12px label above a heading", "neverFor": "body text; it is the ONLY allowed sub-16px text" },
+    "FAQAccordion": { "path": "section/FAQAccordion.tsx", "props": ["items", "mode", "onItemToggle"], "useWhen": "FAQ list", "neverFor": "generic disclosure outside FAQ" },
+    "BentoGrid": { "path": "section/BentoGrid.tsx", "useWhen": "asymmetric feature grid" },
+    "ImageCard": { "path": "section/ImageCard.tsx", "useWhen": "single bordered image+caption card" },
+    "ImageCardGrid": { "path": "section/ImageCardGrid.tsx", "useWhen": "grid of image cards" },
+    "MetricsBar": { "path": "section/MetricsBar.tsx", "useWhen": "row of headline numbers" },
+    "LogoBelt": { "path": "section/LogoBelt.tsx", "useWhen": "static row of brand logos" },
+    "NavSticky": { "path": "nav/NavSticky.tsx", "useWhen": "sticky site header", "neverFor": "rebuild a nav inline" },
+    "HeroPinned": { "path": "section/HeroPinned.tsx", "useWhen": "scroll-pinned hero" },
+    "DarkSection": { "path": "section/DarkSection.tsx", "useWhen": "a dark-scoped section wrapper", "neverFor": "ad-hoc dark colors" },
+    "SpecStrip": { "path": "section/SpecStrip.tsx", "props": ["items", "direction", "mono", "tone", "accentDot"], "useWhen": "one quiet hairline strip of terse facts: a horizontal credibility row (replaces chip soup) or a vertical label+detail truth strip", "neverFor": "a scatter of coloured proof pills, a bento grid of cards, or animated numbers (use MetricsBar)" },
+    "SectionDivider": { "path": "section/SectionDivider.tsx", "useWhen": "hairline between sections" },
+    "SectionHeader_": { "path": "section/SectionHeader.tsx", "alias": true },
+    "EditorialQuote": { "path": "section/EditorialQuote.tsx", "useWhen": "a pull quote" },
+    "AvatarStack": { "path": "section/AvatarStack.tsx", "useWhen": "overlapping avatars / people count" },
+    "BlurbWall": { "path": "section/BlurbWall.tsx", "useWhen": "wall of short testimonials" },
+    "BrowserFrame": { "path": "section/BrowserFrame.tsx", "useWhen": "browser-chrome around a screenshot", "neverFor": "a macOS app window (that is a project-local variant pending promotion)" },
+    "ContactStrip": { "path": "section/ContactStrip.tsx", "useWhen": "contact CTA strip" },
+    "PressStrip": { "path": "section/PressStrip.tsx", "useWhen": "as-seen-in press row" },
+    "StickyFeatureList": { "path": "section/StickyFeatureList.tsx", "props": ["items", "header", "defaultVisual", "cardStyle", "itemMinHeight", "showOrdinal"], "useWhen": "sticky-visual + scroll feature list; item.body is string|ReactNode; showOrdinal (default off) gates the Chapter NN kicker" },
+    "ModeSwitcher": { "path": "section/ModeSwitcher.tsx", "useWhen": "toggle between content modes" },
+    "FooterEditorial": { "path": "section/FooterEditorial.tsx", "props": ["wordmark", "tagline", "links", "columns", "legal", "builtWith", "topHref", "topLabel", "hideBottomBar"], "useWhen": "the studio editorial footer; pass columns for labeled groups or links for a flat sitemap; FooterLink.external adds target+rel" }
+  },
+  "motion": {
+    "BlurReveal": { "path": "motion/BlurReveal.tsx", "useWhen": "entry blur-reveal on scroll" },
+    "MarqueeInfinite": { "path": "motion/MarqueeInfinite.tsx", "useWhen": "infinite logo/pill marquee" },
+    "SplitText": { "path": "motion/SplitText.tsx", "useWhen": "per-word/char text reveal" },
+    "AmbientDrift": { "path": "motion/AmbientDrift.tsx", "useWhen": "one slow blurred low-opacity glow drifting behind a dark stage; opacity clamped <=0.12, duration >=20s, translation-only, pauses under reduced-motion + ?motion=0", "neverFor": "any focal element, a light section, or a shape the user is meant to read" }
+  },
+  "consent": {
+    "CookieConsent": { "path": "consent/CookieConsent.tsx", "useWhen": "GDPR consent gate; mount once", "neverFor": "rebuilding consent inline" }
+  },
+  "brand": {
+    "Logo3mpq": { "path": "brand/Logo3mpq.tsx" },
+    "LogoWave": { "path": "brand/LogoWave.tsx" },
+    "Mascot": { "path": "brand/Mascot.tsx" }
+  },
+  "devtools": {
+    "Inspector": { "path": "devtools/Inspector.tsx", "useWhen": "dev-only Cmd+click handoff overlay; mount behind NODE_ENV check" }
+  }
+}

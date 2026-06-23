@@ -1,7 +1,3 @@
-# Include the ui-kit symlink (must come before exclusions)
-!ui-kit/
-ui-kit/**
-
 # Exclude unneeded projects
 /projects/template-design/
 /projects/template-design/node_modules/
