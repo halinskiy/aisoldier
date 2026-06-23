@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3107",
     "typecheck": "tsc --noEmit",
-    "vercel-build": "bash -c 'ls -la ../../ui-kit 2>/dev/null && npm run build || (echo \"ui-kit not at ../../, checking upward\" && ls -la /vercel/path0/../ui-kit 2>/dev/null && npm run build)'"
+    "postinstall": "node -e \"const fs = require('fs'); const path = require('path'); const uikitPath = './node_modules/@aisoldier/ui-kit'; if (fs.existsSync(uikitPath)) { const stat = fs.lstatSync(uikitPath); if (stat.isSymbolicLink()) { const target = fs.readlinkSync(uikitPath); console.log('symlink:', target); } else { console.log('ui-kit is a directory'); } }\""
   },
   "dependencies": {
     "next": "^15.1.0",
