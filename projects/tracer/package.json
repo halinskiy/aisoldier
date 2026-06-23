@@ -6,7 +6,8 @@
     "dev": "next dev -p 3107",
     "build": "next build",
     "start": "next start -p 3107",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "vercel-build": "bash -c 'pwd && ls -la ../../ 2>/dev/null || echo \"../../ not found, trying absolute paths\" && npm run build'"
   },
   "dependencies": {
     "next": "^15.1.0",
