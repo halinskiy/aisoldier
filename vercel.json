@@ -1,7 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "cd projects/tracer && npm run build",
+  "buildCommand": "cd projects/tracer && npm install && npm run build",
   "outputDirectory": "projects/tracer/.next",
-  "installCommand": "cd projects/tracer && npm install",
   "nodeVersion": "24.x"
 }
