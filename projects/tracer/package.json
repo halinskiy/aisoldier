@@ -6,8 +6,7 @@
     "dev": "next dev -p 3107",
     "build": "next build",
     "start": "next start -p 3107",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "bash -c 'if test -L node_modules/@aisoldier/ui-kit; then target=$(readlink node_modules/@aisoldier/ui-kit); if ! test -d \"$target\"; then echo \"fixing broken symlink: $target\"; rm node_modules/@aisoldier/ui-kit; ln -s ../../ui-kit node_modules/@aisoldier/ui-kit; echo \"symlink fixed\"; fi; fi && echo \"checking /vercel/path0/ui-kit:\" && ls -la ../../ui-kit 2>&1 | head -30'"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "next": "^15.1.0",
