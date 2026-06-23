@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3107",
     "typecheck": "tsc --noEmit",
-    "postinstall": "bash -c 'test -L node_modules/@aisoldier/ui-kit && (echo \"symlink exists, target: $(readlink node_modules/@aisoldier/ui-kit)\" && test -d $(readlink node_modules/@aisoldier/ui-kit) && echo \"target exists\" || echo \"target does NOT exist, fixing...\") || echo \"not a symlink\"'"
+    "postinstall": "bash -c 'if test -L node_modules/@aisoldier/ui-kit; then target=$(readlink node_modules/@aisoldier/ui-kit); if ! test -d \"$target\"; then echo \"fixing broken symlink: $target\"; rm node_modules/@aisoldier/ui-kit; ln -s ../../ui-kit node_modules/@aisoldier/ui-kit; echo \"symlink fixed\"; fi; fi'"
   },
   "dependencies": {
     "next": "^15.1.0",
