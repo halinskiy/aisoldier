@@ -1,119 +1,172 @@
-# AESTHETE - Tracer V2 creative rebuild (whole page on the hero's level)
+# AESTHETE - Tracer V3 scroll-scrubbed (LIVE review, real wall-clock scrub)
 
 Reference bar: getcorder.com / Linear / Screen Studio - calm, confident,
-restrained, alive without shouting. Reviewed LIVE at http://localhost:3107,
-1440px, driven with REAL wall-clock time via Playwright + real Chrome (not
-virtual-time, which freezes framer-motion). Every section scrolled into
-view, motion allowed to play and settle, scroll-scrubbed sections scrubbed.
-Reduced-motion (?motion=0) and the 500px mobile stub verified.
+cinematic, alive. Reviewed LIVE at http://localhost:3107, 1440px, driven by
+REAL scroll via tools/scroll-probe.mjs (Lenis-honest scrollY, spring allowed
+to settle at each stop, every scrubbed section scrubbed at 4-5 positions).
+Reduced-motion (?motion=0) and the 500px mobile stub verified. doc=13501px,
+0 console errors, no horizontal overflow at any width.
 
-## V2 verdict: advisory-only (no blockers)
+## V3 verdict: ADVISORY-ONLY (no hard blockers) - but the advisories are the
+## whole reason it still feels boring/empty/AI. Do the focused pass below.
 
-Every section now performs on the hero's level. The four V2 mandates are
-met live: the hero reads alive, the one full-width grid is real and every
-section docks to it (left 80 / right 1360 / width 1280 px on how, features,
-ownership, faq - identical), each section has a designed alive moment, and
-the CTA is a genuine B2 convergence composition, not a recolored band. The
-dev grid overlay is gone (no .grid-overlay in the DOM, no pink stripes).
-Same-role-same-style and uniform-siblings gates both PASS. Ship-blocking:
-none. The items below are polish, ranked by impact.
+The re-architecture WORKED at the mechanical level. The user's three core
+complaints are objectively answered:
+- "no morphs accompany scrolling" -> FALSE now. Verified live: the hero label
+  morphs Hit record -> It is in your Dropbox -> Share the link AS you scroll,
+  the pill cross-fades through the capture card to the link card, the how-it-
+  works track slides horizontally under vertical wheel, the ownership bar fills
+  under the wheel, the CTA dot blooms to card to folder to link pill. Scrolling
+  continuously drives visible transformation top to bottom. This is real scrub,
+  not enter-once reveal.
+- "janky / рвано" -> the engine is sound (one spring per section, compositor
+  props only, sticky pin). It reads smooth in motion. The remaining "janky"
+  TELL is compositional, not frame-rate: see A2 (horizontal panels park mid-
+  slide showing sliced half-panels at both edges).
+- "AI block rhythm" -> genuinely broken. Vertical-scrub dark hero, horizontal-
+  scrub light how-it-works, parallax dark ownership, full-bleed footer wordmark.
+  The shape varies section to section. This is the strongest win of V3.
 
-## What I verified live (measured, not from source)
+So why does it STILL read boring/empty/AI? One root cause dominates, and the
+three weak spots the user already flagged are all symptoms of it.
 
-- GRID UNITY (the headline V2 fix): how / features / ownership / faq each
-  resolve their .grid-page to left=80 right=1360 width=1280 at 1440px.
-  One grid, every section docked. FAQ is now full-width two-column,
-  edge-to-edge - the centered-narrow complaint is dead.
-- SAME-ROLE-SAME-STYLE (blocking gate): all 5 section H2 identical -
-  Geist, 64px, weight 600. No odd-one-out. The footer wordmark (230px/500)
-  is a distinct display role, correctly different. PASS.
-- UNIFORM SIBLINGS (blocking gate): Features = clean 3x2 of equal-w +
-  equal-h cells, hairline borders, label + one line each, calm. Exactly
-  ONE cell ("One click to share") carries the red tick. Ownership = 4
-  uniform truth rows, two-column on grid, all 4 rail dots lit red after
-  the traveling dot walks them. FAQ rows uniform. PASS.
-- HERO ALIVE: a live REC timer ticks 00:01 -> 00:02 -> 00:03 from early
-  frames (separate from the rest-card's frozen 00:04), the record dot
-  pulses (Framer/WAAPI loop), and AmbientDrift drifts on paint. Three
-  things move before the chain settles. Rest state = one consolidated dark
-  share-link card (Dropbox provenance + Synced + red dot + URL + red tick),
-  the focal artifact. No shrink-to-speck at any beat.
-- HOW IT WORKS: scroll-scrubbed re-stage, three full-width panels, the
-  record-red dot travels the left rail and hands off REC dot -> Dropbox
-  sync dot -> copied tick as you scrub. Genuinely designed and alive, not
-  a flat 3-card row.
-- OWNERSHIP: dark stage, traveling-dot rail lights each guarantee, rows
-  blur-reveal staggered. A real dramatic dark beat.
-- FAQ: full-width two-column accordion; open morphs the hollow ring to a
-  filled record-red dot, answer expands with comfortable padding, one dot
-  lit at a time. Verified by actually clicking it open live.
-- CTA CONVERGENCE (the second screenshot moment): plays once on scroll-in.
-  Beat 1 the lone red dot arrives/pulses on the dark stage under the
-  headline; it resolves into the live tracer.nocorny.com/v/k7r2-mx9p pill
-  sitting BESIDE the solid red Download for macOS button; the copy
-  affordance auto-morphs to a red tick at rest. Headline cols 1-8, note
-  line "Free forever. ~12MB. MIT licensed." A designed composition that
-  pays off the page's promise. Not a band.
-- AMBIENT DRIFT: 3 instances at opacity 0.10 / 0.10 / 0.11 (<= 0.12 cap),
-  durations 32s / 34s / 30s (>= 20s). Only continuous content loops on the
-  page are the drift + the record dot, per contract. Tasteful, atmospheric,
-  never crosses text. Not distracting.
-- REDUCED-MOTION (?motion=0): hero lands fully composed (headline, sub,
-  CTAs, share card all legible), no morph needed. Doctrine compliant.
-- MOBILE 500px: single-screen stub, document.body.scrollWidth === 500 ===
-  clientWidth. No overflow. Hero morph does not run.
-- CONSOLE: 0 errors / 0 warnings on normal load.
+## THE ROOT CAUSE (fix this and 80% of "boring/empty" dies): VOID.
 
-## Ranked items (all advisory; conductor's discretion)
+Every pinned/dark stage is a 100vh black (or white) rectangle with a
+modest-sized subject floating in the UPPER-MIDDLE third and a vast dead lower
+half. Measured, not eyeballed:
+- Hero rest (y2100): "Share the link." at ~290px, card top ~440px, card bottom
+  ~610px. Below 610px = ~490px of pure black void. The card is ~590px wide in
+  a 1440px stage = it occupies ~17% of the stage area.
+- Hero scrub (y400-900): subject card ~360px wide, label and card separated by
+  ~200px of black so they do not read as ONE object.
+- Ownership numbers (y7600): three stat headlines jammed in the TOP 280px,
+  then ~640px of black with one orphan dot.
+- CTA convergence beat 1 (y10600): the "arriving dot" is a literal 20px speck
+  in a near-empty 1440x800 black stage. The subject is microscopic.
+- Inter-section frames (y2600, y5600, y11800): transitional moments where one
+  section's content has left and the next has not arrived = an almost fully
+  empty screen with only the floating ScrollDot in it.
 
-1. (med, advisory) HERO FIRST ~300-400ms reads briefly bare on a cold
-   load. The entrance is a staggered BlurReveal cascade (headline d0, sub
-   d0.1, CTAs d0.2, morph stage d0.32, spec d0.42), each 0.6s from
-   opacity:0 + blur(8px). The live REC pill/share card lives inside the
-   morph-stage wrapper that does not begin until 0.32s, so the very first
-   instant the dark canvas below the nav can read empty before the dot +
-   timer become visible. The brief's mandate was "dot pulsing + timer
-   running + drift the INSTANT it paints, BEFORE the morph chain." On a
-   warm load the headline blur-reveals inside ~0.5s and it feels alive, so
-   this is not a blocker - but to fully honor the mandate, surface the
-   pulsing dot + ticking timer EARLIER (e.g. give the REC indicator its own
-   d0 reveal, ahead of the headline cascade, or drop its delay to ~0.05s),
-   so motion is unmissable in frame 1. Impact: removes the last trace of
-   the "is this static / must I wait" doubt.
+Contrast: the ?motion=0 STATIC hero (rm-y0) is a BETTER composition than the
+live scrubbed hero - headline + "Share the link." + card + spec strip all in
+one tight, balanced frame. The scrub broke the cohesion the static state keeps.
 
-2. (low, advisory) CTA right half (cols 7-12) is entirely empty dark
-   except the faint drift; the whole composition is weighted upper-left.
-   It reads as on-brand restraint (getcorder leaves air), but a faint
-   supporting element on the right - or nudging the composition to use the
-   right columns the storyboard's Option A allowed - would balance the
-   optical weight and make the dark stage feel composed rather than
-   one-cornered. Pure polish; current is acceptable.
+### Fix the void (ranked, all advisory, all high-impact on "premium/full")
 
-3. (low, advisory) FAQ 7-into-2 split is 4 left / 3 right, so column B
-   ends one row higher and leaves a touch more trailing whitespace under
-   its last row than column A. Even and intentional enough; only flagging
-   because the asymmetric tail is faintly visible. Optional: balance to
-   4/3 with the taller answers seeded into column B, or accept as-is.
+1. [HIGH] **Make the subject big and vertically centered in every pinned stage.**
+   The morph subject should fill ~50-65% of the stage height/width, optically
+   centered (not pinned to the top third). Hero: take the link card to
+   max-w-[760-820px] and center the whole label+subject group on the viewport
+   mid-line so the dead lower half closes. Same for the CTA convergence subject
+   (the dot/card/folder/pill should arrive at a confident ~480-560px width, the
+   dot beat should be a 40-48px dot or skip the bare-dot beat entirely and open
+   on the capture card). Ownership numbers: vertically center the 3 stats and
+   let them be genuinely large with the runway tighter. The single biggest
+   premium lever on the page.
 
-4. (low, advisory) Footer wordmark is so oversized it bleeds off the top
-   of the viewport at 1440x900, so the terminal squiggle red dot (the
-   protagonist's "final resting place" per the storyboard) is not visible
-   in-frame at rest. The dot motif clearly lands in the nav mark; consider
-   ensuring the footer mark's red terminal dot is visible within a normal
-   viewport so the dot's journey visibly closes. Minor.
+2. [HIGH] **Tighten the runways so there are NO near-empty transition frames.**
+   The hero is 300vh, how 300vh, CTA 200vh. Between pins the page shows a dead
+   frame (y2600, y5600, y11800). Either (a) cut runway heights ~20-25% so beats
+   are denser per scroll unit, or (b) let the next section's content begin
+   rising into the bottom of the outgoing pin (overlap the hand-off) so the
+   screen is never 80% empty. No frame should read as "a dot in a void."
 
-5. (low, advisory, code-side) Could not exercise hover/press from static
-   captures. Confirm the link-pill copy button, the FAQ triggers, and both
-   CTA buttons use the smooth ease (cubic-bezier(0.2,0.8,0.2,1)) and the
-   active:scale(0.97) press, not a hard flip. Source shows the hero CTAs
-   do (ease-out + active:scale-0.97); verify the same on FAQ + pill.
+3. [MED] **Group the label with its subject.** In the hero the beat label and
+   the morph card are ~200px apart vertically. Pull the gap to ~48-64px so the
+   sentence and the object it describes read as one composed unit, the way the
+   static fallback already does.
 
-6. (low, note) On the ?motion=0 run a Next.js dev "1 Issue" overlay badge
-   appeared (absent on the normal load, 0 console errors there). Likely a
-   reduced-motion hydration warning. Dev-only, not an aesthetic concern,
-   but worth a soldier glance.
+## A2 - HORIZONTAL PANELS PARK MID-SLIDE (this is the real "janky" tell)
 
-Nothing here blocks ship. The V2 escalation lands: the whole page now
-reads designed and alive on the hero's level, with elegant (not noisy)
-morphs and one coherent grid. It meets the getcorder / Linear / Screen
-Studio bar.
+[HIGH, advisory] How-it-works: because the 300vw track is a continuous linear
+scrub with no snap, ANY rest position between the 3 snap points shows two or
+three SLICED half-panels at the screen edges (y3700: "oes live." clipped left +
+"It lands in y..." + "~/Dropbox/T" clipped right; y4900: "racer/" left +
+"Send the link" center + "tracer.nocorny.c" right). A still frame caught
+between panels looks broken/unfinished - this is what reads as janky, not the
+frame rate. Fixes, best first:
+- (a) Add scroll-snap so the track rests ON a panel, never between: give the
+  runway snap points at p = 0, 0.5, 1 (CSS scroll-snap on the runway, or clamp
+  the useTransform so it eases to the nearest panel and dwells there). Each rest
+  shows ONE clean full panel.
+- (b) If keeping the free scrub, fade neighbor panels' opacity down hard at the
+  edges (a vignette/mask on the runway) so a sliced panel is dimmed, not a
+  sharp half-card bleeding in. (a) is the premium answer.
+- Also vertically center the panel grid: at y3100 the section heading is pinned
+  top and the panel sits in the bottom 40%, leaving a ~350px empty mid-band.
+
+## A3 - CTA REST IS SCATTERED (user's exact complaint, confirmed)
+
+[HIGH, advisory] At the CTA rest (y11200) the link pill is upper-left (and
+clipping its own text: "tracer.nocorr" cut off at the pill's right edge),
+then a ~150px gap, then the Download button mid-left, then the note - all
+crammed in the left third with the headline OUT of frame and the right 70% of
+the stage empty black. v2's tight grouping is gone. Compose the CTA rest as ONE
+centered stack:
+- headline (in frame), then the resolved link pill (full width, not clipped),
+  then Download + note, all optically centered on the stage with generous but
+  EQUAL vertical rhythm between them. Center the group, do not left-rag it into
+  a void. Fix the link pill clip: at rest the clipPath must finish at inset(0)
+  AND the pill container must be wide enough for the full SHARE string (it is
+  currently narrower than its content, so even resolved it truncates).
+
+## A4 - THE GLOBAL SCROLLDOT READS AS A STRAY DOT, NOT A PROTAGONIST
+
+[MED, advisory] The concept (one record-red dot threading the page, docking at
+each section marker) is good and the docking-to-nav touch (it lands under the
+active nav item, y3700/y6600) is genuinely authored. BUT in the inter-section
+voids (y5600, y7600, y10600) it floats alone in empty space and reads exactly
+as the user feared: "a stray floating dot." It only reads as a protagonist when
+there is something near it to relate to. Fixes:
+- Once the voids close (root-cause fix above), the dot will almost always have a
+  subject nearby - that alone rescues it.
+- Give it a faint vertical hairline trail (a 1px low-opacity accent line it
+  draws behind itself as it travels) so it reads as ONE continuous thread, not a
+  dot that teleports between frames. A trailing spine is the difference between
+  "stray dot" and "the file moving through the page."
+- Make its weave less wandering: the current weave (20/62/32/70/50 vw) sends it
+  to random horizontal spots that rarely align with the on-screen subject. Bias
+  the weave stops so the dot passes THROUGH or beside the active subject at each
+  section, then it reads as the file being carried, which is the whole story.
+
+## A5 - HERO: TOP-OF-PAGE GAP
+
+[LOW, advisory] At y0 the headline sits at ~190px and the first beat label +
+pill sit at ~615-820px, with ~350px of empty black between headline and the
+recorder pill. The very first impression has a soft middle. Pull the opening
+beat up under the headline (or run the headline INTO the first beat as part of
+the scrub) so the first screen is full from the start.
+
+## What HOLDS (do not regress)
+
+- ONE accent (#e5484d record-red) everywhere: dot, sync dots, tick, Download,
+  bar fill, nav active marker, footer dot. No second hue. PASS.
+- Type floor: all visible copy >=16px; spec strip, mono path/link strings,
+  body all >=16px. PASS (confirmed in source + live).
+- Grid unity: how / features / ownership / faq still dock to the V2 unified
+  grid; features = clean 3x2 uniform cards (equal w+h, hairline borders);
+  ownership truth rows uniform with lit red dots; FAQ two-column uniform. The
+  uniform-siblings + same-role-same-style gates from V2 still PASS.
+- Section-shape variety (vertical scrub / horizontal scrub / parallax / full-
+  bleed wordmark) genuinely breaks the AI block rhythm. PASS - keep it.
+- Footer wordmark (y12400) is a confident, premium close. PASS.
+- Reduced-motion: runways collapse (13501->6722px), every scrubbed section
+  rests on a composed static state, 0 CLS. PASS.
+- Mobile 500px stub: single screen, no overflow, minimal. PASS.
+
+## One-pass priority order (do these, re-shoot, ship)
+
+1. Close the VOID: big centered subjects + tighter runways + no empty
+   transition frames (root cause, kills "boring/empty"). [HIGH]
+2. Snap the horizontal how-it-works panels so no frame shows sliced half-panels
+   (kills the "janky" tell). [HIGH]
+3. Recompose the CTA rest as one centered stack, fix the clipped link pill.
+   [HIGH]
+4. Give the ScrollDot a trailing spine + subject-biased weave so it reads as a
+   thread, not a stray dot. [MED]
+5. Close the hero top gap. [LOW]
+
+None of these block ship on the doctrine gates - but items 1-3 are what stands
+between "the morphs technically work" and "this feels like a premium, authored
+film." Worth the one focused pass before deploy.

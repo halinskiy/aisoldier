@@ -45,6 +45,14 @@ type DarkSectionProps = {
    * when a project enforces a single page grid across light AND dark sections.
    */
   bleed?: boolean;
+  /**
+   * Keep the section overflow VISIBLE so a child `position: sticky` runway can
+   * pin (an `overflow: hidden` ancestor silently disables sticky). Default
+   * false (overflow hidden, the original full-bleed clip behavior). Set true on
+   * a dark section that hosts a scroll-scrubbed pinned stage; clip any bleeding
+   * atmosphere in an inner `absolute inset-0 overflow-hidden` layer instead.
+   */
+  allowSticky?: boolean;
   className?: string;
   innerClassName?: string;
   children: ReactNode;
@@ -62,6 +70,7 @@ export function DarkSection({
   grid = true,
   pad = "lg",
   bleed = false,
+  allowSticky = false,
   className,
   innerClassName,
   children,
@@ -73,7 +82,8 @@ export function DarkSection({
       data-source={source}
       data-tokens={tokens}
       className={cx(
-        "dark-scope relative overflow-hidden border-y border-white/10 scroll-mt-24",
+        "dark-scope relative border-y border-white/10 scroll-mt-24",
+        allowSticky ? "" : "overflow-hidden",
         grid && "dot-grid-dark",
         className,
       )}

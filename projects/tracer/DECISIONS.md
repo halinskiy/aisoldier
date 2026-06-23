@@ -1,5 +1,29 @@
 # Tracer — Decision Log
 
+## 2026-06-23 (V3) — Scroll-scrubbed backbone, single page scroll source
+**Decision:** Every backbone section is a `useScrubProgress` instance (vh runway
++ sticky stage + one spring). The page owns ONE no-target `useScroll()`
+(`useGlobalProgress`) shared by the ScrollDot and the Ownership parallax.
+**Why:** the V2 reveal-on-enter model read as "flicker then static text" in the
+lived experience (the user's feedback). Binding morphs to scroll progress makes
+the wheel scrub the page, which is the actual fix. A single scroll source +
+single rAF loop is the anti-jank base (two loops reading stale scrollY 1-2 frames
+apart is the classic рвано cause).
+
+## 2026-06-23 (V3) — Promote ScrollDot + useScrubProgress to the kit
+**Decision:** The through-dot and the scrub engine are reusable on any scroll-
+narrative landing, so they were promoted to `ui-kit/components/motion/
+ScrollDot.tsx` and `ui-kit/hooks/useScrubProgress.ts` (registered in INDEX/
+REGISTRY/index.ts). The project imports them from `@ui-kit`.
+
+## 2026-06-23 (V3) — Delete TravelingDot; Nav off the window scroll listener
+**Decision:** Deleted `TravelingDot.tsx` (it animated `top`, a layout prop) and
+moved the Nav backdrop trigger from `window.addEventListener('scroll')` to a
+`useLenis` subscription.
+**Why:** J4 bans animated layout props; J1/J2 require a single scroll loop with
+no manual scroll listener. The transform-only ScrollDot replaces TravelingDot;
+the Nav now rides the one Lenis loop.
+
 ## 2026-06-23 (V2) — One grid via .grid-page + DarkSection bleed
 **Decision:** Defined `.grid-page` once (globals.css) + grid tokens, and added a
 `bleed` prop to kit `DarkSection` so dark stages bleed full-viewport while their

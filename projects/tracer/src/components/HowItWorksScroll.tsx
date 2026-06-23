@@ -1,106 +1,168 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef, type ReactNode } from "react";
+import { motion, useTransform } from "framer-motion";
 
 import { useEnhancementEnabled } from "@ui-kit/components/motion/useEnhancementEnabled";
+import { useScrubProgress } from "@ui-kit/hooks/useScrubProgress";
 
 /* -------------------------------------------------------------------------- */
-/*  HowItWorksScroll                                                          */
+/*  HowItWorksScroll (V3) - pinned HORIZONTAL scrub                            */
 /* -------------------------------------------------------------------------- */
 /**
- * The hero chain re-staged at reading pace: three full-width panels, each a beat
- * of the record -> ~/Dropbox/Tracer/ -> share-link story. The record-red dot is
- * the through-line: REC dot (panel 1) -> Dropbox sync dot (panel 2) -> copied
- * tick (panel 3). Same object, three honest jobs, blur-morphing as the dot rail
- * tracks scroll progress down the section.
+ * The record -> own -> share chain told once more, off-axis: vertical scroll
+ * drives a horizontal track of 3 panels (SECTION_CONTRACT_V3 S3 / DIRECTION_V3
+ * A2). The single permitted axis break, a real Framer scrub.
  *
- * Replaces the v1 StickyFeatureList approach. Each panel is a grid child (its
- * caller wraps the whole section in GridPage); the panel text + visual span the
- * full 1-12. Panel entrances use the kit scroll-timeline reveal (.st-reveal),
- * native, off main thread. The dot rail is a single Framer element whose colour
- * and glyph cross-fade with scroll progress, gated by useEnhancementEnabled.
+ * HYDRATION FIX (2026-06-23): the scrub engine lives ONLY in the inner
+ * <HowItWorksScrubbed>, mounted ONLY when enhanced, so the ref passed to
+ * useScroll is always attached to a rendered runway element in the same commit.
+ * No "defined but not hydrated" target. The gate + the static fallback own no
+ * scroll hook.
  *
- * Static mode (reduced-motion / ?motion=0 / SSR / narrow): the rail dot rests as
- * the tick at the bottom; every panel is fully visible. CLS 0.
+ * PANEL-WIDTH FIX (2026-06-23): each panel is a FULL viewport-width slide
+ * (w-screen, content centered on a comfortable max-w-[1080px] inner). Body text
+ * sits at a comfortable measure (max-w-[44ch]); the visual is placed in the
+ * second grid column with its own column gap so it never overlaps the text. One
+ * panel fills the screen at a time as the user scrubs. Track travel -200% over
+ * 3 panels (x: 0% -> -66.667% of a 300%-wide track).
  *
- * Project-local; promote on second use (HANDOFF.md).
+ * Static mode (reduced-motion / ?motion=0 / SSR / narrow): the 3 panels lay out
+ * as a normal vertical stack (no x). CLS 0. Anti-jank: J1-J10 (only `x` is
+ * scrubbed; one spring; sticky pin; vh runway; will-change on the track only).
+ *
+ * Project-local; stays project-local (Tracer-specific horizontal track).
  */
-
-const PATH = "~/Dropbox/Tracer/";
-const SHARE = "tracer.nocorny.com/v/k7r2-mx9p";
 
 type Panel = {
   title: string;
-  body: React.ReactNode;
-  visual: React.ReactNode;
+  body: ReactNode;
+  visual: ReactNode;
 };
 
 export function HowItWorksScroll({ panels }: { panels: Panel[] }) {
   const enhance = useEnhancementEnabled({ minWidth: 1024 });
-  const prefersReduced = useReducedMotion();
-  const live = enhance && !prefersReduced;
 
-  const railRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: railRef,
-    offset: ["start 70%", "end 60%"],
-  });
+  // STATIC FALLBACK: hook-free, the 3 panels as a normal vertical stack.
+  if (!enhance) {
+    return (
+      <div className="flex flex-col gap-16">
+        {panels.map((panel, i) => (
+          <PanelBody key={i} panel={panel} index={i} total={panels.length} />
+        ))}
+      </div>
+    );
+  }
 
-  // The rail dot travels top -> bottom as the section scrolls through.
-  const dotTop = useTransform(scrollYProgress, [0, 1], ["4%", "96%"]);
+  return <HowItWorksScrubbed panels={panels} />;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  HowItWorksScrubbed - mounted only when enhanced; owns the scroll engine     */
+/* -------------------------------------------------------------------------- */
+
+function HowItWorksScrubbed({ panels }: { panels: Panel[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const p = useScrubProgress(ref); // ONE spring (J5). ref is ALWAYS attached.
+  // 3 panels on a 300%-wide track => travel two panel widths = -66.667%.
+  // SNAP (2026-06-23): instead of a linear scrub (which parks the track between
+  // panels, showing sliced half-panels at both edges), the track DWELLS on each
+  // panel. The transition between panels happens in a short window, then the
+  // track holds on the next full panel for the rest of that third. Any rest
+  // position shows ONE clean full panel, never a sliced half. Compositor `x`
+  // only (J9); still ONE spring (the dwell is in the input->output map, not a
+  // second spring).
+  const x = useTransform(
+    p,
+    [0, 0.34, 0.46, 0.66, 0.78, 1],
+    ["0%", "0%", "-33.333%", "-33.333%", "-66.667%", "-66.667%"],
+  );
 
   return (
-    <div ref={railRef} className="relative">
-      {/* the dot rail: a faint vertical line on the far left of the content */}
-      <span
-        className="pointer-events-none absolute left-0 top-0 hidden h-full w-px lg:block"
-        style={{ background: "var(--color-border)" }}
-        aria-hidden
-      />
-      {live && (
-        <motion.span
-          className="pointer-events-none absolute left-0 z-[2] hidden h-[14px] w-[14px] -translate-x-1/2 -translate-y-1/2 rounded-full lg:block"
-          style={{ top: dotTop, background: "var(--color-accent)" }}
-          animate={{ scale: [1, 1.18, 1] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden
-        />
-      )}
-
-      <ol className="flex flex-col gap-px lg:pl-12">
-        {panels.map((panel, i) => (
-          <li
-            key={i}
-            className={`st-reveal st-reveal-${(i % 4) + 1} grid grid-cols-1 items-center gap-10 border-t border-[var(--color-border)] py-16 first:border-t-0 lg:grid-cols-2 lg:gap-16`}
-          >
-            <div>
-              <h3
-                className="font-[family-name:var(--font-display)] font-semibold text-[var(--color-text)]"
-                style={{ fontSize: "var(--text-body-lg)" }}
-              >
-                {panel.title}
-              </h3>
-              <p className="mt-4 max-w-[46ch] font-[family-name:var(--font-sans)] text-[16px] leading-[1.6] text-[var(--color-text-muted)]">
-                {panel.body}
-              </p>
+    // Full-bleed runway: break out of the grid column so each panel is a true
+    // 100vw slide. The runway gives the sticky stage something to scrub.
+    <div
+      ref={ref}
+      style={{ height: "240vh" }}
+      className="relative left-1/2 w-screen -translate-x-1/2"
+    >
+      <div
+        className="flex items-center overflow-hidden"
+        style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          // Edge mask: feather the left/right 7vw so a panel caught mid-slide at
+          // a screen edge fades out instead of bleeding in as a sharp half-card.
+          // With the dwell snap most rests land on a full panel; this makes the
+          // in-between transition frames read clean too (no sliced half-panel).
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0, rgba(0,0,0,1) 7vw, rgba(0,0,0,1) calc(100% - 7vw), transparent 100%)",
+          maskImage:
+            "linear-gradient(to right, transparent 0, rgba(0,0,0,1) 7vw, rgba(0,0,0,1) calc(100% - 7vw), transparent 100%)",
+        }}
+      >
+        <motion.div
+          className="flex h-full"
+          style={{ x, width: "300vw", willChange: "transform" }}
+        >
+          {panels.map((panel, i) => (
+            <div
+              key={i}
+              className="flex h-full w-screen shrink-0 items-center justify-center"
+            >
+              <PanelBody panel={panel} index={i} total={panels.length} />
             </div>
-            <div className="flex justify-center lg:justify-end">{panel.visual}</div>
-          </li>
-        ))}
-      </ol>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Panel visuals - reading-pace static frames of each hero beat              */
+
+function PanelBody({
+  panel,
+  index,
+  total,
+}: {
+  panel: Panel;
+  index: number;
+  total: number;
+}) {
+  return (
+    <div className="grid w-full max-w-[1120px] grid-cols-1 items-center gap-16 px-8 lg:grid-cols-[1fr_minmax(0,520px)] lg:gap-24">
+      <div>
+        <span className="font-[family-name:var(--font-mono)] text-[16px] tabular-nums text-[var(--color-text-muted)]">
+          {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </span>
+        <h3
+          className="mt-4 font-[family-name:var(--font-display)] font-semibold text-[var(--color-text)]"
+          style={{ fontSize: "var(--text-display-md)", lineHeight: "var(--lh-h2)", letterSpacing: "var(--ls-display)" }}
+        >
+          {panel.title}
+        </h3>
+        <p className="mt-6 max-w-[44ch] font-[family-name:var(--font-sans)] text-[19px] leading-[1.6] text-[var(--color-text-muted)]">
+          {panel.body}
+        </p>
+      </div>
+      <div className="flex w-full justify-center lg:justify-end">{panel.visual}</div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Panel visuals - reading-pace static frames of each chain beat             */
 /* -------------------------------------------------------------------------- */
 
-function PanelShell({ children }: { children: React.ReactNode }) {
+const PATH = "~/Dropbox/Tracer/";
+const SHARE = "tracer.nocorny.com/v/k7r2-mx9p";
+
+function PanelShell({ children }: { children: ReactNode }) {
   return (
     <div
-      className="flex min-h-[180px] w-full max-w-[460px] items-center justify-center rounded-[var(--radius-window)] border border-[var(--color-border)] bg-[var(--color-surface)] p-10"
+      className="flex min-h-[240px] w-full max-w-[520px] items-center justify-center rounded-[var(--radius-window)] border border-[var(--color-border)] bg-[var(--color-surface)] p-12"
       style={{ boxShadow: "var(--shadow-md)" }}
     >
       {children}
@@ -138,7 +200,7 @@ export function DropboxVisual() {
         className="flex w-full items-center gap-5 rounded-[var(--radius-window)] border border-[var(--color-border-strong)] bg-[var(--color-bg)] px-7 py-6"
         style={{ boxShadow: "var(--shadow-lg)" }}
       >
-        <svg width="34" height="32" viewBox="0 0 32 30" fill="none" aria-hidden>
+        <svg width="34" height="32" viewBox="0 0 32 30" fill="none" aria-hidden className="shrink-0">
           <path
             d="M8 0L0 5.2L8 10.4L16 5.2L8 0ZM24 0L16 5.2L24 10.4L32 5.2L24 0ZM0 15.6L8 20.8L16 15.6L8 10.4L0 15.6ZM24 10.4L16 15.6L24 20.8L32 15.6L24 10.4ZM8 22.5L16 27.7L24 22.5L16 17.3L8 22.5Z"
             fill="var(--color-text-muted)"

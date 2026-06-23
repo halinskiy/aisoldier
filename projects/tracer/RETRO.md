@@ -4,6 +4,117 @@ Private learning journal for agents. NOT shown to the user. Each agent writes he
 
 Read this file at the START of every session before building anything.
 
+## 2026-06-23 — soldier — V3 premium-feel polish (void / CTA rest / panel snap)
+
+### What took longer than it should have?
+Nothing burned retries, but the FIRST pass left two new near-empty frames I only
+caught on the re-probe: (a) the CTA opening frame was empty because I gave the
+headline a clip-reveal tied to `p` (clipped to nothing at p~0, before the pin
+even engages) instead of making the anchor always-visible; (b) I briefly set the
+ownership numbers sticky to `height:78vh` to "lift" the content, which is wrong —
+a sub-100vh sticky inside a vh runway just adds dead space at the bottom of every
+frame. Reverted to 100vh and solved the seam with an overlap (`-mt-[18vh]` on the
+following rows) instead.
+
+### What did I miss that the prior reviews caught?
+The reviews (judge + aesthete) were already explicit that the void shows at
+TRANSITION SEAMS, not in the beats. My instinct was to tune the beats; the actual
+fix was structural: pull the headline into the pin so the rest composes, tighten
+runways, and OVERLAP hand-offs. The `?motion=0` static was a free cohesion oracle
+the whole time — I should reference it FIRST when judging where things should rest,
+not after.
+
+### What will I do differently next time?
+1. A persistent ANCHOR in a pinned stage (a headline) must be unconditionally
+   visible, never gated on scroll progress — only the morphing SUBJECT scrubs.
+   Otherwise the stage is empty until the subject arrives.
+2. To close a dead seam between two pinned sections, OVERLAP them (negative margin
+   pulling the next section up into the outgoing runway tail) rather than shrinking
+   the sticky height (which adds bottom dead space).
+3. For horizontal scrub panels, dwell-snap the x map (plateaus at each panel) AND
+   add an edge mask — the dwell handles most rests, the mask saves the in-between
+   transition frame. CSS scroll-snap fights Lenis, so do it in the transform map.
+4. Always re-probe by REAL scroll after the fix; the gates + ?motion=0 pass even
+   when a live transition frame is empty (the bug the user keeps catching).
+
+---
+
+## 2026-06-23 — 3mpq-soldier — V3 scrub hotfix (ref hydration + sticky pin + panel width)
+
+### What took longer than it should have?
+The build "passed gates" but was broken in the lived scroll because the two
+failures are invisible to both ds-lint and tools/shoot.mjs. shoot.mjs uses
+Chrome `--screenshot` which renders only the static/first-paint frame, so it
+NEVER exercises a scroll-driven morph. I had to write a CDP scroll-and-screenshot
+probe (tools/scroll-probe.mjs, Node 22 built-in WebSocket, zero deps) that drives
+real Chrome, scrolls to absolute positions, lets the spring settle, and captures
+the console. That probe found the "not hydrated" error in one run and then the
+negative-top sticky bug via a getBoundingClientRect readout. Lesson: a scrubbed
+build is not verified until something has actually SCROLLED it in a real browser
+and read both the console and the element rects.
+
+### What did I miss (that the user caught)?
+Two bugs, both upstream of my edits, both classic:
+1. Calling `useScroll({target: ref})` in a component that early-returns a fallback
+   where the ref is never attached. On the first render the gate is false, the
+   fallback renders, the target is unhydrated, Framer throws, scrollYProgress
+   freezes. I initially assumed the ref fix alone would solve it.
+2. `overflow:hidden` on an ancestor silently disabling `position:sticky`. After
+   the ref fix the opacity probe showed beat-3 at opacity 1.0, yet the screenshot
+   was empty — because the sticky stage had a NEGATIVE top (scrolled off-screen).
+   Only reading getBoundingClientRect().top revealed it. I would have chased the
+   clip-reveal timing forever without that rect readout.
+
+### What will I do differently next time?
+- For ANY scroll-scrubbed component: never call the scroll hook in the same
+  component that conditionally returns a hook-free fallback. Split into a gate
+  (no hook) + an inner `*Scrubbed` (owns the hook, ref always attached). Make this
+  the default shape, not a fix.
+- When a scrubbed stage looks empty but the element opacity is 1.0, read
+  getBoundingClientRect().top before touching the animation timing — a sticky
+  stage with a negative top means an `overflow:hidden` ancestor broke the pin.
+- Verify a scrubbed build with scroll-probe.mjs (real scroll + console + rects),
+  not shoot.mjs, before claiming the morph works. shoot.mjs only proves the
+  static fallback.
+
+## 2026-06-23 — 3mpq-soldier — V3 scroll-scrubbed motion re-architecture
+
+### What took longer than it should have?
+The em-dash sweep. I wrote every component with `—` in the JSDoc comment banners
+(habit). ds-lint ERRORs on em-dash after code on the same line and WARNs in pure
+comments; one inline comment (`Features.tsx:28`) was a hard ERROR. My first perl
+sweep failed twice: once the `for` loop ate the whole space-separated `$FILES`
+string as one filename, and once perl ran without `-CSD` so it never matched the
+multibyte `\x{2014}` and silently left the dashes (and the double-run garbled a
+middle-dot into a U+FFFD replacement char). Lesson below.
+
+### What did I miss that a gate caught?
+1. `useTransform` cannot animate a CSS-var color: my first TruthRows lit the row
+   dot by interpolating `background` from `rgba(0,0,0,0)` to `var(--color-accent)`,
+   which Motion rejects at runtime ("not an animatable color"). The dev console
+   warned, not the build. Fix: never color-interpolate a token; fade the OPACITY
+   of a filled accent dot layered over a hollow ring instead (compositor-safe,
+   stays token-driven, no raw hex).
+2. J2 flagged the pre-existing Nav `window.addEventListener('scroll')`. It only
+   drove a boolean backdrop, not a morph, but the contract blocks on ANY match.
+   Moved it to `useLenis(({scroll})=>...)` with a threshold guard so it rides the
+   single Lenis loop and never re-renders per frame.
+
+### What will I do differently next time?
+- Write comment banners with ASCII dashes (`-`) from the start. Never type `—`
+  in a .tsx, even in a comment; the linter cannot tell a banner from prose.
+- For any multibyte text sweep use `perl -CSD -i -pe` and iterate the file list
+  with a real `for f in a b c` (one path per word), never a `$FILES` variable
+  holding a space-joined string passed as one argument.
+- Reflex rule for scroll-driven dots/markers: light them by OPACITY of a
+  pre-colored layer, never by animating `background`/`borderColor` between a
+  transparent value and a CSS var. Motion can't tween a var color and it's a
+  silent runtime warning, not a build failure.
+- The shoot tool renders the STATIC fallback (headless = no enhancement), so a
+  green screenshot proves the `?motion=0` composed-end-state gate but NOT the
+  scrubbed experience. State that honestly; the scrubbed path needs a real
+  interactive viewport (the user's scroll test) to verify.
+
 Format:
 ```
 ## YYYY-MM-DD — {agent name} — {task completed}

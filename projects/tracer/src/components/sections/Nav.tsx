@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLenis } from "lenis/react";
 
 import { NoCornyMark } from "../NoCornyMark";
 import copy from "@content/copy.json";
@@ -33,12 +34,14 @@ export function Nav() {
     visible: false,
   });
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Nav backdrop flips on/off past 24px. Ride the SINGLE Lenis rAF loop (no
+  // manual scroll listener, no second loop - J1/J2). The setState only fires on
+  // the threshold CROSS (guarded), never per frame, so it is not setState-on-
+  // scroll in the jank sense (J3): no morph is driven by it.
+  useLenis(({ scroll }) => {
+    const next = scroll > 24;
+    setScrolled((prev) => (prev === next ? prev : next));
+  });
 
   // Position the sliding dot under the active link's center.
   useEffect(() => {

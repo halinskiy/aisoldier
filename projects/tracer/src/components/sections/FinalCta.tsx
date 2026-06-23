@@ -1,18 +1,22 @@
 import { DarkSection } from "@ui-kit/components/section/DarkSection";
-import { BlurReveal } from "@ui-kit/components/motion/BlurReveal";
-import { AmbientDrift } from "@ui-kit/components/motion/AmbientDrift";
 
 import { GridPage } from "../GridPage";
 import { CTAConvergence } from "../CTAConvergence";
 import copy from "@content/copy.json";
 
 /**
- * S7a - Final CTA. The B2 payoff convergence: the whole morph chain collapses
- * one last time into the live share-link pill beside the Download button. DARK
- * full-bleed stage with one AmbientDrift glow behind; content on the ONE page
- * grid. Headline spans cols 1-8; the convergence composition + Download + link
- * pill span the full 1-12. No body paragraph (the convergence is the body), no
- * second CTA, no GitHub repeat, no eyebrow. Note line under the cluster.
+ * S7a - Final CTA (V3). The narrative CLIMAX: a scroll-scrubbed convergence
+ * (dot -> capture -> Dropbox -> live link pill) on a 150vh runway that comes to
+ * REST on the composed payoff (CTAConvergence). DARK full-bleed stage.
+ *
+ * The headline now lives INSIDE the pinned stage (passed into CTAConvergence)
+ * so that at the runway end the headline + resolved link pill + Download button
+ * + note line are ALL co-visible and optically centered, the way the Hero rests
+ * on its share-link card. Previously the headline sat in a separate grid block
+ * above the sticky stage and scrolled off before p=1, ending the page on a void.
+ *
+ * final_cta.body is SUPPRESSED (the convergence is the body, SECTION_CONTRACT_V3
+ * Part 5). No second CTA, no GitHub repeat, no eyebrow.
  */
 export function FinalCta() {
   const { final_cta } = copy;
@@ -22,43 +26,16 @@ export function FinalCta() {
       component="FinalCtaSection"
       source="projects/tracer/src/components/sections/FinalCta.tsx"
       bleed
+      allowSticky
     >
-      <AmbientDrift
-        position={{ top: "24%", left: "12%" }}
-        size={560}
-        opacity={0.11}
-        duration={30}
-        blur={100}
-        amplitude={72}
-      />
-
       <GridPage className="relative z-[1]">
-        <div className="col-span-12 lg:col-span-8">
-          <BlurReveal>
-            <h2
-              className="font-[family-name:var(--font-display)] font-semibold text-white/90"
-              style={{
-                fontSize: "var(--text-display-md)",
-                lineHeight: "var(--lh-h2)",
-                letterSpacing: "var(--ls-display)",
-                maxWidth: "16ch",
-              }}
-            >
-              {final_cta.heading}
-            </h2>
-          </BlurReveal>
-        </div>
-
-        <div className="col-span-12 mt-12">
-          <BlurReveal delay={0.1}>
-            <CTAConvergence
-              downloadLabel={final_cta.cta_primary}
-              downloadHref="/download"
-            />
-            <p className="mt-8 font-[family-name:var(--font-sans)] text-[16px] text-white/40">
-              {final_cta.note}
-            </p>
-          </BlurReveal>
+        <div className="col-span-12">
+          <CTAConvergence
+            heading={final_cta.heading}
+            downloadLabel={final_cta.cta_primary}
+            downloadHref="/download"
+            note={final_cta.note}
+          />
         </div>
       </GridPage>
     </DarkSection>

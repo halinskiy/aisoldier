@@ -1,5 +1,30 @@
 # Tracer — Components
 
+> V3 (2026-06-23) re-architected MOTION (scroll-scrubbed, not reveal-on-enter).
+> The component shells below stay; their motion model changed. See the V3 block.
+
+## V3 motion components (2026-06-23)
+
+Kit (promoted this session):
+- `@ui-kit/hooks/useScrubProgress` — the scroll-scrub engine (useScroll+useSpring
+  once -> one `p`). Used by Hero, How-it-works, Ownership numbers, CTA.
+- `@ui-kit/components/motion/ScrollDot` — global fixed through-dot driven by the
+  page progress; docks at section markers. Mounted once in page.tsx.
+
+Project-local:
+- `src/hooks/useGlobalProgress.ts` — the ONE no-target useScroll() (page spine).
+  Feeds ScrollDot + Ownership parallax.
+- `src/components/ScrubReveal.tsx` — A4 scroll-linked clip/blur type reveal
+  (replaced BlurReveal on all section H2s).
+- `HeroMorphStage.tsx` — REWORKED: 3-beat vertical scrub (300vh).
+- `HowItWorksScroll.tsx` — REWORKED: Framer horizontal scrub (300vh).
+- `CTAConvergence.tsx` — REWORKED: 4-beat scroll climax (200vh).
+- `OwnershipNumbers.tsx` — NEW: A5 scrubbed numbers strip (150vh).
+- `TruthRows.tsx` — NEW: A4 reveal rows (replaced TravelingDot).
+- `Features.tsx` — REWORKED: per-cell local-useScroll reveal (no enter stagger).
+- DELETED: `TravelingDot.tsx` (animated `top`, a layout prop = jank).
+- Nav: backdrop now rides `useLenis` (no addEventListener('scroll')).
+
 > V2 (2026-06-23) reworked the section roster. The grid, the dot-thread, and
 > the per-section alive moments below supersede the v1 component map where they
 > conflict. SpecStrip and the v1 hero rest-card carry forward inside the new

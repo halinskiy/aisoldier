@@ -1,5 +1,177 @@
 # Tracer — Changelog
 
+## 2026-06-23 — V3 POLISH: close the void, compose the CTA rest, snap the panels (soldier)
+Focused premium-feel pass on the working V3 scrub (every working mechanic kept:
+engine, J1-J10 anti-jank, scrub correctness, ScrollDot, one accent #E5484D,
+>=16px, grid, mobile stub, ?motion=0 fallback). Verified by REAL scroll
+(tools/scroll-probe.mjs) at 40+ positions, not gates/?motion=0 alone. Doc went
+13501px -> 10947px (tighter runways). 0 console errors on / and /?motion=0.
+
+1. CTA CLIMAX RESTING FRAME (was: ends on empty black void). The headline was a
+   separate grid block ABOVE the sticky stage, so it scrolled off before p=1 and
+   the composed payoff never rested co-visible. Fix: pulled the headline INTO the
+   pinned stage (FinalCta now passes `heading` to CTAConvergence; the separate
+   headline GridPage + its ScrubReveal are gone). Headline is the persistent
+   anchor (always visible, no clip-reveal). All beats finish by ~p0.85; from
+   p0.85->1 the composed cluster (headline + resolved link card + Download + note)
+   HOLDS static and CENTERED, like the Hero rests on its share card. The link is
+   now a FULL-WIDTH card (max-w-[640px]) so tracer.nocorny.com/v/k7r2-mx9p is
+   NEVER truncated and the clip-reveal finishes at inset(0 0 0 0). Runway 200vh
+   -> 150vh. Verified: CTA rest at p~1 = full composed cluster, pill not clipped;
+   the ?motion=0 static composes identically (cohesion reference matched).
+   Files: CTAConvergence.tsx (rewritten), sections/FinalCta.tsx.
+
+2. CLOSE THE VOID across pinned stages. Subjects enlarged + centered, runways
+   tightened so beats are denser with no near-empty transition frames:
+   - Hero 300vh -> 230vh; sticky stage biased to the UPPER third (pt-[14vh],
+     justify-start) so the beat label + subject sit right under the H1 (closed
+     the y0 soft void); subject box 260->300px, link card max 600->660px; H1 lead
+     tightened (-mb-[8vh]). Files: HeroMorphStage.tsx, sections/Hero.tsx.
+   - CTA subject larger (dot 20->24px, cards minWidth 380->420px), centered.
+   - Ownership numbers runway 150vh -> 120vh, beats finish by ~p0.78 then hold.
+
+3. SNAP THE HORIZONTAL PANELS (the real "janky" tell). The how-it-works 300vw
+   track was a linear scrub that parked between panels showing sliced half-panels.
+   Fix: the x map now DWELLS on each panel (dwell zones at p 0-0.34 / 0.46-0.66 /
+   0.78-1 -> 0% / -33.333% / -66.667%) so any rest settles on ONE full panel; plus
+   a 7vw horizontal edge MASK feathers any panel caught mid-slide so a transition
+   frame reads clean, never a sharp sliced half-card. Runway 300vh -> 240vh. Still
+   ONE spring, compositor `x` only (J5/J9 intact). File: HowItWorksScroll.tsx.
+
+4. OWNERSHIP SEAM (was: ~600px empty dark viewport between numbers and truth
+   rows). Numbers strip now top-biased + finishes early; truth rows pulled UP into
+   the runway tail (-mt-[18vh]) so they rise as the strip rests (overlapped
+   hand-off). The dead band is closed; reads as one continuous section. Files:
+   OwnershipNumbers.tsx, sections/Ownership.tsx.
+
+5. SCROLLDOT SPINE + subject-biased weave (kit). ScrollDot now draws a faint 1px
+   trailing spine above the dot (linear-gradient, fades upward, shares the dot's
+   opacity so it fades at docks) so it reads as one continuous thread, not a stray
+   dot. New props: spine / spineVh / spineOpacity (default on). The page weave is
+   biased toward center (44-52vw) where the hero card / how panels / CTA subjects
+   sit, so the dot passes BESIDE the active subject. Files: ui-kit ScrollDot.tsx
+   (promoted), app/page.tsx.
+
+Gates: ds-lint src 0/0 over 24 files; slop-scan src + copy PASS; next build green;
+ScrollDot.tsx lint clean. (Pre-existing em-dash WARNs in unrelated kit files
+MarqueeInfinite/SplitText were untouched, not used by Tracer.)
+
+## 2026-06-23 — V3 scrub HOTFIX: ref hydration + broken sticky pin + panel width (soldier)
+Urgent fix round: gates passed but a live hand scroll-test showed the scrubbed
+sections broken. Two independent root causes, both fixed and verified by a real
+CDP scroll-and-screenshot probe (tools/scroll-probe.mjs, new) at multiple scroll
+positions, since tools/shoot.mjs only renders the static fallback.
+
+ROOT CAUSE 1 — useScroll target ref not hydrated.
+Every scrubbed component called `useScrubProgress(ref)` / `useScroll({target:ref})`
+at the top, then early-returned the static fallback (where `ref` was never
+attached) on the first render (useEnhancementEnabled is false on SSR + first
+client frame). Framer threw "Target ref is defined but not hydrated", scrollY-
+Progress never advanced, and every useTransform froze -> empty stages.
+Fix: split each scrubbed section into a thin gate that owns NO scroll hook, plus
+an inner `*Scrubbed` component mounted ONLY when enhanced. The inner component
+attaches its ref to an unconditionally rendered runway element in the SAME commit
+the hook runs, so useScroll never sees an unhydrated target. Hook order is stable
+in every component. Files: HeroMorphStage, HowItWorksScroll, CTAConvergence,
+OwnershipNumbers, ScrubReveal. (TruthRows.Row and Features.FeatureCell already
+attached their ref unconditionally, so they were safe and unchanged.)
+Result: console "not hydrated" error GONE; scrollYProgress drives the morphs.
+
+ROOT CAUSE 2 — overflow:hidden ancestor disabled position:sticky.
+Even after the ref fix the hero/CTA stages still scrolled away (sticky stage had
+a NEGATIVE top, morph subject pushed off-screen). Cause: `overflow:hidden` on an
+ancestor silently disables a descendant's position:sticky. The Hero section and
+the kit DarkSection both carried overflow-hidden.
+Fix: moved the Hero's overflow-hidden onto a dedicated `absolute inset-0
+overflow-hidden` AmbientDrift clip layer (so the glow still clips without
+breaking the pin); added an `allowSticky` prop to the kit DarkSection that drops
+overflow-hidden, set on the CTA. Now both stages pin and the morph subject is
+present at every scroll position.
+
+ALSO — how-it-works panels (one word per line + visual overlapping text).
+The dead scrub had all 3 panels visible at 1/3 width simultaneously, and
+PanelBody used a 2-col grid inside a narrow column. Reworked: each panel is now a
+full 100vw slide (full-bleed `left-1/2 w-screen -translate-x-1/2` runway, track
+width 300vw, x scrubs 0% -> -66.667%); body at a comfortable max-w-[44ch]; the
+visual sits in its own `minmax(0,520px)` grid column with a 24-col gap so it
+never overlaps the text. One panel fills the screen at a time.
+
+ALSO — no dead frames in the runways. Widened the beat cross-fade overlaps so
+beats share a blur seam (hero beat-2 exit 0.74 overlaps beat-3 reveal 0.62-0.84,
+finishing before p=1) and enlarged the morph subjects (hero/CTA cards bigger,
+hero stage box 260px) so the stage always carries a confident, large focal
+composition, never a tiny pill in a black void.
+
+Verified: 0 console errors on / and /?motion=0; morph subject visible at every
+probed position in the Hero / How-it-works / CTA runways; ?motion=0 lands on the
+composed end states (runways collapse, doc height 13501 -> 6722); ds-lint src
+green, slop-scan copy green, next build green, dev 200. KEPT: engine, J1-J10,
+ScrollDot, text cuts, one accent, >=16px, grid, mobile stub. No animated layout
+props reintroduced.
+
+## 2026-06-23 — V3 motion RE-ARCHITECTURE (soldier, from SECTION_CONTRACT_V3)
+Root cause of the V2 feedback (boring, mostly text, very AI, janky, "no morphs
+that accompany scrolling"): V2 motion was reveal-on-enter (play once on section
+enter), not bound to scroll position. V3 makes scroll PROGRESS drive the morphs
+so the wheel scrubs the page like film.
+
+THE ENGINE (shared, promoted to kit)
+- `useScrubProgress(ref)` hook: useScroll(target, offset start/start end/end) +
+  useSpring ONCE -> one `p` MotionValue. Promoted to `ui-kit/hooks/
+  useScrubProgress.ts` (registered in INDEX/REGISTRY/index.ts). Every scrubbed
+  section is an instance with different useTransform mappings.
+- `useGlobalProgress()` (project-local): the SINGLE no-target useScroll() on the
+  page. Drives both the ScrollDot and the Ownership parallax bgY. Exactly one
+  no-target useScroll() in the codebase.
+
+THE THROUGH-ELEMENT (promoted to kit)
+- `ScrollDot`: one position:fixed accent dot driven by the page progress, travels
+  8vh->92vh with lateral weave, docks (opacity fade + blur seam) at 4 section
+  markers, blinks only at the hero start + CTA rest. Promoted to `ui-kit/
+  components/motion/ScrollDot.tsx` (registry key motion.ScrollDot). Gated by
+  useEnhancementEnabled (no overlay on mobile / reduced-motion / ?motion=0).
+- DELETED `TravelingDot.tsx` (V2): it animated `top`, a layout prop (J4 jank).
+
+SCRUBBED EVERY SECTION
+- Hero (`HeroMorphStage`): 300vh runway, 3-beat vertical scrub (REC -> Dropbox
+  morph with blur seam at 0.45-0.55 -> link-pill clip-reveal). One <=6-word
+  label per beat. hero.subheading SUPPRESSED inside the stage. H1 server-rendered
+  above the stage as the persistent LCP anchor.
+- How-it-works (`HowItWorksScroll`): 300vh runway, pinned HORIZONTAL scrub
+  x:0%->-66% across 3 panels (reworked from CSS scroll-timeline). H2 via
+  ScrubReveal. steps[0].body shortened to 2 sentences; steps[2] "Done." dropped
+  (render only, copy.json intact).
+- Features: per-cell local-useScroll y+blur+opacity reveal (no enter stagger);
+  `.st-reveal` import removed. ScrollDot docks at cell[3] (static tick affordance).
+- Ownership: `OwnershipNumbers` 150vh scrubbed strip (~12MB count + bar scaleX +
+  "0 servers" clip + MIT fade); `TruthRows` A4 reveal rows with accent dots
+  fading up on scroll; A7 parallax bgY on AmbientDrift via the shared global
+  progress (no 2nd useScroll).
+- FAQ: H2 via ScrubReveal; open/close stays a discrete sub-250ms interaction.
+- CTA (`CTAConvergence`): 200vh runway, 4-beat scroll CLIMAX (dot arrives ->
+  blooms to card -> Dropbox folder -> link-pill clip-reveal to rest beside
+  Download). final_cta.body SUPPRESSED (render only).
+
+ANTI-JANK (the рвано fix), all verified by grep:
+- J1 one rAF loop (ReactLenis autoRaf). J2 no addEventListener('scroll') (Nav now
+  rides useLenis). J3 no setState-on-scroll. J4 transform/opacity/clipPath/filter
+  only. J5 one useSpring per scrubbed section. J6 will-change scoped to morph
+  nodes. J7 vh runways. J8 position:sticky pins (no JS top). J9 compositor-only
+  motion styles. J10 backbone is scrub, not reveal-on-enter.
+
+SHARED HELPER
+- `ScrubReveal` (project-local): A4 scroll-linked clip/blur type reveal, replaces
+  BlurReveal on every section H2. Static-safe.
+
+NEW SHARED HELPER + TEXT CUTS
+- A4 type reveal replaces every play-once fade-up on section headings.
+- copy.json untouched; cuts (hero.subheading, final_cta.body suppressed;
+  steps[0]/[2] shortened) are RENDER-only, documented in HANDOFF.
+
+GATES: ds-lint projects/tracer/src = 0/0. ScrollDot + useScrubProgress kit
+additions = 0 errors. slop-scan PASS. next build PASS. dev 200 on / and /?motion=0,
+console clean. Static fallback lands on composed end states (no blank mid-beat).
+
 ## 2026-06-23 — V2 creative rebuild (soldier, from SECTION_CONTRACT_V2)
 Raised the WHOLE page to the hero's ambition. v1 src was untouched (prior
 session hit the limit before changing anything); this is the real V2.

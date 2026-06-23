@@ -82,6 +82,12 @@ export type { UseEnhancementEnabledOptions } from "./components/motion/useEnhanc
 export { AmbientDrift } from "./components/motion/AmbientDrift";
 export type { AmbientDriftProps } from "./components/motion/AmbientDrift";
 
+export { ScrollDot } from "./components/motion/ScrollDot";
+export type { ScrollDotProps, ScrollDotDockWindow } from "./components/motion/ScrollDot";
+
+export { useScrubProgress } from "./hooks/useScrubProgress";
+export type { UseScrubProgressOptions } from "./hooks/useScrubProgress";
+
 export { Button } from "./components/ui/Button";
 export type { ButtonProps } from "./components/ui/Button";
 

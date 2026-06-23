@@ -1,196 +1,215 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useTransform } from "framer-motion";
 
 import { useEnhancementEnabled } from "@ui-kit/components/motion/useEnhancementEnabled";
+import { useScrubProgress } from "@ui-kit/hooks/useScrubProgress";
 
 /* -------------------------------------------------------------------------- */
-/*  CTAConvergence (B2 payoff convergence)                                    */
+/*  CTAConvergence (V3) - the scroll CLIMAX, composed rest                       */
 /* -------------------------------------------------------------------------- */
 /**
- * The closing CTA as the narrative climax: the whole hero chain re-staged ONE
- * final time and collapsing into the live share-link pill beside the Download
- * button. Plays ONCE on scroll-into-view, then rests. The record-red dot is the
- * protagonist's last journey:
+ * The narrative climax, SCRUBBED on a 150vh runway (SECTION_CONTRACT_V3 S7a /
+ * DIRECTION_V3 A6): the record -> Dropbox -> link chain converges one last time
+ * and the page comes to REST on the full composed payoff.
  *
- *   beat 1  dot arrives, pulsing live (the dot travels in from the heading side).
- *   beat 2  dot blooms into the file-capture card (content morph, blur seam).
- *   beat 3  card morphs into the ~/Dropbox/Tracer/ folder + red sync dot.
- *   beat 4  folder resolves into the live tracer.nocorny.com/v/k7r2-mx9p link
- *           pill that comes to rest directly beside the Download button.
- *           After 1.5s the pill's copy affordance auto-morphs to a red tick.
+ * POLISH (2026-06-23): the headline now lives INSIDE the sticky stage and the
+ * whole group is vertically CENTERED. All beat transforms finish by p~0.85; from
+ * p0.85 -> 1 the composed cluster (headline + resolved link pill + Download +
+ * note) HOLDS static and centered, exactly the way the Hero rests on its share
+ * card. Previously the headline sat above the pin and the centered content
+ * scrolled off the top before p=1, ending the page on a black void. The link
+ * pill is now full-width inside a tall card (max-w-[640px]) so the SHARE string
+ * is NEVER truncated and the clip-reveal finishes at inset(0 0 0 0).
  *
- * Rest state (permanent): the live link pill + the Download button + the note
- * line. Only the ambient drift (the section supplies it) and the pill's copy
- * interaction remain alive. Reuses HeroMorphStage's visual vocabulary but is a
- * distinct composition. Gated by useEnhancementEnabled; static mode lands on the
- * rest state (link pill with red tick beside Download). CLS 0.
+ * Engine instance: 150vh runway + sticky 100vh stage + useScrubProgress(ref)
+ * -> one `p` (J5). Beats, compositor props only:
+ *   beat 1  p 0.04-0.22  the dot arrives (pulsing live), confident 24px.
+ *   beat 2  p 0.20-0.46  dot blooms into the file-capture card (blur seam).
+ *   beat 3  p 0.44-0.66  card morphs to the Dropbox folder + red sync dot.
+ *   beat 4  p 0.64-0.85  folder clip-reveals into the live link card, FULL
+ *                        width, finishing at inset(0) by 0.85.
+ *   rest    p 0.85-1.00  everything static and centered (the payoff at rest).
  *
- * Project-local custom embed (HANDOFF.md). Geist Mono only for the link string.
+ * No per-beat text label inside the stage (the convergence IS the sentence).
+ *
+ * Static mode (reduced-motion / ?motion=0 / SSR / narrow): runway collapses, pin
+ * drops, the composed rest is rendered (headline + resolved link card + Download
+ * + note). CLS 0. Geist Mono ONLY for the link string.
+ *
+ * Project-local custom embed (HANDOFF.md).
  */
 
-const PATH = "~/Dropbox/Tracer/";
 const SHARE = "tracer.nocorny.com/v/k7r2-mx9p";
 
-const SPRING = { type: "spring" as const, stiffness: 160, damping: 21, mass: 0.9 };
-const SMOOTH = { duration: 0.18, ease: [0.2, 0.8, 0.2, 1] as const };
-
-const STAGE_H = 132;
-
-type Beat = 1 | 2 | 3 | 4;
-
 export function CTAConvergence({
+  heading,
   downloadLabel,
   downloadHref,
+  note,
 }: {
+  heading: string;
   downloadLabel: string;
   downloadHref: string;
+  note: string;
 }) {
   const enhance = useEnhancementEnabled({ minWidth: 1024 });
-  const prefersReduced = useReducedMotion();
-  const live = enhance && !prefersReduced;
 
-  const ref = useRef<HTMLDivElement>(null);
-  // Static fallback rests on beat 4 with the tick shown.
-  const [beat, setBeat] = useState<Beat>(4);
-  const [ticked, setTicked] = useState(true);
-  const [copied, setCopied] = useState(false);
-  const [started, setStarted] = useState(false);
-
-  useEffect(() => {
-    if (!live) {
-      setBeat(4);
-      setTicked(true);
-      return;
-    }
-    setBeat(1);
-    setTicked(false);
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            setStarted(true);
-            io.disconnect();
-          }
-        }
-      },
-      { threshold: 0.4 },
+  // STATIC FALLBACK: hook-free, the composed rest state.
+  if (!enhance) {
+    return (
+      <div className="flex min-h-[70vh] flex-col items-center justify-center gap-10 py-24 text-center">
+        <Heading text={heading} />
+        <div className="w-full max-w-[640px]">
+          <LinkCard />
+        </div>
+        <RestActions
+          downloadLabel={downloadLabel}
+          downloadHref={downloadHref}
+          note={note}
+        />
+      </div>
     );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [live]);
-
-  useEffect(() => {
-    if (!started || !live) return;
-    let mounted = true;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const at = (ms: number, fn: () => void) =>
-      timers.push(setTimeout(() => mounted && fn(), ms));
-    at(500, () => setBeat(2));
-    at(1100, () => setBeat(3));
-    at(1700, () => setBeat(4));
-    at(3200, () => setTicked(true)); // auto-tick ~1.5s after the pill rests
-    return () => {
-      mounted = false;
-      timers.forEach(clearTimeout);
-    };
-  }, [started, live]);
-
-  const dotVisible = beat === 1;
-  const captureVisible = beat === 2;
-  const folderVisible = beat === 3;
-  const pillVisible = beat === 4;
-
-  const onCopy = () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(`https://${SHARE}`).catch(() => {});
-    }
-    setCopied(true);
-    setTicked(true);
-    setTimeout(() => setCopied(false), 1600);
-  };
+  }
 
   return (
-    <div className="flex flex-col items-start gap-8">
-      {/* the convergence stage: dot -> capture -> folder -> (pill handed off below) */}
-      <div ref={ref} className="relative w-full" style={{ minHeight: STAGE_H }}>
-        {/* beat 1: the dot arrives, pulsing */}
-        <motion.span
-          className="absolute left-0 top-1/2 z-[2] h-[16px] w-[16px] -translate-y-1/2 rounded-full"
-          style={{ background: "var(--color-accent)" }}
-          initial={false}
-          animate={{
-            opacity: dotVisible ? 1 : 0,
-            x: dotVisible ? 0 : -32,
-            filter: dotVisible ? "blur(0px)" : "blur(2px)",
-          }}
-          transition={SPRING}
-          aria-hidden
-        >
-          {live && dotVisible && (
+    <CTAScrubbed
+      heading={heading}
+      downloadLabel={downloadLabel}
+      downloadHref={downloadHref}
+      note={note}
+    />
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  CTAScrubbed - mounted only when enhanced; owns the scroll engine            */
+/* -------------------------------------------------------------------------- */
+
+function CTAScrubbed({
+  heading,
+  downloadLabel,
+  downloadHref,
+  note,
+}: {
+  heading: string;
+  downloadLabel: string;
+  downloadHref: string;
+  note: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const p = useScrubProgress(ref); // ONE spring (J5). ref is ALWAYS attached.
+
+  // The headline is the persistent anchor: it is present from the FIRST frame
+  // of the pinned stage (no clip-reveal) so the CTA stage is never an empty void
+  // while the convergence subject is still arriving. It fills the upper stage.
+
+  // beat 1: the arriving dot (visible 0.04 - 0.22)
+  const dotOpacity = useTransform(p, [0, 0.04, 0.18, 0.24], [0, 1, 1, 0]);
+  const dotX = useTransform(p, [0, 0.18], ["-48px", "0px"]);
+  const dotBlur = useTransform(p, [0.18, 0.24], ["blur(0px)", "blur(2px)"]);
+
+  // beat 2: the capture card (0.20 - 0.46)
+  const capOpacity = useTransform(p, [0.18, 0.26, 0.42, 0.48], [0, 1, 1, 0]);
+  const capScale = useTransform(p, [0.2, 0.46], [0.94, 1]);
+  const capBlur = useTransform(
+    p,
+    [0.26, 0.34, 0.38, 0.46],
+    ["blur(0px)", "blur(2px)", "blur(0px)", "blur(2px)"],
+  );
+
+  // beat 3: the Dropbox folder (0.44 - 0.66)
+  const folderOpacity = useTransform(p, [0.42, 0.5, 0.6, 0.66], [0, 1, 1, 0]);
+  const folderScale = useTransform(p, [0.44, 0.66], [0.94, 1]);
+  const folderBlur = useTransform(
+    p,
+    [0.5, 0.56, 0.6, 0.66],
+    ["blur(0px)", "blur(2px)", "blur(0px)", "blur(2px)"],
+  );
+
+  // beat 4: the live link card clip-reveals (0.64 - 0.85), then RESTS.
+  const linkOpacity = useTransform(p, [0.62, 0.68], [0, 1]);
+  const linkClip = useTransform(
+    p,
+    [0.64, 0.85],
+    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+  );
+  const linkY = useTransform(p, [0.64, 0.8], ["20px", "0px"]);
+
+  // Download + note ride up into rest as the link resolves (0.78 - 0.92), then hold.
+  const actionsOpacity = useTransform(p, [0.78, 0.9], [0, 1]);
+  const actionsY = useTransform(p, [0.78, 0.92], ["18px", "0px"]);
+
+  return (
+    <div ref={ref} style={{ height: "150vh" }}>
+      <div
+        className="flex flex-col items-center justify-center overflow-hidden text-center"
+        style={{ position: "sticky", top: 0, height: "100vh" }}
+      >
+        {/* the composed group: headline + morph subject + actions, centered */}
+        <div className="flex w-full max-w-[640px] flex-col items-center gap-10">
+          {/* headline, inside the pin so it co-exists with the resolved pill.
+              Always present (the anchor), never an empty stage while the subject
+              is still arriving. */}
+          <Heading text={heading} />
+
+          {/* the convergence subject: one large focal point, beats cross-fade.
+              A tall box centered so the subject reads substantial, never a
+              speck floating over a void. */}
+          <div className="relative flex h-[160px] w-full items-center justify-center">
+            {/* beat 1: the arriving dot */}
             <motion.span
-              className="absolute inset-0 rounded-full"
-              style={{ background: "var(--color-accent)" }}
-              animate={{ scale: [1, 1.9, 1], opacity: [0.55, 0, 0.55] }}
-              transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
-            />
-          )}
-        </motion.span>
+              className="absolute h-[24px] w-[24px] rounded-full"
+              style={{ background: "var(--color-accent)", opacity: dotOpacity, x: dotX, filter: dotBlur, willChange: "transform, opacity, filter" }}
+              aria-hidden
+            >
+              <motion.span
+                className="absolute inset-0 rounded-full"
+                style={{ background: "var(--color-accent)" }}
+                animate={{ scale: [1, 1.9, 1], opacity: [0.55, 0, 0.55] }}
+                transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.span>
 
-        {/* beat 2: file-capture card */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2"
-          initial={false}
-          animate={{
-            opacity: captureVisible ? 1 : 0,
-            x: captureVisible ? 0 : beat < 2 ? -24 : 24,
-            filter: captureVisible ? "blur(0px)" : "blur(2px)",
-          }}
-          transition={SPRING}
-          aria-hidden
-        >
-          <CaptureCard />
-        </motion.div>
+            {/* beat 2: the capture card */}
+            <motion.div
+              className="absolute"
+              style={{ opacity: capOpacity, scale: capScale, filter: capBlur, willChange: "transform, opacity, filter" }}
+              aria-hidden
+            >
+              <CaptureCard />
+            </motion.div>
 
-        {/* beat 3: Dropbox folder + sync dot */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2"
-          initial={false}
-          animate={{
-            opacity: folderVisible ? 1 : 0,
-            x: folderVisible ? 0 : beat < 3 ? -20 : 20,
-            filter: folderVisible ? "blur(0px)" : "blur(2px)",
-          }}
-          transition={SPRING}
-          aria-hidden
-        >
-          <DropboxFolder />
-        </motion.div>
+            {/* beat 3: the Dropbox folder */}
+            <motion.div
+              className="absolute"
+              style={{ opacity: folderOpacity, scale: folderScale, filter: folderBlur, willChange: "transform, opacity, filter" }}
+              aria-hidden
+            >
+              <DropboxFolder />
+            </motion.div>
 
-        {/* beat 4: the resolved row - link pill beside the Download button */}
-        <motion.div
-          className="absolute left-0 top-1/2 flex w-full -translate-y-1/2 flex-wrap items-center gap-4"
-          initial={false}
-          animate={{
-            opacity: pillVisible ? 1 : 0,
-            y: pillVisible ? "-50%" : "-40%",
-            filter: pillVisible ? "blur(0px)" : "blur(2px)",
-          }}
-          transition={SPRING}
-          style={{ pointerEvents: pillVisible ? "auto" : "none" }}
-        >
-          <a
-            href={downloadHref}
-            className="inline-flex shrink-0 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-7 py-3.5 font-[family-name:var(--font-sans)] text-[16px] font-medium text-white transition-[background-color,transform] duration-150 [transition-timing-function:var(--ease-out)] hover:bg-[var(--color-accent-hover)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ink-surface)]"
+            {/* beat 4: the live link card, clip-revealed to rest (full width) */}
+            <motion.div
+              className="absolute w-full px-2"
+              style={{ opacity: linkOpacity, y: linkY, clipPath: linkClip, willChange: "clip-path, transform, opacity" }}
+            >
+              <LinkCard />
+            </motion.div>
+          </div>
+
+          {/* Download + note: ride into the composed rest, then hold static */}
+          <motion.div
+            style={{ opacity: actionsOpacity, y: actionsY, willChange: "transform, opacity" }}
           >
-            {downloadLabel}
-          </a>
-
-          <LinkPill ticked={ticked} copied={copied} onCopy={onCopy} />
-        </motion.div>
+            <RestActions
+              downloadLabel={downloadLabel}
+              downloadHref={downloadHref}
+              note={note}
+            />
+          </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -198,47 +217,76 @@ export function CTAConvergence({
 
 /* -------------------------------------------------------------------------- */
 
-function LinkPill({
-  ticked,
-  copied,
-  onCopy,
+function Heading({ text }: { text: string }) {
+  return (
+    <h2
+      className="font-[family-name:var(--font-display)] font-semibold text-white/90"
+      style={{
+        fontSize: "var(--text-display-md)",
+        lineHeight: "var(--lh-h2)",
+        letterSpacing: "var(--ls-display)",
+        maxWidth: "18ch",
+      }}
+    >
+      {text}
+    </h2>
+  );
+}
+
+function RestActions({
+  downloadLabel,
+  downloadHref,
+  note,
 }: {
-  ticked: boolean;
-  copied: boolean;
-  onCopy: () => void;
+  downloadLabel: string;
+  downloadHref: string;
+  note: string;
 }) {
   return (
+    <div className="flex flex-col items-center gap-5">
+      <DownloadButton label={downloadLabel} href={downloadHref} />
+      <p className="font-[family-name:var(--font-sans)] text-[16px] text-white/40">
+        {note}
+      </p>
+    </div>
+  );
+}
+
+function DownloadButton({ label, href }: { label: string; href: string }) {
+  return (
+    <a
+      href={href}
+      className="inline-flex shrink-0 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-7 py-3.5 font-[family-name:var(--font-sans)] text-[16px] font-medium text-white transition-[background-color,transform] duration-150 [transition-timing-function:var(--ease-out)] hover:bg-[var(--color-accent-hover)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ink-surface)]"
+    >
+      {label}
+    </a>
+  );
+}
+
+/* The resolved share-link as a full-width card (no truncation). */
+function LinkCard() {
+  return (
     <div
-      className="inline-flex items-center gap-3 rounded-[var(--radius-pill)] py-2.5 pl-5 pr-2.5"
+      className="w-full rounded-[var(--radius-window)] px-7 py-5"
       style={{
         background: "var(--color-on-dark-glass)",
         border: "1px solid var(--color-on-dark-hairline-strong)",
+        boxShadow: "var(--shadow-dark-lg)",
       }}
     >
-      <span className="font-[family-name:var(--font-mono)] text-[16px] text-[var(--color-on-dark)] opacity-90">
-        {SHARE}
-      </span>
-      <button
-        type="button"
-        onClick={onCopy}
-        aria-label={copied ? "Link copied" : "Copy link"}
-        className="flex h-[34px] w-[34px] items-center justify-center rounded-[var(--radius-button)] text-[var(--color-on-dark)] transition-[background-color,transform] duration-150 [transition-timing-function:var(--ease-out)] active:scale-[0.94] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ink-surface)]"
-        style={{
-          background: ticked ? "var(--color-accent)" : "var(--color-on-dark-glass-strong)",
-          border: "1px solid var(--color-on-dark-hairline)",
-        }}
-      >
-        {ticked ? (
-          <motion.svg
-            key="tick"
-            width="16"
-            height="16"
-            viewBox="0 0 14 14"
-            fill="none"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={SMOOTH}
-          >
+      <div className="flex items-center gap-3">
+        <span className="min-w-0 flex-1 truncate text-left font-[family-name:var(--font-mono)] text-[20px] text-[var(--color-on-dark)] opacity-90">
+          {SHARE}
+        </span>
+        <span
+          className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[var(--radius-button)] text-[var(--color-on-dark)]"
+          style={{
+            background: "var(--color-accent)",
+            border: "1px solid var(--color-on-dark-hairline)",
+          }}
+          aria-hidden
+        >
+          <svg width="20" height="20" viewBox="0 0 14 14" fill="none">
             <path
               d="M2.5 7.5L5.5 10.5L11.5 3.5"
               stroke="currentColor"
@@ -246,14 +294,9 @@ function LinkPill({
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-          </motion.svg>
-        ) : (
-          <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden style={{ opacity: 0.7 }}>
-            <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-            <path d="M2 9V2.5C2 2 2.4 1.5 3 1.5H9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
           </svg>
-        )}
-      </button>
+        </span>
+      </div>
     </div>
   );
 }
@@ -261,28 +304,28 @@ function LinkPill({
 function CaptureCard() {
   return (
     <div
-      className="flex items-center gap-4 rounded-[var(--radius-window)] px-5 py-4"
+      className="flex items-center gap-5 rounded-[var(--radius-window)] px-7 py-6"
       style={{
         background: "var(--color-on-dark-glass)",
         border: "1px solid var(--color-on-dark-hairline)",
         boxShadow: "var(--shadow-dark-lg)",
-        minWidth: 260,
+        minWidth: 420,
       }}
     >
       <span
-        className="h-[13px] w-[13px] shrink-0 rounded-full"
+        className="h-[15px] w-[15px] shrink-0 rounded-full"
         style={{ background: "var(--color-accent)" }}
       />
-      <span className="flex items-end gap-[3px]" aria-hidden>
-        {[10, 18, 8, 22, 14, 20, 9, 16].map((h, i) => (
+      <span className="flex items-end gap-[4px]" aria-hidden>
+        {[12, 22, 10, 26, 16, 24, 11, 20].map((h, i) => (
           <span
             key={i}
-            className="w-[3px] rounded-full bg-[var(--color-on-dark)] opacity-50"
+            className="w-[4px] rounded-full bg-[var(--color-on-dark)] opacity-50"
             style={{ height: h }}
           />
         ))}
       </span>
-      <span className="ml-1 font-[family-name:var(--font-mono)] text-[16px] text-[var(--color-on-dark)] opacity-70">
+      <span className="ml-1 font-[family-name:var(--font-mono)] text-[18px] text-[var(--color-on-dark)] opacity-70">
         recording.mp4
       </span>
     </div>
@@ -292,12 +335,12 @@ function CaptureCard() {
 function DropboxGlyph() {
   return (
     <svg
-      width="22"
-      height="21"
+      width="26"
+      height="24"
       viewBox="0 0 32 30"
       fill="none"
       aria-hidden
-      className="text-[var(--color-on-dark)]"
+      className="shrink-0 text-[var(--color-on-dark)]"
       style={{ opacity: 0.6 }}
     >
       <path
@@ -311,19 +354,20 @@ function DropboxGlyph() {
 function DropboxFolder() {
   return (
     <div
-      className="flex items-center gap-4 rounded-[var(--radius-window)] px-5 py-4"
+      className="flex items-center gap-5 rounded-[var(--radius-window)] px-7 py-6"
       style={{
         background: "var(--color-on-dark-glass)",
         border: "1px solid var(--color-on-dark-hairline)",
         boxShadow: "var(--shadow-dark-lg)",
+        minWidth: 420,
       }}
     >
       <DropboxGlyph />
-      <span className="font-[family-name:var(--font-mono)] text-[16px] text-[var(--color-on-dark)] opacity-80">
-        {PATH}
+      <span className="font-[family-name:var(--font-mono)] text-[18px] text-[var(--color-on-dark)] opacity-80">
+        ~/Dropbox/Tracer/
       </span>
       <span
-        className="ml-1 h-[8px] w-[8px] rounded-full"
+        className="ml-auto h-[10px] w-[10px] rounded-full"
         style={{ background: "var(--color-accent)" }}
         aria-hidden
       />

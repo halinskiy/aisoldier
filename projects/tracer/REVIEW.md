@@ -4,6 +4,103 @@ Reviews by 3mpq-judge. Nothing reaches the user until the verdict is **PASSED**.
 
 ---
 
+## 2026-06-23 — V3 SCROLL-SCRUB review (motion re-architecture, live scroll-driven)
+
+**Reviewer:** 3mpq-judge
+**Live target:** http://localhost:3107 (1440px desktop). Driven by SCROLL POSITION via `tools/scroll-probe.mjs` (real Chrome CDP, scrolls to absolute scrollY, lets the spring settle 1.2s, screenshots + captures console). NOT the static `shoot.mjs` fallback. 30+ probes across every runway, plus `?motion=0`, plus 500px mobile, plus CDP assertions.
+**Verdict:** ISSUES (3 items: 1 FAIL, 2 WARN). The motion engine, the smoothness fix, and the hydration fix all PASS. The single FAIL is a dead/empty stage at the CTA climax END and two adjacent empty seams — the exact "I did not see morphs / empty stage" complaint recurring at transition points, not in the beats themselves.
+
+Independent screenshots (my own, scroll-driven), all in `/tmp/aisoldier-judge/tracer-v3/`:
+- Hero: `hero-y0/750/1500/2200.png` (3 beats: REC pill -> Capture card travels to Dropbox -> Share-link card)
+- How: `how-y3400/4000/4700.png` (horizontal panels: Hit record -> It lands in your Dropbox -> Send the link)
+- Features+Ownership: `feat-own-y6200/7200/7800/8500.png`, `own2-y7600/8000.png` (bento tick, numbers scrub, truth rows)
+- FAQ+CTA: `faq-cta-y9500/10500/11200/12434.png`, `cta2-y10100/10800/11500.png`, `ctarest-y11900.png`
+- Static: `m0-y0/3500.png`, `m0end-y5822.png` (?motion=0 composed end states)
+- Mobile: `mob-y0.png` (500px stub)
+
+---
+
+### 1. SCROLL-DRIVEN MORPHS — mostly PASS, one FAIL on dead stages
+
+**Hero (300vh, 3-beat vertical scrub) — PASS.** Driven by scrollY, every beat shows a live morphing subject, no empty stage:
+- y0/y750 beat 1: "Hit record." + the `00:04 Recording` pill (red dot + stop button), ScrollDot tracking top-left.
+- y1500 beat 2: "It is in your Dropbox." (mid blur-seam) + the `Capture saved / recording.mp4` card physically traveling toward the `~/Dropbox/Tracer/` folder slot. Live hand-off.
+- y2200 beat 3: "Share the link." + the resolved card (`~/Dropbox/Tracer/ Synced` + `tracer.nocorny.com/v/k7r2-mx9p` + red tick) + SpecStrip. ScrollDot docked.
+
+**How-it-works (300vh, horizontal scrub) — PASS.** Full-width panels, BIG readable text, NOT one-word-per-line. The horizontal travel is visible mid-scrub (y4000 shows panel 1 exiting left, panel 2 centering, panel 3 entering right). Panels read "01/03 Hit record", "02/03 It lands in your Dropbox", "03/03 Send the link" with proper body sentences and Geist Mono path/URL. The `01 / 03` panel counter is the contract's intended ordinal, not a banned eyebrow.
+
+**Features (scrubbed reveal) — PASS.** 6 uniform bordered cells, copy verbatim, no icons. ScrollDot docks on `One click to share` (items[3]) with the red tick affordance.
+
+**Ownership numbers (150vh) + truth rows — PASS on content, but see FAIL seam.** y7200/y7600 show the scrub working: `~0MB -> ~11MB` count-up, the upload bar filling, `0 servers` clip-revealing left-to-right, `MIT` fading in. y8500 shows all 4 truth rows lit red on the rail. The numbers and the truth rows are both alive.
+
+**CTA (200vh, 4-beat climax) — PASS on beats 2-4, FAIL on the rest END.** y10100 beat 1 (headline + arriving ScrollDot), y10800 beat 2 (`recording.mp4` capture card blooms), y11200/y11500 beat 4 (link pill `tracer.nocorny.com/v/k7r2-mx9p` + tick resolves). The convergence chain is real and visible.
+
+**FAIL — three dead/empty stages at transition seams.** Driving by scrollY, three positions show a backbone/connective stage that is essentially empty black (morph subject gone, next content not yet arrived):
+- **CTA end of runway (y11900, p~=1, the "rest")** — the WORST. The sticky stage is FULLY EMPTY black. Headline, link pill, Download button and note line have ALL scrolled off the top while the footer rises from the bottom. The contract S7a "Rest (p=1): headline + pill + Download button + note line simultaneously visible" never actually happens: by the time p reaches 1 the composed content has exited the viewport top. The climax of the whole page ends on a black void. (`ctarest-y11900.png`)
+- **Ownership numbers->truth-rows seam (y8000)** — ~600px of empty dark between the numbers strip leaving the sticky stage and the first truth row entering from the bottom. Only the ScrollDot and a faint glow occupy the viewport. (`own2-y8000.png`)
+- **CTA beat1->beat2 seam (y10500)** — headline gone off top, capture card not yet bloomed; center+top of the stage empty with the Download button stranded low-left. (`faq-cta-y10500.png`)
+
+Root cause (CTA): in `CTAConvergence.tsx:122-179` the convergence subject + Download + note live INSIDE the sticky stage with `justify-center`, but the headline is rendered OUTSIDE/above it, and the morph subject is `items-start` (left column only). So (a) headline and resolved pill never coexist, and (b) as the 200vh runway finishes, the sticky un-pins and the centered content scrolls up and out before p hits 1, leaving the final frame empty. The "rest" the user lands on after the climax is a black void, not the composed headline+pill+button.
+
+Root cause (Ownership seam): the numbers sticky stage (`OwnershipNumbers.tsx:74` 150vh) releases, but the truth rows section starts far enough below that a full empty viewport sits between them.
+
+This is the user's complaint resurfacing: the beats DO morph (big win over V2's empty scrubbed stages), but the SEAMS between/after them still read as dead text-less black — and the CTA climax literally ends on emptiness.
+
+### 2. SMOOTHNESS (the "рвано" fix) — PASS
+
+J1-J10 verified on the live page + source:
+- **J1 ONE rAF loop** — single `ReactLenis` provider in `layout.tsx:57` (autoRaf). No second loop.
+- **J2 no scroll listeners** — `grep addEventListener.*scroll src/` = 0. Nav uses `useLenis(({scroll})=>...)` (a Lenis subscription, not a raw listener).
+- **J3 no setState-on-scroll-morph** — the only scroll-fed setState is Nav's threshold-crossed boolean (`Nav.tsx:41-44`, guarded `prev===next?prev:next`, fires only crossing scroll>24) and `OwnershipNumbers.tsx:71` `useMotionValueEvent(count)` feeding display TEXT only. Neither drives a per-frame morph. J3-safe.
+- **J4 no animated layout props** — the only `animate={{height:auto}}` is `FAQTwoCol.tsx:72`, the permitted discrete <250ms accordion interaction, not a scrub. The two `animate={{scale,opacity}}` are the one-permitted blink loop (compositor props).
+- **J5 one spring per section** — every scrubbed section calls `useScrubProgress(ref)` exactly once (kit hook `ui-kit/hooks/useScrubProgress.ts` wraps the single useSpring). No section springs individual transforms.
+- **J6 will-change scoped** — every `will-change` is on a named morphing node (dot/card/pill/bar/label/track), never a section shell.
+- **J7 runways in vh** — `300vh`/`300vh`/`150vh`/`200vh`, all vh, on plain runway divs.
+- **J8 position:sticky** — all four sticky stages use `position:sticky; top:0; height:100vh`. No JS-driven top. No motion value bound to `top`.
+- **J9 compositor props only** — grep confirmed NO motion value drives width/height/top/left/margin/padding/boxShadow. Every motion.div style binding is opacity/filter/x/y/scale/scaleX/clipPath only. The `boxShadow` and `top:0/height:100vh` literals are static (card shadows + the sticky pin), not transform-driven.
+- **J10 no reveal-on-enter as main event** — at scrollY 0 the backbone Hero shows beat 1 (recorder pill), and advancing requires scroll; content is revealed BY progress.
+
+Single global `useScroll()` (no target) = exactly 1 (`useGlobalProgress.ts:24`); all section scrubs use `useScroll({target,offset})`. The scrub feels tied to the wheel via the 120/30 spring. No janky compounding.
+
+### 3. NO console errors / hydration — PASS (the headline fix)
+
+- `/` (normal): **0 console errors** across the full 0->13501px scroll.
+- `/?motion=0`: **0 console errors**. The framer "Target ref is defined but not hydrated" error is GONE (the hook-bearing inner components mount only when enhanced, with the ref attached in the same commit — `HeroMorphStage.tsx:18-25` documents the fix). The V2 round-1 `?motion=0` hydration WARNING is also gone.
+- `?motion=0` composed static end states verified: Hero lands on beat-3 (H1 + Share-link card + SpecStrip), Ownership truth rows all lit, CTA rest composed, footer. NO blank mid-beat. Doc collapses 13501px -> 6722px (runways -> auto), so CLS from runway collapse is 0.
+
+### 4. NO REGRESSION — PASS
+
+CDP-measured on both `/` and `/?motion=0`:
+- **One accent** — blue/violet node scan = **0**. `--color-accent` = `#e5484d`. No second hue.
+- **>=16px** — rendered-DOM sub-16px scan = **0 nodes** on both paths. `ds-lint src/` = 0 errors over 24 files. `slop-scan src/` and `copy.json` both PASS.
+- **Unified grid** — every section docks the same `.grid-page` (verified visually across all probes; left rail of headlines/rows aligns at the same x).
+- **Mobile 500px** — `document.body.scrollWidth === clientWidth` (500===500), no overflow, doc height 900px (single stub: mark + "macOS only. Download on your desktop." + one Download button). No scrub, no sticky.
+- **Copy** matches copy.json — share string `tracer.nocorny.com/v/k7r2-mx9p`, path `~/Dropbox/Tracer/`, note `Free forever. ~12MB. MIT licensed.`, all headings exact.
+- **Favicon** — `/icon.svg` = 200 (the `/favicon.ico` 404 is the expected/irrelevant default; the Next metadata icon is shipped).
+- **Theme rhythm** — dark Hero -> light How -> light Features -> dark Ownership -> light FAQ -> dark CTA -> light Footer. No cream flash at any boundary.
+
+---
+
+### Issues requiring fix
+
+| # | Severity | What | Scroll pos | Expected | Actual | Fix |
+|---|---|---|---|---|---|---|
+| 1 | **FAIL** | CTA climax ends on a fully EMPTY black stage; headline + pill never coexist | y11900 (CTA p~=1); also y10500 seam | S7a "Rest (p=1): headline + pill + Download button + note line simultaneously visible" | At end of the 200vh runway the sticky un-pins and ALL composed content scrolls off the top before p=1; the last CTA frame is black void. Headline is outside the sticky, so it exits before the pill resolves. | In `CTAConvergence.tsx`: pull the headline INTO the sticky stage (or hold the composed rest at the stage center through p=1) so headline + resolved pill + Download + note are co-visible at the runway END, not just mid-scrub. Option: finish all beat transforms by p~0.85 and keep the composed cluster静 (static, centered) for the last 0.85->1.0 so the climax rests full, like the Hero does. The page must not end its narrative on emptiness. |
+| 2 | WARN | Ownership numbers->truth-rows dead seam (~600px empty viewport) | y8000 | continuous live subject through the section | numbers strip has left the sticky stage, truth rows not yet entered; only ScrollDot + glow visible | Tighten the gap: reduce the 150vh numbers runway slightly OR raise the truth rows so they enter as the numbers leave. The ScrollDot traveling helps but the band still reads dead. |
+| 3 | WARN | CTA convergence + Ownership numbers sit in a left/upper column, leaving ~60% of the dark stage permanently empty | y10800, y11200, y7600 | one focal point that anchors the stage | the morph subject (card/pill/numbers) occupies only the left-upper quarter of a full-bleed 100vh dark stage; the rest is black | Either scale the subject up to anchor the stage, or center it, or pair it with the headline so the composition fills more of the focal area. Same "small object in a sea of black" failure mode the V2 hero rest had (and fixed) — apply that lesson to the CTA + Ownership stages. |
+
+### Ranked fix order
+1. **#1 CTA empty-rest climax (FAIL)** — the payoff of the entire scroll narrative currently ends on a black void. This is the single thing that re-triggers the user's "empty stage / I did not see the morph rest" complaint at the most important moment. Blocking.
+2. #2 Ownership seam, #3 left-column voids — both WARN; they make the dark stages feel emptier than the director bar wants, but each individual beat does morph and is visible. Fix before SHIP; not user-experience-breaking the way #1 is.
+
+### What is genuinely fixed vs V2 (credit)
+The two reported motion bugs ARE fixed: the "not hydrated" error is gone (0 console errors on both paths), and the scrubbed stages are NO LONGER rendering empty during the beats — Hero, How, Ownership-numbers and CTA all show live morphing subjects driven by the wheel at multiple positions. The "boring / mostly text / janky" complaint is materially answered: horizontal panel travel, count-up numbers, traveling ScrollDot, clip-reveals, blur seams — all smooth (J1-J10 clean), all scroll-tied. The remaining FAIL is specifically the TRANSITION SEAMS and the CTA's final resting frame, not the beats.
+
+### Self-deferral ledger
+None outstanding from prior reviews. Round-2 (V2) promised work was completed. No new deferrals made this round.
+
+---
+
 ## 2026-06-23 — V2 CREATIVE REBUILD review (whole page raised to hero level)
 
 **Reviewer:** 3mpq-judge
